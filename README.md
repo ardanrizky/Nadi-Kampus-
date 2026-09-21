@@ -6,7 +6,7 @@
 
 ## 📌 Gambaran Proyek
 
-**NadiKampus** adalah platform analitik cerdas yang dirancang untuk pengambil kebijakan perguruan tinggi (Pimpinan Universitas, Dekanat, Dosen Wali, dan Direktorat Kemahasiswaan) dalam memetakan kondisi psikososial, tekanan akademik, serta aspirasi mahasiswa secara objektif berbasis bukti (*data-driven decision making*).
+**NadiKampus** adalah platform analitik cerdas yang dirancang untuk pengambil kebijakan perguruan tinggi (Pimpinan Universitas, Dekanat, Dosen Wali, dan Direktorat Kemahasiswaan) dalam memetakan kondisi psikososial, tekanan akademik, serta aspirasi mahasiswa secara objektif berbasis data (*data-driven decision making*).
 
 Sistem ini mengintegrasikan:
 1. **Machine Learning Clustering (K-Means, $k=4$)**: Segmentasi profil risiko dan potensi mahasiswa dengan metrik *Silhouette Score* **0,71**.
@@ -19,40 +19,32 @@ Sistem ini mengintegrasikan:
 
 ```text
 nadi-kampus-web/
-├── api/
-│   └── main.py                     # Layanan API backend (FastAPI) & endpoint prediksi klaster
-├── data/
-│   ├── raw/
-│   │   └── data_survei_mahasiswa.csv # Data mentah survei (2.481 responden mahasiswa)
-│   └── processed/
-│       └── student_features_clean.csv # Fitur hasil normalisasi & koordinat PCA 2D
-├── frontend/
+├── 📁 api/                      # Layanan API backend (FastAPI) & endpoint prediksi klaster
+│   └── main.py
+├── 📁 data/
+│   ├── raw/                    # Data mentah survei (2.481 responden mahasiswa)
+│   │   └── data_survei_mahasiswa.csv
+│   └── processed/              # Fitur hasil normalisasi & koordinat PCA 2D
+│       └── student_features_clean.csv
+├── 📁 frontend/                # Antarmuka web pengguna (HTML, CSS, JS)
 │   ├── css/
-│   │   └── style.css               # Desain sistem modular, tema institusional terpadu
+│   │   └── style.css           # Desain sistem modular & palet institusional
 │   ├── js/
-│   │   ├── app.js                  # Logika aplikasi, navigasi view, filter fakultas
-│   │   ├── charts.js               # Engine grafik SVG dinamis (PCA Scatter, Donut, Rings)
-│   │   ├── data.js                 # Dataset frontend, koordinat centroid, & NLP
-│   │   └── landing.js              # Interaktivitas landing page
-│   ├── dashboard.html              # Halaman utama Intelligence Dashboard Console
-│   └── index.html                  # Halaman beranda / landing page
-├── models/
-│   └── centroids.json              # Metadata model K-Means & koordinat titik centroid
-├── notebooks/
-│   ├── 01_eda_and_kmeans_clustering.ipynb # Analisis data, Elbow Method, Silhouette, & PCA
-│   └── 02_nlp_sentiment_analysis.ipynb   # Prapemrosesan teks, analisis sentimen & topik
-├── .dockerignore                   # Berkas pengabaian build Docker
-├── .env.example                    # Contoh konfigurasi environment variables
-├── .gitignore                      # Berkas pengabaian Git (Python, OS, Editor)
-├── .python-version                 # Versi Python yang direkomendasikan (3.11.8)
-├── Dockerfile                      # Konfigurasi container Docker
-├── docker-compose.yml              # Orkestrasi Docker multi-container
-├── railway.toml                    # Konfigurasi deployment platform Railway
-├── render.yaml                     # Konfigurasi deployment platform Render
-├── requirements.txt                # Dependensi pustaka Python
-├── vercel.json                     # Konfigurasi routing & deployment Vercel
-├── app.py                          # Entry point server aplikasi
-└── README.md                       # Dokumentasi proyek
+│   │   ├── app.js              # Logika aplikasi, navigasi view, filter fakultas
+│   │   ├── charts.js           # Engine grafik SVG dinamis (PCA Scatter, Donut, Rings)
+│   │   ├── data.js             # Dataset frontend, koordinat centroid, & NLP
+│   │   └── landing.js          # Interaktivitas landing page
+│   ├── dashboard.html          # Halaman utama Intelligence Dashboard Console
+│   └── index.html              # Halaman beranda / landing page
+├── 📁 models/                   # Model & metadata titik centroid K-Means (k=4)
+│   └── centroids.json
+├── 📁 notebooks/                # Jupyter Notebooks untuk riset & eksperimen pemodelan
+│   ├── 01_eda_and_kmeans_clustering.ipynb   # Elbow Method, Silhouette Score (0.71), & PCA 2D
+│   └── 02_nlp_sentiment_analysis.ipynb     # Prapemrosesan teks, sentimen, & ekstraksi topik
+├── 📄 .gitignore               # Pengabaian berkas sistem, editor, dan cache Python
+├── 🐍 app.py                   # Runner server lokal aplikasi
+├── 📄 requirements.txt         # Daftar dependensi library Python
+└── 📖 README.md                # Dokumentasi proyek
 ```
 
 ---
@@ -70,37 +62,20 @@ Berdasarkan analisis klaster multi-dimensi (Wellbeing, Academic Pressure, Social
 
 ---
 
-## 💻 Cara Menjalankan Aplikasi
+## 💻 Cara Menjalankan Proyek Secara Lokal
 
-### 1. Menjalankan Langsung dengan Python (Fullstack)
+### Opsi 1: Menjalankan Server Python (Fullstack + API)
 ```bash
-# Clone repository
-git clone https://github.com/ardanrizky/nadi-kampus.git
-cd nadi-kampus
-
-# Buat virtual environment (opsional)
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# Install dependensi
+# 1. Install library yang dibutuhkan
 pip install -r requirements.txt
 
-# Jalankan server
+# 2. Jalankan aplikasi
 python app.py
 ```
-Akses di peramban: `http://localhost:8000`
+Akses di browser: `http://localhost:8000`
 
-### 2. Menggunakan Docker
-```bash
-docker-compose up --build
-```
-
----
-
-## 🚀 Deployment
-
-- **Vercel**: Mendukung *Zero-configuration deployment* melalui berkas `vercel.json`.
-- **Render / Railway**: Cukup sambungkan repositori GitHub Anda; file `render.yaml` dan `railway.toml` akan mengonfigurasi otomatis.
+### Opsi 2: Buka Antarmuka Langsung Tanpa Python
+Anda juga dapat membuka berkas `frontend/index.html` atau `frontend/dashboard.html` langsung dengan klik dua kali (*double-click*) pada browser favorit Anda.
 
 ---
 
