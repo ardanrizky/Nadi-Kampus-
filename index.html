@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NadiKampus — Analitik Wellbeing &amp; Permasalahan Mahasiswa</title>
+  <meta name="description" content="Analitik wellbeing dan permasalahan mahasiswa untuk mendukung keputusan kampus berbasis data." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23059669'/%3E%3Cpath d='M4 17h6l3-7 5 13 3-6h7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="page-landing">
+  <a class="skip" href="dashboard.html">Lewati ke dashboard</a>
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a class="brand" href="index.html" aria-label="NadiKampus, ke beranda">
+        <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="currentColor"/>
+          <path d="M4 17h6l3-7 5 13 3-6h7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand__name">Nadi<b>Kampus</b></span>
+      </a>
+      <nav class="nav__links" aria-label="Navigasi utama">
+        <a href="index.html" class="is-current">Beranda</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+      <a class="btn btn--navy btn--sm" href="dashboard.html">Explore Dashboard</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero hero--landing" id="top">
+      <div class="hero__inner">
+        <div class="hero__copy">
+          <p class="hero__pill"><span class="dot"></span>Survei wellbeing semester genap 2025/2026 sudah dianalisis</p>
+          <h1 class="hero__title">
+            <span class="line"><span>Memahami</span></span>
+            <span class="line"><span>Mahasiswa</span></span>
+            <span class="line"><span>Melalui Data</span></span>
+          </h1>
+          <p class="hero__sub">Analitik wellbeing dan permasalahan mahasiswa untuk mendukung keputusan kampus berbasis data.</p>
+          <div class="hero__cta">
+            <a class="btn btn--navy" href="dashboard.html">Explore Dashboard</a>
+            <a class="btn btn--ghost" href="dashboard.html">View Insight</a>
+          </div>
+          <ul class="hero__facts" aria-label="Ringkasan cakupan">
+            <li><strong>2.481</strong><span>responden survei</span></li>
+            <li><strong>6</strong><span>fakultas</span></li>
+            <li><strong>4</strong><span>klaster mahasiswa</span></li>
+          </ul>
+        </div>
+
+        <div class="hero__art" aria-hidden="true">
+          <svg class="art" viewBox="0 0 520 540" role="img">
+            <defs>
+              <linearGradient id="gHead" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#A7F0CE"/>
+                <stop offset="0.55" stop-color="#34C58F"/>
+                <stop offset="1" stop-color="#047857"/>
+              </linearGradient>
+              <radialGradient id="gGlow" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" stop-color="#fff" stop-opacity="1"/>
+                <stop offset="0.45" stop-color="#fff" stop-opacity="0.55"/>
+                <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+              </radialGradient>
+              <path id="headShape" d="M120 520 C125 450 150 420 175 405 C160 380 150 350 150 310 C150 210 210 130 300 130 C370 130 410 185 410 245 C410 270 420 282 428 295 L415 302 C420 312 418 320 410 324 C414 332 410 342 400 346 C402 365 385 382 362 386 C360 405 365 420 385 435 C430 450 460 490 470 520 Z"/>
+              <clipPath id="headClip"><use href="#headShape"/></clipPath>
+            </defs>
+
+            <!-- bayangan siluet kedua -->
+            <use href="#headShape" transform="translate(46,-18)" fill="#059669" opacity=".13"/>
+            <use href="#headShape" transform="translate(88,-32) scale(.98)" fill="#059669" opacity=".07"/>
+
+            <!-- siluet utama -->
+            <use href="#headShape" fill="url(#gHead)"/>
+
+            <!-- pohon di dalam kepala -->
+            <g clip-path="url(#headClip)">
+              <g class="tree" fill="none" stroke="#ECFDF5" stroke-linecap="round" stroke-opacity=".92">
+                <path d="M236 540 C238 480 240 420 238 350" stroke-width="9"/>
+                <path d="M238 420 C238 380 210 355 190 310" stroke-width="6"/>
+                <path d="M238 395 C250 350 282 325 300 262" stroke-width="6"/>
+                <path d="M214 340 C198 300 198 255 230 205" stroke-width="4.5"/>
+                <path d="M287 300 C302 262 332 240 352 208" stroke-width="4.5"/>
+                <path d="M190 310 C170 290 165 262 176 230" stroke-width="3.5"/>
+                <path d="M300 262 C332 252 362 262 384 250" stroke-width="3.5"/>
+                <path d="M230 205 C240 180 262 168 280 160" stroke-width="3"/>
+                <path d="M352 208 C356 188 348 170 336 158" stroke-width="3"/>
+              </g>
+              <g id="leaves"></g>
+              <circle cx="238" cy="452" r="46" fill="url(#gGlow)"/>
+              <circle class="pulse-core" cx="238" cy="452" r="12" fill="#fff"/>
+            </g>
+
+            <!-- garis denyut (nadi) -->
+            <path class="pulse-line" d="M40 505 H150 L172 470 L198 528 L222 486 L240 505 H330" fill="none" stroke="#065F46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/>
+          </svg>
+
+          <div class="chip chip--a">
+            <span class="chip__label">Wellbeing Index</span>
+            <span class="chip__row">
+              <svg viewBox="0 0 36 36" class="chip__ring"><circle cx="18" cy="18" r="14" fill="none" stroke="#DCE8E2" stroke-width="5"/><circle cx="18" cy="18" r="14" fill="none" stroke="#059669" stroke-width="5" stroke-linecap="round" stroke-dasharray="57 88" transform="rotate(-90 18 18)"/></svg>
+              <b>65</b>
+            </span>
+          </div>
+          <div class="chip chip--b">
+            <span class="chip__label">Klaster terdeteksi</span>
+            <span class="chip__dots"><i style="--c:#E0664A"></i><i style="--c:#D9971E"></i><i style="--c:#2B65B0"></i><i style="--c:#059669"></i></span>
+          </div>
+          <div class="chip chip--c">
+            <span class="chip__label">Sentimen komentar</span>
+            <span class="chip__bar"><i style="width:30%;background:#059669"></i><i style="width:22%;background:#B6C2CE"></i><i style="width:48%;background:#E0664A"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <svg class="hero__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 60 C240 10 480 10 720 45 C960 80 1200 90 1440 40 L1440 120 L0 120 Z" fill="#0F1F3D"/>
+      </svg>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot__inner">
+      <span class="brand brand--foot">
+        <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><path d="M4 17h6l3-7 5 13 3-6h7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="brand__name">Nadi<b>Kampus</b></span>
+      </span>
+      <span>Mengubah suara mahasiswa menjadi keputusan kampus berbasis data.</span>
+    </div>
+  </footer>
+
+  <script src="js/landing.js"></script>
+</body>
+</html>

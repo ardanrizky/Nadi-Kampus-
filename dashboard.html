@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NadiKampus Analytics — Dashboard Mahasiswa</title>
+  <meta name="description" content="Aplikasi analitik wellbeing dan permasalahan mahasiswa berbasis Latent Profile Analysis dan NLP." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23059669'/%3E%3Cpath d='M4 17h6l3-7 5 13 3-6h7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="page-app">
+
+  <div class="app-layout">
+    <!-- ============ SIDEBAR KIRI ============ -->
+    <aside class="app-sidebar" id="appSidebar" aria-label="Navigasi aplikasi">
+      <div class="app-sidebar__top">
+        <div class="sidebar-brand-row">
+          <a class="brand brand--app" href="index.html" title="Kembali ke Beranda">
+            <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+              <rect width="32" height="32" rx="9" fill="currentColor"/>
+              <path d="M4 17h6l3-7 5 13 3-6h7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="brand__text">
+              <span class="brand__name">Nadi<b>Kampus</b></span>
+              <span class="brand__tag">Institutional Analytics</span>
+            </div>
+          </a>
+
+          <!-- Tombol Collapse / Expand Sidebar -->
+          <button class="sidebar-collapse-btn" id="btnToggleSidebar" type="button" aria-label="Ciutkan / Perlebar sidebar" title="Toggle Sidebar">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Menu Navigasi Interaktif -->
+        <nav class="app-nav" role="tablist" aria-orientation="vertical">
+          <button class="app-nav__item is-active" role="tab" aria-selected="true" data-view="executive" id="tab-executive" aria-controls="view-executive">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+            </div>
+            <div class="nav-text">
+              <span class="nav-title">Executive Dashboard</span>
+              <span class="nav-sub">Ringkasan 4 Indikator</span>
+            </div>
+            <span class="pulse-chip" id="sideWbScore" title="Wellbeing Index Terkini">65</span>
+          </button>
+
+          <button class="app-nav__item" role="tab" aria-selected="false" data-view="profile" id="tab-profile" aria-controls="view-profile">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 5.2a3.3 3.3 0 0 1 0 6.1M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>
+            </div>
+            <div class="nav-text">
+              <span class="nav-title">Student Clustering</span>
+              <span class="nav-sub">K-Means (k=4)</span>
+            </div>
+            <span class="cluster-mini-pips" title="4 Klaster Teridentifikasi">
+              <i style="background:#E0664A"></i><i style="background:#D9971E"></i><i style="background:#2B65B0"></i><i style="background:#059669"></i>
+            </span>
+          </button>
+
+          <button class="app-nav__item" role="tab" aria-selected="false" data-view="voice" id="tab-voice" aria-controls="view-voice">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg>
+            </div>
+            <div class="nav-text">
+              <span class="nav-title">Student Voice</span>
+              <span class="nav-sub">NLP &amp; Sentimen</span>
+            </div>
+            <span class="nlp-soundwave" title="Pemrosesan Suara Mahasiswa">
+              <i></i><i></i><i></i><i></i>
+            </span>
+          </button>
+
+          <button class="app-nav__item" role="tab" aria-selected="false" data-view="reco" id="tab-reco" aria-controls="view-reco">
+            <div class="nav-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.8z"/></svg>
+            </div>
+            <div class="nav-text">
+              <span class="nav-title">Recommendations</span>
+              <span class="nav-sub">Program Intervensi</span>
+            </div>
+            <span class="prio-counter" title="Program Prioritas Tinggi">3 Prio</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Widget Bawah: Live Heartbeat Monitor & Navigation -->
+      <div class="app-sidebar__bottom">
+        <!-- Campus EKG Heartbeat Telemetry Widget -->
+        <div class="campus-ekg-card" id="campusEkgCard" tabindex="0" role="region" aria-label="Status Denyut Kampus" title="Klik untuk melihat ringkasan insight kampus">
+          <div class="ekg-top">
+            <span class="ekg-status-dot"></span>
+            <span class="ekg-title">NADI KAMPUS MONITOR</span>
+            <span class="ekg-freq">74 BPM</span>
+          </div>
+
+          <!-- Animated EKG Pulse Line -->
+          <div class="ekg-graph" aria-hidden="true">
+            <svg viewBox="0 0 220 38" class="ekg-svg">
+              <path class="ekg-path-bg" d="M0 19 L45 19 L55 5 L65 33 L75 10 L85 26 L95 19 L220 19"/>
+              <path class="ekg-path-beam" d="M0 19 L45 19 L55 5 L65 33 L75 10 L85 26 L95 19 L220 19"/>
+            </svg>
+          </div>
+
+          <div class="ekg-meta">
+            <span class="ekg-state">Status: <b>Terkendali</b></span>
+            <span class="ekg-n">2.481 Responden</span>
+          </div>
+        </div>
+
+        <a href="index.html" class="app-back-btn" title="Kembali ke Landing Page">
+          <div class="app-back-btn__icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </div>
+          <span class="app-back-btn__text">Kembali ke Beranda</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- ============ KONTEN UTAMA ============ -->
+    <div class="app-main">
+      <!-- Topbar Header Bersih & Terintegrasi -->
+      <header class="app-topbar">
+        <div class="app-topbar__crumb">
+          <span class="crumb-lead">Dashboard</span>
+          <span class="crumb-slash">/</span>
+          <h1 class="crumb-title" id="viewHeading">Executive Dashboard</h1>
+        </div>
+
+        <div class="app-topbar__actions">
+          <div class="app-badge">
+            <span class="badge-dot"></span>
+            Semester Genap 2025/2026
+          </div>
+
+          <label class="select select--app" title="Filter berdasarkan fakultas">
+            <span>Fakultas:</span>
+            <select id="fFaculty" aria-label="Pilih fakultas"></select>
+          </label>
+
+          <button type="button" class="btn btn--outline btn--sm" id="btnPrintReport" title="Cetak atau unduh ringkasan">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
+              <path d="M6 9V2h12v7"></path>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <span>Cetak Ringkasan</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Stage / Kontainer View -->
+      <main class="app-content">
+
+        <!-- ---------- 1. EXECUTIVE DASHBOARD ---------- -->
+        <section class="view is-active" id="view-executive" role="tabpanel" aria-labelledby="tab-executive">
+          <div class="view__head">
+            <h3>Kondisi mahasiswa <span id="exScope">seluruh kampus</span></h3>
+            <p>Empat indikator utama dan interpretasi strategis bagi pengambil keputusan institusi.</p>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="kpis" id="kpis"></div>
+
+          <!-- Trend & Insight Utama -->
+          <div class="grid2">
+            <article class="card">
+              <div class="card__head">
+                <h4>Tren 6 bulan terakhir</h4>
+                <div class="seg" id="trendToggles" role="group" aria-label="Pilih indikator tren"></div>
+              </div>
+              <div class="chart" id="trendChart"></div>
+            </article>
+
+            <article class="card" id="insight">
+              <div class="card__head">
+                <h4>Insight utama</h4>
+              </div>
+              <ul class="insights" id="insights"></ul>
+            </article>
+          </div>
+
+          <!-- Fakultas Comparison -->
+          <article class="card">
+            <div class="card__head">
+              <h4>Perbandingan antar fakultas</h4>
+              <div class="seg" id="cmpMetric" role="group" aria-label="Pilih indikator perbandingan"></div>
+            </div>
+            <p class="card__hint">Klik satu fakultas di bawah untuk memfilter seluruh dashboard secara instan.</p>
+            <div class="fbars" id="fbars"></div>
+          </article>
+        </section>
+
+        <!-- ---------- 2. STUDENT CLUSTERING ANALYSIS (K-MEANS) ---------- -->
+        <section class="view" id="view-profile" role="tabpanel" aria-labelledby="tab-profile" hidden>
+          <div class="view__head">
+            <h3>Student Clustering Analysis (K-Means) <span id="prScope">seluruh kampus</span></h3>
+            <p>Hasil K-Means Clustering (k=4): mahasiswa dikelompokkan ke dalam klaster berdasarkan kedekatan jarak Euclidean pada 4 dimensi wellbeing &amp; akademik terhadap titik centroid.</p>
+          </div>
+
+          <div class="lpa-note">
+            <span><b>4 Klaster</b> Terpilih (k=4)</span>
+            <span>Silhouette Score <b>0,71</b> (Struktur Klaster Kuat)</span>
+            <span>Metode: <b>Elbow &amp; K-Means Clustering</b></span>
+            <span>Total Iterasi Konvergen: <b>12 Iterasi</b></span>
+          </div>
+
+          <!-- 4 K-Means Cluster Cards -->
+          <div class="profiles" id="profiles"></div>
+
+          <!-- Grid 1: Scatter Plot 2D & Pola Centroid -->
+          <div class="grid2 grid2--cluster-top">
+            <article class="card">
+              <div class="card__head">
+                <h4>Sebaran Responden &amp; Centroid 2D (PCA Space)</h4>
+                <span class="card__badge">200 Sampel Representatif</span>
+              </div>
+              <p class="card__hint">Arahkan kursor ke titik mahasiswa atau klik Centroid (C1–C4) untuk memfokuskan klaster.</p>
+              <div class="chart" id="clusterScatterChart"></div>
+            </article>
+
+            <article class="card">
+              <div class="card__head">
+                <h4>Nilai Centroid Multi-Dimensi (0–100)</h4>
+              </div>
+              <p class="card__hint">Grafik perbandingan skor centroid klaster pada 4 indikator utama.</p>
+              <div class="chart" id="profileChart"></div>
+            </article>
+          </div>
+
+          <!-- Detail Karakteristik Klaster Centroid -->
+          <article class="card card--cluster-detail" id="profileDetail"></article>
+        </section>
+
+        <!-- ---------- 3. STUDENT VOICE (NLP) ---------- -->
+        <section class="view" id="view-voice" role="tabpanel" aria-labelledby="tab-voice" hidden>
+          <div class="view__head">
+            <h3>Student Voice (NLP) <span id="vcScope">seluruh kampus</span></h3>
+            <p>Ribuan komentar terbuka dianalisis dengan Natural Language Processing: distribusi sentimen, ekstraksi topik dominan, dan representasi suara mahasiswa anonim.</p>
+          </div>
+
+          <div class="grid2 grid2--voice">
+            <article class="card">
+              <div class="card__head">
+                <h4>Sentimen komentar</h4>
+              </div>
+              <div class="donutwrap">
+                <div class="donut" id="donut"></div>
+                <div class="legend" id="sentLegend"></div>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card__head">
+                <h4>Topik dominan</h4>
+              </div>
+              <p class="card__hint">Klik topik untuk menyaring kata kunci dan komentar terkait.</p>
+              <div class="topics" id="topics"></div>
+            </article>
+          </div>
+
+          <article class="card">
+            <div class="card__head">
+              <h4 id="quotesTitle">Komentar mahasiswa</h4>
+              <div class="seg" id="sentFilter" role="group" aria-label="Filter sentimen"></div>
+            </div>
+            <div class="kw" id="keywords"></div>
+            <ul class="quotes" id="quotes"></ul>
+          </article>
+        </section>
+
+        <!-- ---------- 4. RECOMMENDATION PROGRAM ---------- -->
+        <section class="view" id="view-reco" role="tabpanel" aria-labelledby="tab-reco" hidden>
+          <div class="view__head">
+            <h3>Recommendation Program <span id="rcScope">seluruh kampus</span></h3>
+            <p>Katalog program dukungan diprioritaskan otomatis berdasarkan tingkat kebutuhan data LPA dan proporsi suara kritis mahasiswa.</p>
+          </div>
+
+          <div class="seg seg--wrap" id="recoFilter" role="group" aria-label="Filter sasaran program"></div>
+          <div class="recos" id="recos"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Tray rencana program terpilih -->
+  <div class="tray" id="tray" hidden>
+    <span id="trayCount">0 program dipilih</span>
+    <button class="btn btn--em btn--sm" id="trayCopy" type="button">Salin ringkasan rencana</button>
+    <button class="tray__clear" id="trayClear" type="button">Kosongkan</button>
+  </div>
+
+  <!-- Toast Notifikasi -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js?v=4"></script>
+  <script src="js/charts.js?v=4"></script>
+  <script src="js/app.js?v=4"></script>
+</body>
+</html>
