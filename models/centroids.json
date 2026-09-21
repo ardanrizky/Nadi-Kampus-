@@ -1,0 +1,80 @@
+{
+  "model_name": "K-Means Student Wellbeing Segmenter",
+  "k": 4,
+  "n_samples": 2481,
+  "silhouette_score": 0.71,
+  "inertia": 184.25,
+  "scaling_method": "StandardScaler",
+  "dimensions": [
+    "wellbeing_score",
+    "academic_pressure",
+    "social_support",
+    "career_readiness"
+  ],
+  "centroids": [
+    {
+      "cluster_id": 1,
+      "cluster_name": "Academic Pressure",
+      "percentage": 27.0,
+      "sample_count": 670,
+      "features": {
+        "wellbeing_score": 48.0,
+        "academic_pressure": 82.0,
+        "social_support": 55.0,
+        "career_readiness": 52.0
+      },
+      "pca_2d": {
+        "pc1": -0.42,
+        "pc2": 0.58
+      }
+    },
+    {
+      "cluster_id": 2,
+      "cluster_name": "Career Concern",
+      "percentage": 24.0,
+      "sample_count": 595,
+      "features": {
+        "wellbeing_score": 58.0,
+        "academic_pressure": 60.0,
+        "social_support": 62.0,
+        "career_readiness": 44.0
+      },
+      "pca_2d": {
+        "pc1": 0.52,
+        "pc2": 0.44
+      }
+    },
+    {
+      "cluster_id": 3,
+      "cluster_name": "Social Adaptation",
+      "percentage": 18.0,
+      "sample_count": 447,
+      "features": {
+        "wellbeing_score": 50.0,
+        "academic_pressure": 62.0,
+        "social_support": 38.0,
+        "career_readiness": 58.0
+      },
+      "pca_2d": {
+        "pc1": -0.36,
+        "pc2": -0.54
+      }
+    },
+    {
+      "cluster_id": 4,
+      "cluster_name": "Balanced Wellbeing",
+      "percentage": 31.0,
+      "sample_count": 769,
+      "features": {
+        "wellbeing_score": 76.0,
+        "academic_pressure": 46.0,
+        "social_support": 80.0,
+        "career_readiness": 74.0
+      },
+      "pca_2d": {
+        "pc1": 0.48,
+        "pc2": -0.48
+      }
+    }
+  ]
+}

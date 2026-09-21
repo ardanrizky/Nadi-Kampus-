@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.git
+.gitignore
+.env
+.DS_Store
+Thumbs.db
+node_modules/
+notebooks/.ipynb_checkpoints/

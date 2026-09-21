@@ -1,112 +1,108 @@
-# 🌿 NadiKampus — Institutional Student Intelligence Console
+# 🌿 NadiKampus: Sistem Analisis Wellbeing & Klaster Mahasiswa
 
-> **Aplikasi Web Analisis Wellbeing dan Permasalahan Mahasiswa Berbasis Machine Learning (K-Means Clustering) dan Natural Language Processing (NLP).**
-
----
-
-## 📌 Tentang Proyek
-
-**NadiKampus** adalah platform analitik institusional yang dirancang untuk membantu pimpinan universitas, dekanat, dosen wali, dan pengelola kemahasiswaan dalam memahami kondisi mahasiswa secara objektif berbasis data komprehensif.
-
-Aplikasi ini menggabungkan:
-- **K-Means Clustering ($k=4$)** untuk segmentasi profil psikososial dan akademik mahasiswa.
-- **Natural Language Processing (NLP)** untuk analisis sentimen dan ekstraksi topik dari ribuan suara/komentar terbuka mahasiswa.
-- **Executive Decision Intelligence** untuk menyajikan ringkasan indikator utama dan katalog program intervensi terprioritas.
+> **Platform Analisis Data Institusional Mahasiswa Berbasis Algoritma K-Means Clustering dan Natural Language Processing (NLP).**
 
 ---
 
-## 🚀 Fitur Utama
+## 📌 Gambaran Proyek
 
-### 1. 🏛️ Executive Dashboard
-- **4 Indikator Utama**: *Wellbeing Index*, *Academic Pressure*, *Social Support*, dan *Career Readiness*.
-- **Tren 6 Bulan Terakhir**: Grafik multi-garis dinamis untuk memantau perubahan indikator dari waktu ke waktu.
-- **Strategic Insights**: Deteksi anomali otomatis dan peringatan dini pada fakultas dengan tekanan tertinggi.
-- **Filter Fakultas**: Menyaring data per fakultas atau melihat agregasi seluruh kampus.
+**NadiKampus** adalah platform analitik cerdas yang dirancang untuk pengambil kebijakan perguruan tinggi (Pimpinan Universitas, Dekanat, Dosen Wali, dan Direktorat Kemahasiswaan) dalam memetakan kondisi psikososial, tekanan akademik, serta aspirasi mahasiswa secara objektif berbasis bukti (*data-driven decision making*).
 
-### 2. 👥 Student Clustering Analysis (K-Means, $k=4$)
-- **4 Profil Klaster Mahasiswa**:
-  - *Cluster 1: Academic Pressure* (Tekanan akademik tinggi, butuh pendampingan beban studi).
-  - *Cluster 2: Career Concern* (Kecemasan karier & magang di tingkat akhir).
-  - *Cluster 3: Social Adaptation* (Tantangan adaptasi sosial & rasa kesepian).
-  - *Cluster 4: Balanced Wellbeing* (Keseimbangan optimal antara akademik dan kehidupan sosial).
-- **Sebaran Responden 2D (PCA Space)**: Visualisasi *scatter plot* interaktif 200 sampel representatif dengan koordinat PCA dan titik *centroid* (C1–C4) yang dapat difokuskan saat diklik.
-- **Perbandingan Centroid Multi-Dimensi**: Grafik garis perbandingan skor centroid pada skala 0–100.
-- **Metrik Validasi Klaster**: Dilengkapi nilai *Silhouette Score* (0,71) dan justifikasi metode *Elbow*.
-
-### 3. 💬 Student Voice (NLP & Sentimen)
-- **Distribusi Sentimen**: Grafik donat sentimen (Positif, Netral, Negatif).
-- **Topik Dominan**: Ekstraksi 7 topik utama permasalahan mahasiswa beserta proporsi sentimennya.
-- **Kutipan Mahasiswa Terfilter**: Membaca suara anonim mahasiswa yang dapat difilter berdasarkan sentimen dan topik tertentu.
-
-### 4. 🎯 Katalog Program Rekomendasi
-- Rekomendasi program intervensi spesifik berdasarkan klaster risiko (Prioritas Tinggi, Sedang, Rendah).
-- Keranjang Rencana Intervensi interaktif (*Plan Tray*) yang dapat disalin ke papan klip.
-- Fitur **Cetak Ringkasan Institusional** (*Print-ready report*).
-
-### 5. 💓 Monitor Denyut Kampus (Live EKG)
-- Telemetri status kesehatan kampus *real-time* (BPM, status kendali, dan jumlah responden).
+Sistem ini mengintegrasikan:
+1. **Machine Learning Clustering (K-Means, $k=4$)**: Segmentasi profil risiko dan potensi mahasiswa dengan metrik *Silhouette Score* **0,71**.
+2. **Natural Language Processing (NLP)**: Analisis sentimen dan penambangan topik dari ribuan suara komentar terbuka mahasiswa.
+3. **Interactive Intelligence Console**: Antarmuka dashboard institusional berbasis web dengan visualisasi *Scatter Plot* PCA 2D interaktif, grafik tren, serta katalog rekomendasi intervensi.
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
-
-- **HTML5 Semantic**: Struktur dokumen web yang aksesibel dan standar industri.
-- **Vanilla CSS3**: Desain sistem modular modern dengan palet warna institusional (*Navy* `#0F1F3D`, *Emerald* `#059669`, *Mint* `#EAF7F0`, dan *Paper* `#F8FBF9`), tipografi *Fraunces* & *Plus Jakarta Sans*, dan responsif di berbagai resolusi layar.
-- **Vanilla JavaScript (ES6+)**: Logika interaktif, reaktivitas komponen, dan *state management* tanpa *overhead* pustaka pihak ketiga.
-- **Custom SVG Chart Engine**: Pembuatan grafik (*ring gauges*, *sparklines*, *scatter plot*, *donut chart*) murni dengan SVG untuk performa instan dan tajam di layar Retina/HiDPI.
-
----
-
-## 📂 Struktur Direktori
+## 📂 Struktur Direktori Proyek
 
 ```text
 nadi-kampus-web/
-├── css/
-│   └── style.css            # Desain sistem & stylesheet terpadu
-├── js/
-│   ├── app.js               # Logika navigasi & reaktivitas dashboard
-│   ├── charts.js            # Engine grafik SVG (PCA scatter, ring, tren, donat)
-│   ├── data.js              # Dataset institusional, centroid klaster, & NLP
-│   └── landing.js           # Interaktivitas beranda/landing page
-├── .gitignore               # Daftar berkas yang diabaikan Git
-├── dashboard.html           # Halaman utama aplikasi analitik dashboard
-├── index.html               # Halaman beranda / landing page
-└── README.md                # Dokumentasi proyek
+├── api/
+│   └── main.py                     # Layanan API backend (FastAPI) & endpoint prediksi klaster
+├── data/
+│   ├── raw/
+│   │   └── data_survei_mahasiswa.csv # Data mentah survei (2.481 responden mahasiswa)
+│   └── processed/
+│       └── student_features_clean.csv # Fitur hasil normalisasi & koordinat PCA 2D
+├── frontend/
+│   ├── css/
+│   │   └── style.css               # Desain sistem modular, tema institusional terpadu
+│   ├── js/
+│   │   ├── app.js                  # Logika aplikasi, navigasi view, filter fakultas
+│   │   ├── charts.js               # Engine grafik SVG dinamis (PCA Scatter, Donut, Rings)
+│   │   ├── data.js                 # Dataset frontend, koordinat centroid, & NLP
+│   │   └── landing.js              # Interaktivitas landing page
+│   ├── dashboard.html              # Halaman utama Intelligence Dashboard Console
+│   └── index.html                  # Halaman beranda / landing page
+├── models/
+│   └── centroids.json              # Metadata model K-Means & koordinat titik centroid
+├── notebooks/
+│   ├── 01_eda_and_kmeans_clustering.ipynb # Analisis data, Elbow Method, Silhouette, & PCA
+│   └── 02_nlp_sentiment_analysis.ipynb   # Prapemrosesan teks, analisis sentimen & topik
+├── .dockerignore                   # Berkas pengabaian build Docker
+├── .env.example                    # Contoh konfigurasi environment variables
+├── .gitignore                      # Berkas pengabaian Git (Python, OS, Editor)
+├── .python-version                 # Versi Python yang direkomendasikan (3.11.8)
+├── Dockerfile                      # Konfigurasi container Docker
+├── docker-compose.yml              # Orkestrasi Docker multi-container
+├── railway.toml                    # Konfigurasi deployment platform Railway
+├── render.yaml                     # Konfigurasi deployment platform Render
+├── requirements.txt                # Dependensi pustaka Python
+├── vercel.json                     # Konfigurasi routing & deployment Vercel
+├── app.py                          # Entry point server aplikasi
+└── README.md                       # Dokumentasi proyek
 ```
 
 ---
 
-## 💻 Cara Menjalankan Proyek
+## 👥 Hasil Segmentasi Klaster Mahasiswa (K-Means, $k=4$)
 
-Proyek ini tidak memerlukan langkah instalasi `npm` atau proses *build* yang rumit. 
+Berdasarkan analisis klaster multi-dimensi (Wellbeing, Academic Pressure, Social Support, Career Readiness):
 
-### Opsi 1: Buka Langsung di Browser
-Cukup buka berkas `index.html` atau `dashboard.html` langsung menggunakan peramban web modern favorit Anda (Google Chrome, Microsoft Edge, Firefox, Safari).
+| Klaster | Nama Klaster | Porsi Mahasiswa | Karakteristik Utama | Rekomendasi Intervensi |
+| :--- | :--- | :---: | :--- | :--- |
+| **Klaster 1** | *Academic Pressure* | **27%** | Tekanan akademik tinggi, beban tugas berat | Mentoring beban SKS & konseling akademik |
+| **Klaster 2** | *Career Concern* | **24%** | Cemas karier pasca kampus, butuh magang | *Career clinic*, sertifikasi, & bursa kerja |
+| **Klaster 3** | *Social Adaptation* | **18%** | Kesepian, adaptasi sosial perantau | *Peer-support program* & komunitas inklusif |
+| **Klaster 4** | *Balanced Wellbeing* | **31%** | Resilien, seimbang, adaptif | Dilibatkan sebagai *Student Ambassador* |
 
-### Opsi 2: Menggunakan Local Server (Direkomendasikan)
-Menggunakan server lokal agar *font caching* dan *script loading* optimal:
+---
 
+## 💻 Cara Menjalankan Aplikasi
+
+### 1. Menjalankan Langsung dengan Python (Fullstack)
 ```bash
-# Menggunakan Python 3
-python -m http.server 8000
+# Clone repository
+git clone https://github.com/ardanrizky/nadi-kampus.git
+cd nadi-kampus
 
-# Atau menggunakan npx serve
-npx serve .
+# Buat virtual environment (opsional)
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install dependensi
+pip install -r requirements.txt
+
+# Jalankan server
+python app.py
 ```
-Lalu akses di peramban: `http://localhost:8000`
+Akses di peramban: `http://localhost:8000`
+
+### 2. Menggunakan Docker
+```bash
+docker-compose up --build
+```
 
 ---
 
-## 🌐 Deploy ke GitHub Pages
+## 🚀 Deployment
 
-Proyek ini sudah 100% siap untuk di-deploy ke **GitHub Pages**:
-1. Buat repositori baru di akun GitHub Anda.
-2. *Push* kode ini ke branch `main`.
-3. Buka tab **Settings** repositori > **Pages**.
-4. Pada bagian **Build and deployment > Source**, pilih **Deploy from a branch** dan pilih branch `main` folder `/ (root)`.
-5. Website NadiKampus Anda akan langsung daring (*online*) dan dapat diakses publik.
+- **Vercel**: Mendukung *Zero-configuration deployment* melalui berkas `vercel.json`.
+- **Render / Railway**: Cukup sambungkan repositori GitHub Anda; file `render.yaml` dan `railway.toml` akan mengonfigurasi otomatis.
 
 ---
 
 ## 📄 Lisensi
-Hak Cipta © 2026 NadiKampus. Dikembangkan untuk keperluan riset dan analisis institusi pendidikan tinggi.
+Hak Cipta © 2026 NadiKampus. Dikembangkan untuk keperluan riset analitik institusi pendidikan tinggi.
