@@ -1,83 +1,79 @@
-# 🌿 NadiKampus: Sistem Analisis Wellbeing & Klaster Mahasiswa
+# NadiKampus
 
-> **Platform Analisis Data Institusional Mahasiswa Berbasis Algoritma K-Means Clustering dan Natural Language Processing (NLP).**
+Aplikasi web analitik untuk memetakan kondisi psikososial, tekanan akademik, dan aspirasi mahasiswa berbasis data survei. Sistem ini menggabungkan algoritma K-Means Clustering untuk segmentasi kelompok mahasiswa dan Natural Language Processing (NLP) untuk menganalisis sentimen serta topik dari komentar mahasiswa.
 
----
+## Fitur
 
-## 📌 Gambaran Proyek
+- Segmentasi Mahasiswa (K-Means Clustering): Mengelompokkan data responden ke dalam 4 klaster profil risiko dan potensi mahasiswa dengan visualisasi sebaran PCA 2D.
+- Analisis Sentimen & Topik (NLP): Mengolah feedback dan keluhan terbuka mahasiswa untuk mengetahui sentimen umum (positif, netral, negatif).
+- Dashboard Interaktif: Menampilkan visualisasi data, sebaran klaster mahasiswa per fakultas, grafik proporsi, dan rekomendasi tindakan.
+- Backend API (FastAPI): Layanan API lokal untuk melayani kebutuhan data frontend dan inferensi klaster baru.
 
-**NadiKampus** adalah platform analitik cerdas yang dirancang untuk pengambil kebijakan perguruan tinggi (Pimpinan Universitas, Dekanat, Dosen Wali, dan Direktorat Kemahasiswaan) dalam memetakan kondisi psikososial, tekanan akademik, serta aspirasi mahasiswa secara objektif berbasis data (*data-driven decision making*).
+## Pembagian Klaster Mahasiswa
 
-Sistem ini mengintegrasikan:
-1. **Machine Learning Clustering (K-Means, $k=4$)**: Segmentasi profil risiko dan potensi mahasiswa dengan metrik *Silhouette Score* **0,71**.
-2. **Natural Language Processing (NLP)**: Analisis sentimen dan penambangan topik dari ribuan suara komentar terbuka mahasiswa.
-3. **Interactive Intelligence Console**: Antarmuka dashboard institusional berbasis web dengan visualisasi *Scatter Plot* PCA 2D interaktif, grafik tren, serta katalog rekomendasi intervensi.
+Berdasarkan hasil pemodelan K-Means ($k=4$), profil mahasiswa dikelompokkan menjadi 4 kategori:
 
----
+| Klaster | Nama Klaster | Persentase | Karakteristik Utama |
+|---|---|---|---|
+| Klaster 1 | Academic Pressure | 27% | Mengalami beban tugas tinggi dan tekanan perkuliahan |
+| Klaster 2 | Career Concern | 24% | Khawatir akan prospek karir dan kesiapan kerja |
+| Klaster 3 | Social Adaptation | 18% | Kesulitan dalam adaptasi lingkungan dan relasi pertemanan |
+| Klaster 4 | Balanced Wellbeing | 31% | Memiliki keseimbangan akademik dan adaptasi yang baik |
 
-## 📂 Struktur Direktori Proyek
+## Teknologi yang Digunakan
+
+- Python 3.10+
+- FastAPI & Uvicorn (Backend API)
+- Scikit-learn, Pandas, NumPy (Pemodelan K-Means, PCA, dan manipulasi data)
+- HTML, CSS, JavaScript (Frontend Dashboard interaktif)
+- Jupyter Notebook (Eksplorasi data, pengujian elbow method, dan NLP)
+
+## Cara Menjalankan Aplikasi
+
+1. Clone repositori ini:
+```bash
+git clone https://github.com/ardanrizky/Nadi-Kampus-.git
+cd Nadi-Kampus-
+```
+
+2. Pasang dependensi yang dibutuhkan:
+```bash
+pip install -r requirements.txt
+```
+
+3. Jalankan aplikasi:
+```bash
+python app.py
+```
+
+4. Buka browser dan akses:
+```text
+http://localhost:8000
+```
+
+*Catatan: Antarmuka dashboard juga dapat dibuka langsung tanpa menjalankan server Python dengan membuka berkas `frontend/dashboard.html` di browser.*
+
+## Struktur Folder
 
 ```text
 nadi-kampus-web/
-├── 📁 api/                      # Layanan API backend (FastAPI) & endpoint prediksi klaster
+├── api/                    # Endpoint backend FastAPI
 │   └── main.py
-├── 📁 data/
-│   ├── raw/                    # Data mentah survei (2.481 responden mahasiswa)
-│   │   └── data_survei_mahasiswa.csv
-│   └── processed/              # Fitur hasil normalisasi & koordinat PCA 2D
-│       └── student_features_clean.csv
-├── 📁 frontend/                # Antarmuka web pengguna (HTML, CSS, JS)
+├── data/
+│   ├── raw/                # Data mentah survei mahasiswa
+│   └── processed/          # Data hasil prapemrosesan dan koordinat PCA
+├── frontend/               # File tampilan antarmuka web
 │   ├── css/
-│   │   └── style.css           # Desain sistem modular & palet institusional
 │   ├── js/
-│   │   ├── app.js              # Logika aplikasi, navigasi view, filter fakultas
-│   │   ├── charts.js           # Engine grafik SVG dinamis (PCA Scatter, Donut, Rings)
-│   │   ├── data.js             # Dataset frontend, koordinat centroid, & NLP
-│   │   └── landing.js          # Interaktivitas landing page
-│   ├── dashboard.html          # Halaman utama Intelligence Dashboard Console
-│   └── index.html              # Halaman beranda / landing page
-├── 📁 models/                   # Model & metadata titik centroid K-Means (k=4)
+│   ├── dashboard.html      # Halaman dashboard utama
+│   └── index.html          # Halaman beranda
+├── models/                 # File model dan titik centroid K-Means
 │   └── centroids.json
-├── 📁 notebooks/                # Jupyter Notebooks untuk riset & eksperimen pemodelan
-│   ├── 01_eda_and_kmeans_clustering.ipynb   # Elbow Method, Silhouette Score (0.71), & PCA 2D
-│   └── 02_nlp_sentiment_analysis.ipynb     # Prapemrosesan teks, sentimen, & ekstraksi topik
-├── 📄 .gitignore               # Pengabaian berkas sistem, editor, dan cache Python
-├── 🐍 app.py                   # Runner server lokal aplikasi
-├── 📄 requirements.txt         # Daftar dependensi library Python
-└── 📖 README.md                # Dokumentasi proyek
+├── notebooks/              # Eksperimen data sains (EDA, K-Means, NLP)
+├── app.py                  # Runner server aplikasi lokal
+├── requirements.txt        # Daftar dependensi library
+└── README.md               # Dokumentasi proyek
 ```
 
----
-
-## 👥 Hasil Segmentasi Klaster Mahasiswa (K-Means, $k=4$)
-
-Berdasarkan analisis klaster multi-dimensi (Wellbeing, Academic Pressure, Social Support, Career Readiness):
-
-| Klaster | Nama Klaster | Porsi Mahasiswa | Karakteristik Utama | Rekomendasi Intervensi |
-| :--- | :--- | :---: | :--- | :--- |
-| **Klaster 1** | *Academic Pressure* | **27%** | Tekanan akademik tinggi, beban tugas berat | Mentoring beban SKS & konseling akademik |
-| **Klaster 2** | *Career Concern* | **24%** | Cemas karier pasca kampus, butuh magang | *Career clinic*, sertifikasi, & bursa kerja |
-| **Klaster 3** | *Social Adaptation* | **18%** | Kesepian, adaptasi sosial perantau | *Peer-support program* & komunitas inklusif |
-| **Klaster 4** | *Balanced Wellbeing* | **31%** | Resilien, seimbang, adaptif | Dilibatkan sebagai *Student Ambassador* |
-
----
-
-## 💻 Cara Menjalankan Proyek Secara Lokal
-
-### Opsi 1: Menjalankan Server Python (Fullstack + API)
-```bash
-# 1. Install library yang dibutuhkan
-pip install -r requirements.txt
-
-# 2. Jalankan aplikasi
-python app.py
-```
-Akses di browser: `http://localhost:8000`
-
-### Opsi 2: Buka Antarmuka Langsung Tanpa Python
-Anda juga dapat membuka berkas `frontend/index.html` atau `frontend/dashboard.html` langsung dengan klik dua kali (*double-click*) pada browser favorit Anda.
-
----
-
-## 📄 Lisensi
-Hak Cipta © 2026 NadiKampus. Dikembangkan untuk keperluan riset analitik institusi pendidikan tinggi.
+## Lisensi
+Proyek ini dibuat untuk keperluan akademik dan portofolio data science.
