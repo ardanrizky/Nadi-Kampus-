@@ -51,7 +51,6 @@ python app.py
 http://localhost:8000
 ```
 
-*Catatan: Antarmuka dashboard juga dapat dibuka langsung tanpa menjalankan server Python dengan membuka berkas `frontend/dashboard.html` di browser.*
 
 ## Struktur Folder
 
@@ -74,6 +73,3 @@ nadi-kampus-web/
 ├── requirements.txt        # Daftar dependensi library
 └── README.md               # Dokumentasi proyek
 ```
-
-## Lisensi
-Proyek ini dibuat untuk keperluan akademik dan portofolio data science.
