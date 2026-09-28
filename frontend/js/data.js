@@ -43,21 +43,22 @@ var TOPICS = [
     keywords: ['UKM', 'organisasi', 'acara kampus', 'teman satu tim', 'relawan'] }
 ];
 
-/* Data per fakultas. topicW = bobot komentar topik, profile = porsi 4 cluster (jumlah 100) */
-var FACULTIES = {
-  teknik:      { name: 'Teknik',              n: 612, wellbeing: 64, pressure: 76, social: 62, career: 60,
-                 profile: [32, 22, 16, 30], topicW: [28, 16, 10, 10, 14, 10, 12] },
-  ekonomi:     { name: 'Ekonomi & Bisnis',    n: 498, wellbeing: 68, pressure: 66, social: 66, career: 64,
-                 profile: [20, 24, 18, 38], topicW: [18, 20, 14, 12, 12, 10, 14] },
-  kedokteran:  { name: 'Kedokteran',          n: 356, wellbeing: 58, pressure: 84, social: 60, career: 66,
-                 profile: [44, 14, 16, 26], topicW: [34, 10, 12, 14, 10, 10, 10] },
-  hukum:       { name: 'Hukum',               n: 287, wellbeing: 63, pressure: 72, social: 61, career: 58,
-                 profile: [30, 26, 16, 28], topicW: [26, 16, 10, 12, 12, 10, 14] },
-  sains:       { name: 'Sains & Matematika',  n: 401, wellbeing: 67, pressure: 68, social: 64, career: 56,
-                 profile: [22, 30, 18, 30], topicW: [22, 16, 10, 14, 14, 12, 12] },
-  humaniora:   { name: 'Humaniora',           n: 327, wellbeing: 70, pressure: 58, social: 69, career: 52,
-                 profile: [14, 30, 22, 34], topicW: [14, 18, 14, 16, 14, 12, 12] }
+/* Data per Program Studi (Prodi). topicW = bobot komentar topik, profile = porsi 4 cluster (jumlah 100) */
+var PRODIS = {
+  ti:  { name: 'Teknik Informatika',     n: 520, wellbeing: 64, pressure: 78, social: 62, career: 62,
+         profile: [34, 22, 16, 28], topicW: [28, 18, 10, 10, 14, 10, 10] },
+  ds:  { name: 'Sains Data Terapan',     n: 410, wellbeing: 67, pressure: 72, social: 65, career: 65,
+         profile: [24, 24, 16, 36], topicW: [22, 20, 12, 12, 12, 10, 12] },
+  si:  { name: 'Sistem Informasi',       n: 460, wellbeing: 68, pressure: 65, social: 66, career: 64,
+         profile: [20, 26, 16, 38], topicW: [18, 20, 14, 12, 12, 10, 14] },
+  el:  { name: 'Teknik Elektro',         n: 435, wellbeing: 59, pressure: 82, social: 60, career: 62,
+         profile: [42, 16, 16, 26], topicW: [32, 12, 12, 14, 10, 10, 10] },
+  tel: { name: 'Teknik Telekomunikasi',  n: 340, wellbeing: 65, pressure: 68, social: 64, career: 58,
+         profile: [24, 28, 18, 30], topicW: [22, 16, 12, 14, 14, 10, 12] },
+  me:  { name: 'Teknik Mekatronika',     n: 316, wellbeing: 63, pressure: 74, social: 61, career: 59,
+         profile: [30, 24, 18, 28], topicW: [26, 16, 10, 12, 14, 10, 12] }
 };
+var FACULTIES = PRODIS;
 
 /* =========================================================
    Hasil K-Means Clustering (k=4)
@@ -151,7 +152,7 @@ const CLUSTER_POINTS = (() => {
         cluster: ci,
         x: Number(randNorm(c.pca.x, 0.72).toFixed(2)),
         y: Number(randNorm(c.pca.y, 0.68).toFixed(2)),
-        fac: ['teknik', 'ekonomi', 'kedokteran', 'hukum', 'sains', 'humaniora'][Math.floor(rnd() * 6)]
+        fac: ['ti', 'ds', 'si', 'el', 'tel', 'me'][Math.floor(rnd() * 6)]
       });
     }
   });
@@ -191,25 +192,25 @@ const RECOS = [
     owner: 'Unit Layanan Konseling', duration: '1 bulan persiapan', effort: 'Sedang', kpi: 'Waktu tunggu konseling di bawah 48 jam' },
   { id: 'r2', title: 'Kalender Beban Studi Terpadu', metric: 'pressure', t: 0, profiles: [0],
     desc: 'Program studi menyelaraskan tanggal tugas besar dan ujian antar mata kuliah agar tidak menumpuk dalam satu minggu.',
-    owner: 'Wakil Dekan Akademik', duration: '1 semester', effort: 'Rendah', kpi: 'Minggu dengan 3 penilaian besar atau lebih turun 50%' },
+    owner: 'Koordinator Program Studi', duration: '1 semester', effort: 'Rendah', kpi: 'Minggu dengan 3 penilaian besar atau lebih turun 50%' },
   { id: 'r3', title: 'Career Lab & Magang Terpandu', metric: 'career', t: 1, profiles: [1],
     desc: 'Klinik CV, simulasi wawancara, dan pemetaan lowongan magang dengan mentor alumni untuk mahasiswa semester 5 ke atas.',
-    owner: 'Pusat Karier', duration: '1–2 semester', effort: 'Sedang', kpi: 'Mahasiswa dengan portofolio siap magang naik 30%' },
+    owner: 'Pusat Karier & Magang', duration: '1–2 semester', effort: 'Sedang', kpi: 'Mahasiswa dengan portofolio siap magang naik 30%' },
   { id: 'r4', title: 'Konseling Keuangan & Beasiswa Darurat', metric: 'wellbeing', t: 2, profiles: [0, 1],
     desc: 'Satu pintu untuk keringanan UKT dan beasiswa darurat, dengan syarat dan alur yang dipublikasikan jelas.',
-    owner: 'Biro Kemahasiswaan', duration: '2 bulan persiapan', effort: 'Tinggi', kpi: 'Proses keringanan selesai dalam 14 hari' },
+    owner: 'Bagian Kemahasiswaan', duration: '2 bulan persiapan', effort: 'Tinggi', kpi: 'Proses keringanan selesai dalam 14 hari' },
   { id: 'r5', title: 'Buddy Program Mahasiswa Baru', metric: 'social', t: 3, profiles: [2],
     desc: 'Mahasiswa baru dan rantau dipasangkan dengan kakak tingkat dalam kelompok kecil selama satu semester pertama.',
-    owner: 'Biro Kemahasiswaan & BEM', duration: '1 semester', effort: 'Rendah', kpi: 'Skor dukungan sosial angkatan baru naik 8 poin' },
+    owner: 'Kemahasiswaan & BEM', duration: '1 semester', effort: 'Rendah', kpi: 'Skor dukungan sosial angkatan baru naik 8 poin' },
   { id: 'r6', title: 'Dosen Wali Responsif', metric: 'social', t: 5, profiles: [0, 2],
     desc: 'Pedoman dan pelatihan singkat untuk dosen wali, dengan dua konsultasi wajib per semester dan penanda dini bagi mahasiswa berisiko.',
-    owner: 'Pusat Pengembangan Pendidikan', duration: '1 semester', effort: 'Sedang', kpi: 'Konsultasi dosen wali terlaksana bagi 90% mahasiswa' },
+    owner: 'Pusat Pembinaan Akademik', duration: '1 semester', effort: 'Sedang', kpi: 'Konsultasi dosen wali terlaksana bagi 90% mahasiswa' },
   { id: 'r7', title: 'Ruang & Kegiatan Komunitas Kecil', metric: 'social', t: 6, profiles: [2, 3],
     desc: 'Kegiatan mingguan berkelompok kecil (10–15 orang) di ruang bersama, dengan jadwal yang tidak bentrok dengan praktikum.',
-    owner: 'Biro Kemahasiswaan', duration: '1 semester', effort: 'Rendah', kpi: 'Partisipasi mahasiswa di kegiatan komunitas naik 20%' },
+    owner: 'Bagian Kemahasiswaan', duration: '1 semester', effort: 'Rendah', kpi: 'Partisipasi mahasiswa di kegiatan komunitas naik 20%' },
   { id: 'r8', title: 'Perbaikan Layanan Digital & Fasilitas', metric: 'wellbeing', t: 4, profiles: [1, 3],
     desc: 'Menstabilkan wifi saat ujian daring, memperpanjang jam ruang belajar musim ujian, dan membuka antrean layanan akademik secara daring.',
-    owner: 'Biro Sarana & Teknologi Informasi', duration: '2–3 bulan', effort: 'Tinggi', kpi: 'Keluhan wifi saat ujian daring turun 60%' }
+    owner: 'UPT Komputer & Jaringan', duration: '2–3 bulan', effort: 'Tinggi', kpi: 'Keluhan wifi saat praktikum turun 60%' }
 ];
 
 /* Pasang eksplisit ke objek window global */
@@ -217,7 +218,8 @@ window.DIMS = DIMS;
 window.MONTHS = MONTHS;
 window.TREND_OFFSETS = TREND_OFFSETS;
 window.TOPICS = TOPICS;
-window.FACULTIES = FACULTIES;
+window.PRODIS = PRODIS;
+window.FACULTIES = PRODIS;
 window.CLUSTERS = CLUSTERS;
 window.PROFILES = CLUSTERS;
 window.CLUSTER_POINTS = CLUSTER_POINTS;

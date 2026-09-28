@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23059669'/%3E%3Cpath d='M4 17h6l3-7 5 13 3-6h7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="page-app">
@@ -141,9 +141,9 @@
             Semester Genap 2025/2026
           </div>
 
-          <label class="select select--app" title="Filter berdasarkan fakultas">
-            <span>Fakultas:</span>
-            <select id="fFaculty" aria-label="Pilih fakultas"></select>
+          <label class="select select--app" title="Filter berdasarkan program studi">
+            <span>Prodi:</span>
+            <select id="fFaculty" aria-label="Pilih program studi"></select>
           </label>
 
           <button type="button" class="btn btn--outline btn--sm" id="btnPrintReport" title="Cetak atau unduh ringkasan">
@@ -188,13 +188,13 @@
             </article>
           </div>
 
-          <!-- Fakultas Comparison -->
+          <!-- Program Studi Comparison -->
           <article class="card">
             <div class="card__head">
-              <h4>Perbandingan antar fakultas</h4>
+              <h4>Perbandingan antar program studi</h4>
               <div class="seg" id="cmpMetric" role="group" aria-label="Pilih indikator perbandingan"></div>
             </div>
-            <p class="card__hint">Klik satu fakultas di bawah untuk memfilter seluruh dashboard secara instan.</p>
+            <p class="card__hint">Klik satu program studi di bawah untuk memfilter seluruh dashboard secara instan.</p>
             <div class="fbars" id="fbars"></div>
           </article>
         </section>
@@ -266,6 +266,64 @@
               <div class="topics" id="topics"></div>
             </article>
           </div>
+
+          <!-- Chat Box: Kotak Suara & Keluh Kesah Mahasiswa -->
+          <article class="card card--voice-chat">
+            <div class="card__head">
+              <div class="voice-chat__header">
+                <span class="voice-chat__badge">💬 Ruang Curhat &amp; Keluh Kesah</span>
+                <h4>Sampaikan Suara atau Aspirasi Mahasiswa</h4>
+                <p class="card__hint">Tuliskan kendala akademik, fasilitas, beban tugas, atau kesehatan mentalmu. Sistem NLP NadiKampus akan menganalisis sentimen &amp; memasukkannya secara langsung ke analitik di atas.</p>
+              </div>
+              <span class="voice-chat__anon">🔒 100% Anonim &amp; Terenkripsi</span>
+            </div>
+
+            <form class="voice-chat__form" id="voiceForm">
+              <div class="voice-chat__input-row">
+                <textarea class="voice-chat__textarea" id="voiceInput" rows="3" placeholder="Ketik keluh kesahmu di sini... (Contoh: Beban praktikum dan tugas besar semester ini bersamaan membuat waktu istirahat kurang, butuh penyesuaian jadwal...)" required></textarea>
+              </div>
+
+              <div class="voice-chat__controls">
+                <div class="voice-chat__meta-selects">
+                  <label class="select select--sm">
+                    <span>Prodi:</span>
+                    <select id="voiceProdi">
+                      <option value="ti">Teknik Informatika</option>
+                      <option value="ds">Sains Data Terapan</option>
+                      <option value="si">Sistem Informasi</option>
+                      <option value="el">Teknik Elektro</option>
+                      <option value="tel">Teknik Telekomunikasi</option>
+                      <option value="me">Teknik Mekatronika</option>
+                    </select>
+                  </label>
+
+                  <label class="select select--sm">
+                    <span>Semester:</span>
+                    <select id="voiceSemester">
+                      <option value="1">Semester 1 - 2</option>
+                      <option value="3">Semester 3 - 4</option>
+                      <option value="5" selected>Semester 5 - 6</option>
+                      <option value="7">Semester 7 - 8</option>
+                    </select>
+                  </label>
+                </div>
+
+                <button type="submit" class="btn btn--em btn--sm" id="btnSubmitVoice">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                  <span>Kirim Suara Mahasiswa</span>
+                </button>
+              </div>
+
+              <!-- Quick Curhat Chips -->
+              <div class="voice-chat__quick">
+                <span class="quick-lead">💡 Contoh keluhan cepat:</span>
+                <button type="button" class="quick-chip" data-curhat="Jadwal tugas besar dan ujian praktikum minggu ini bertabrakan, kami begadang 4 hari berturut-turut.">📚 Tugas menumpuk</button>
+                <button type="button" class="quick-chip" data-curhat="Bingung mempersiapkan portofolio magang dan sertifikasi kompetensi untuk semester 6.">💼 Cemas magang &amp; karier</button>
+                <button type="button" class="quick-chip" data-curhat="Wifi di gedung laboratorium sering putus saat sedang submit kode praktikum.">📶 Wifi &amp; fasilitas lab</button>
+                <button type="button" class="quick-chip" data-curhat="Dosen wali sangat responsif dan mendengarkan masalah kendala perkuliahan saya dengan baik.">💚 Dosen wali responsif</button>
+              </div>
+            </form>
+          </article>
 
           <article class="card">
             <div class="card__head">

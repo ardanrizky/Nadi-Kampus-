@@ -33,6 +33,7 @@
   const state = {
     view: 'executive',
     fac: 'all',
+    selectedKPI: null,
     trend: new Set(DIMS.map(m => m.key)),
     cmp: 'wellbeing',
     profile: 0,
@@ -46,11 +47,12 @@
      Data Turunan
      --------------------------------------------------------- */
   function compute(key) {
-    const keys = Object.keys(FACULTIES);
+    const prodiSource = window.PRODIS || window.FACULTIES || {};
+    const keys = Object.keys(prodiSource);
     let d;
     if (key === 'all') {
-      const total = keys.reduce((a, k) => a + FACULTIES[k].n, 0);
-      const wavg = fn => keys.reduce((a, k) => a + FACULTIES[k].n * fn(FACULTIES[k]), 0) / total;
+      const total = keys.reduce((a, k) => a + prodiSource[k].n, 0);
+      const wavg = fn => keys.reduce((a, k) => a + prodiSource[k].n * fn(prodiSource[k]), 0) / total;
       d = {
         key,
         name: 'seluruh kampus',
@@ -61,10 +63,10 @@
       };
       DIMS.forEach(m => { d.scores[m.key] = Math.round(wavg(f => f[m.key])); });
     } else {
-      const f = FACULTIES[key];
+      const f = prodiSource[key];
       d = {
         key,
-        name: 'Fakultas ' + f.name,
+        name: 'Prodi ' + f.name,
         n: f.n,
         scores: {},
         profile: f.profile.slice(),
@@ -138,18 +140,39 @@
       const delta = v - tr[0];
       const better = m.good === 'high' ? delta > 0 : delta < 0;
       const dt = (delta > 0 ? '+' : '−') + Math.abs(delta) + ' poin';
+      const isSelected = state.selectedKPI === m.key;
       return `
-        <article class="kpi" tabindex="0" style="--c:${m.color}">
+        <article class="kpi ${isSelected ? 'is-selected' : ''}" data-kpi="${m.key}" tabindex="0" role="button" aria-pressed="${isSelected}" style="--c:${m.color}" title="Klik untuk fokus & melihat rincian riwayat bulanan">
           <div class="kpi__top">
             <span class="kpi__label">${m.label}</span>
             <span class="pill pill--${lv.c}">${lv.t}</span>
           </div>
           <div class="kpi__main">
-            <div class="kpi__ring">${Charts.ring(v, m.color)}<b class="kpi__num" data-count="${v}">${v}</b></div>
-            <div class="kpi__side">${Charts.spark(tr, m.color, 90, 40)}</div>
+            <div class="kpi__ring">${Charts.ring(v, m.color, 92, 10, m.label)}<b class="kpi__num" data-count="${v}">${v}</b></div>
+            <div class="kpi__side">${Charts.spark(tr, m.color, 110, 42, MONTHS)}</div>
           </div>
-          <span class="delta delta--${better ? 'good' : 'bad'}">${dt} sejak Maret</span>
+          <div class="kpi__foot">
+            <span class="delta delta--${better ? 'good' : 'bad'}">${dt} sejak Maret</span>
+            <span class="kpi__action-hint">${isSelected ? '● Fokus Aktif' : '🔍 Klik Detail'}</span>
+          </div>
           <p class="kpi__about">${m.about}</p>
+          ${isSelected ? `
+            <div class="kpi__expanded" aria-label="Rincian riwayat 6 bulan">
+              <div class="kpi__expanded-header">
+                <span>Riwayat 6 Bulan:</span>
+                <span class="kpi__benchmark">Target: ${m.good === 'high' ? '≥70' : '≤50'}</span>
+              </div>
+              <div class="kpi__mo-chips">
+                ${MONTHS.map((mo, idx) => `
+                  <div class="kpi__chip ${idx === MONTHS.length - 1 ? 'is-curr' : ''}">
+                    <span class="kpi__chip-mo">${mo}</span>
+                    <strong class="kpi__chip-val">${tr[idx]}</strong>
+                  </div>
+                `).join('')}
+              </div>
+              <p class="kpi__hint-msg">💡 Grafik tren 6 bulan di bawah telah difokuskan pada <strong>${m.label}</strong>.</p>
+            </div>
+          ` : ''}
         </article>`;
     }).join('');
   }
@@ -204,14 +227,15 @@
     });
 
     if (state.fac === 'all') {
-      const ks = Object.keys(FACULTIES).sort((a, b) => FACULTIES[b].pressure - FACULTIES[a].pressure);
-      const f = FACULTIES[ks[0]];
+      const prodiSource = window.PRODIS || window.FACULTIES || {};
+      const ks = Object.keys(prodiSource).sort((a, b) => prodiSource[b].pressure - prodiSource[a].pressure);
+      const f = prodiSource[ks[0]];
       out.push({
         tone: 'bad',
-        title: `Tekanan akademik tertinggi ada di ${f.name}`,
+        title: `Tekanan akademik tertinggi ada di Prodi ${f.name}`,
         text: `Skor ${f.pressure}, ${f.pressure - ALL.scores.pressure} poin di atas rata-rata kampus (${ALL.scores.pressure}).`,
         act: { fac: ks[0] },
-        label: `Fokus ke ${f.name}`
+        label: `Fokus ke Prodi ${f.name}`
       });
     }
     return out;
@@ -242,7 +266,8 @@
 
     const m = dim(state.cmp);
     const avg = ALL.scores[m.key];
-    const items = Object.entries(FACULTIES).map(([k, f]) => ({ k, name: f.name, v: f[m.key] }))
+    const prodiSource = window.PRODIS || window.FACULTIES || {};
+    const items = Object.entries(prodiSource).map(([k, f]) => ({ k, name: f.name, v: f[m.key] }))
       .sort((a, b) => (m.good === 'high' ? b.v - a.v : a.v - b.v));
 
     box.innerHTML = items.map(it => {
@@ -424,12 +449,143 @@
         qList.innerHTML = `<li class="empty">Tidak ada komentar untuk kombinasi filter ini.</li>`;
       } else {
         qList.innerHTML = filtered.map(q => `
-          <li class="quote quote--${q.s}">
+          <li class="quote quote--${q.s} ${q.isNew ? 'quote--new' : ''}">
+            ${q.isNew ? `<span class="quote__new-tag">✨ Curhat Baru (Anonim${q.prodi ? ' · ' + q.prodi : ''}${q.sem ? ' · Sem ' + q.sem : ''})</span>` : ''}
             <p>“${q.x}”</p>
             <span><i></i>${TOPICS[q.t].name} · ${q.s === 'pos' ? 'Positif' : q.s === 'neg' ? 'Negatif' : 'Netral'}</span>
           </li>`).join('');
       }
     }
+  }
+
+  /* ---------------------------------------------------------
+     NLP Classifier & Kotak Curhat Mahasiswa
+     --------------------------------------------------------- */
+  function analyzeVoiceNLP(text) {
+    const lower = text.toLowerCase();
+    
+    // Klasifikasi topik berdasarkan frekuensi kata kunci
+    const extraTopicLexicons = [
+      ['tugas', 'deadline', 'ujian', 'praktikum', 'tubes', 'kuliah', 'tidur', 'jadwal', 'kelas', 'materi', 'begadang', 'lelah', 'istirahat', 'capek'], // 0
+      ['magang', 'karier', 'cv', 'kerja', 'portofolio', 'interview', 'loker', 'alumni', 'industri', 'profesi', 'masa depan'], // 1
+      ['ukt', 'biaya', 'uang', 'finansial', 'bayar', 'kos', 'makan', 'beasiswa', 'keringanan', 'mahal', 'spp', 'ekonomi'], // 2
+      ['teman', 'sendirian', 'kesepian', 'sosial', 'rantau', 'asrama', 'isolasi', 'berteman', 'ngobrol', 'relasi', 'asing'], // 3
+      ['wifi', 'fasilitas', 'ruang', 'lab', 'gedung', 'perpustakaan', 'toilet', 'ac', 'parkir', 'layanan', 'antrean', 'server', 'lemot'], // 4
+      ['dosen', 'wali', 'bimbingan', 'skripsi', 'konsultasi', 'pengajar', 'revisi', 'feedback', 'jurusan', 'prodi', 'dosen wali'], // 5
+      ['ukm', 'organisasi', 'kegiatan', 'bem', 'hima', 'lomba', 'acara', 'komunitas', 'ekskul', 'kepanitiaan'] // 6
+    ];
+
+    const topicScores = TOPICS.map((topic, i) => {
+      let score = 0;
+      topic.keywords.forEach(kw => {
+        if (lower.includes(kw.toLowerCase())) score += 2.5;
+      });
+      if (extraTopicLexicons[i]) {
+        extraTopicLexicons[i].forEach(kw => {
+          if (lower.includes(kw)) score += 1.5;
+        });
+      }
+      return { topicIndex: i, score };
+    });
+    
+    topicScores.sort((a, b) => b.score - a.score);
+    const bestTopic = topicScores[0].score > 0 ? topicScores[0].topicIndex : 0;
+
+    // Klasifikasi sentimen
+    const negWords = [
+      'sulit', 'berat', 'stres', 'stress', 'capek', 'lelah', 'kecewa', 'kurang', 'buruk', 'putus',
+      'tidak', 'belum', 'lambat', 'bingung', 'panik', 'mahal', 'sendiri', 'kesepian',
+      'terlambat', 'rusak', 'susah', 'takut', 'cemas', 'masalah', 'keluhan', 'keluh', 'parah',
+      'begadang', 'drop', 'menumpuk', 'tabrakan', 'bentrok', 'padat', 'pusing', 'down', 'overthinking'
+    ];
+    const posWords = [
+      'bagus', 'senang', 'membantu', 'nyaman', 'terbantu', 'puas', 'mantap', 'baik', 'ramah',
+      'jelas', 'semangat', 'seru', 'solusi', 'tenang', 'apresiasi', 'terima kasih', 'keren', 'positif'
+    ];
+
+    let negCount = 0, posCount = 0;
+    negWords.forEach(w => { if (lower.includes(w)) negCount++; });
+    posWords.forEach(w => { if (lower.includes(w)) posCount++; });
+
+    let sentiment = 'neu';
+    if (negCount > posCount) sentiment = 'neg';
+    else if (posCount > negCount) sentiment = 'pos';
+    else if (negCount === 0 && posCount === 0) sentiment = 'neu';
+
+    return { topicIndex: bestTopic, sentiment };
+  }
+
+  function initVoiceForm() {
+    const form = $('#voiceForm');
+    const input = $('#voiceInput');
+    const prodiSel = $('#voiceProdi');
+    const semSel = $('#voiceSemester');
+    if (!form || !input) return;
+
+    // Tombol contoh keluhan cepat
+    $$('.quick-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const text = btn.dataset.curhat;
+        if (text) {
+          input.value = text;
+          input.focus();
+        }
+      });
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+
+      const nlp = analyzeVoiceNLP(text);
+      const prodiKey = prodiSel ? prodiSel.value : 'ti';
+      const prodiSource = window.PRODIS || window.FACULTIES || {};
+      const prodiName = prodiSource[prodiKey] ? prodiSource[prodiKey].name : 'Teknik Informatika';
+      const semVal = semSel ? semSel.value : '5';
+
+      // Masukkan curhat baru ke QUOTES
+      const newQuote = {
+        t: nlp.topicIndex,
+        s: nlp.sentiment,
+        x: text,
+        isNew: true,
+        prodi: prodiName,
+        sem: semVal,
+        time: 'Baru saja'
+      };
+      QUOTES.unshift(newQuote);
+
+      // Mutasi bobot topik & sentimen pada D secara realtime
+      if (D && D.topics && D.topics[nlp.topicIndex]) {
+        const top = D.topics[nlp.topicIndex];
+        top.w = Math.min(100, top.w + 0.8);
+        const sIdx = nlp.sentiment === 'pos' ? 0 : nlp.sentiment === 'neu' ? 1 : 2;
+        top.sent[sIdx] = Math.min(100, top.sent[sIdx] + 2);
+        D.sentiment = [0, 1, 2].map(j => D.topics.reduce((a, t) => a + t.w * t.sent[j], 0) / 100);
+      }
+
+      // Reset form
+      input.value = '';
+
+      // Tampilkan filter ke 'all' agar komentar baru langsung tampak
+      state.sent = 'all';
+      state.topic = null;
+      renderVoice();
+
+      const sentEmoji = nlp.sentiment === 'pos' ? 'Positif 😊' : nlp.sentiment === 'neg' ? 'Keluhan / Kritis ⚠️' : 'Netral ℹ️';
+      toast(`✅ Curhat diterima! NLP deteksi: Topik "${TOPICS[nlp.topicIndex].name}" · Sentimen: ${sentEmoji}`);
+
+      // Scroll ke komentar baru dan flash highlight
+      setTimeout(() => {
+        const firstQuote = $('#quotes li.quote');
+        if (firstQuote) {
+          firstQuote.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          firstQuote.classList.add('flash');
+          setTimeout(() => firstQuote.classList.remove('flash'), 1800);
+        }
+      }, 100);
+    });
   }
 
   /* ---------------------------------------------------------
@@ -617,6 +773,25 @@
       return;
     }
 
+    // Klik Kartu KPI untuk fokus / detail riwayat bulanan
+    const kpiCard = e.target.closest('.kpi');
+    if (kpiCard && !e.target.closest('button, a')) {
+      const k = kpiCard.dataset.kpi;
+      if (state.selectedKPI === k) {
+        state.selectedKPI = null;
+        state.trend = new Set(DIMS.map(m => m.key));
+        toast('Menampilkan riwayat seluruh indikator');
+      } else {
+        state.selectedKPI = k;
+        state.trend = new Set([k]);
+        const m = dim(k);
+        toast(`Fokus indikator: ${m ? m.label : k}`);
+      }
+      renderKPIs();
+      renderTrend();
+      return;
+    }
+
     const t = e.target.closest('button, a');
     if (!t) return;
 
@@ -715,17 +890,27 @@
     });
   }
 
-  // Populate Dropdown Fakultas
+  // Keyboard accessibility for KPI cards
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.classList && e.target.classList.contains('kpi')) {
+      e.preventDefault();
+      e.target.click();
+    }
+  });
+
+  // Populate Dropdown Program Studi
   const facSel = $('#fFaculty');
   if (facSel) {
-    facSel.innerHTML = `<option value="all">Seluruh kampus</option>` +
-      Object.keys(FACULTIES).map(k => `<option value="${k}">Fakultas ${FACULTIES[k].name}</option>`).join('');
+    const prodiSource = window.PRODIS || window.FACULTIES || {};
+    facSel.innerHTML = `<option value="all">Seluruh Program Studi (Kampus)</option>` +
+      Object.keys(prodiSource).map(k => `<option value="${k}">Prodi ${prodiSource[k].name}</option>`).join('');
     facSel.addEventListener('change', e => setFaculty(e.target.value));
   }
 
   /* ---------------------------------------------------------
      Inisialisasi
      --------------------------------------------------------- */
+  initVoiceForm();
   setFaculty('all', true);
 
   // Check initial hash (e.g. #profile, #voice, #reco, #insight)

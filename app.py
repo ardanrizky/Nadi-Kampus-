@@ -19,7 +19,7 @@ def run_server():
         if os.path.exists(frontend_path):
             app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
 
-        print(f"🌿 NadiKampus server running at http://localhost:{port}")
+        print(f"[*] NadiKampus server running at http://localhost:{port}")
         uvicorn.run(app, host=host, port=port)
     except ImportError:
         # Fallback to standard library HTTP server if dependencies are not installed
@@ -34,7 +34,7 @@ def run_server():
                 self.send_header("Access-Control-Allow-Origin", "*")
                 super().end_headers()
 
-        print(f"🌿 NadiKampus fallback server running at http://localhost:{port}")
+        print(f"[*] NadiKampus fallback server running at http://localhost:{port}")
         with socketserver.TCPServer((host, port), CustomHandler) as httpd:
             httpd.serve_forever()
 

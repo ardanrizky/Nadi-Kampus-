@@ -12,34 +12,48 @@ const Charts = (() => {
   };
 
   /* ---------- Ring (gauge melingkar) ---------- */
-  function ring(value, color, size = 92, stroke = 10) {
+  function ring(value, color, size = 92, stroke = 10, label = '') {
     const r = (size - stroke) / 2;
     const c = 2 * Math.PI * r;
     return `
-      <svg class="ring" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" aria-hidden="true">
-        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="#E4EEE9" stroke-width="${stroke}"/>
+      <svg class="ring ring--interactive" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="${label ? label + ': ' : ''}${value} dari 100">
+        <title>${label ? label + ': ' : ''}${value}/100 poin</title>
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="#E2E8F0" stroke-width="${stroke}"/>
         <circle class="ring__val" cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${color}"
           stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}"
           data-target="${c * (1 - value / 100)}" transform="rotate(-90 ${size / 2} ${size / 2})"/>
       </svg>`;
   }
 
-  /* ---------- Sparkline ---------- */
-  function spark(values, color, w = 96, h = 30) {
+  /* ---------- Sparkline Interaktif ---------- */
+  function spark(values, color, w = 110, h = 42, months = ['Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu']) {
     const min = Math.min(...values), max = Math.max(...values);
     const span = max - min || 1;
     const pts = values.map((v, i) => [
-      (w * i) / (values.length - 1),
-      h - 4 - ((v - min) / span) * (h - 8)
+      5 + ((w - 10) * i) / (values.length - 1),
+      h - 6 - ((v - min) / span) * (h - 14)
     ]);
     const line = pts.map(p => p.join(',')).join(' ');
-    const area = `0,${h} ${line} ${w},${h}`;
-    const last = pts[pts.length - 1];
+    const area = `5,${h} ${line} ${w - 5},${h}`;
+
+    // Interactive monthly dot markers
+    const dots = pts.map((p, i) => {
+      const m = months[i] || `Bulan ${i + 1}`;
+      const v = values[i];
+      const delta = i > 0 ? (v - values[i - 1] >= 0 ? `+${v - values[i - 1]}` : `${v - values[i - 1]}`) : '0';
+      return `
+        <g class="spark-node" tabindex="0">
+          <title>${m}: ${v} poin (${delta})</title>
+          <circle cx="${p[0]}" cy="${p[1]}" r="8" fill="transparent" class="spark-hit"/>
+          <circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#FFFFFF" stroke="${color}" stroke-width="2.2" class="spark-dot"/>
+        </g>`;
+    }).join('');
+
     return `
-      <svg class="spark" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true">
-        <polygon points="${area}" fill="${color}" opacity=".12"/>
-        <polyline points="${line}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="${last[0]}" cy="${last[1]}" r="3" fill="${color}"/>
+      <svg class="spark spark--interactive" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Tren 6 bulan">
+        <polygon points="${area}" fill="${color}" opacity=".15"/>
+        <polyline points="${line}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        ${dots}
       </svg>`;
   }
 
