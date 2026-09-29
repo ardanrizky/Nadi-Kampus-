@@ -36,15 +36,15 @@ const Charts = (() => {
     const line = pts.map(p => p.join(',')).join(' ');
     const area = `5,${h} ${line} ${w - 5},${h}`;
 
-    // Interactive monthly dot markers
+    // Interactive monthly dot markers with instant hover telemetry
     const dots = pts.map((p, i) => {
       const m = months[i] || `Bulan ${i + 1}`;
       const v = values[i];
       const delta = i > 0 ? (v - values[i - 1] >= 0 ? `+${v - values[i - 1]}` : `${v - values[i - 1]}`) : '0';
       return `
-        <g class="spark-node" tabindex="0">
-          <title>${m}: ${v} poin (${delta})</title>
-          <circle cx="${p[0]}" cy="${p[1]}" r="8" fill="transparent" class="spark-hit"/>
+        <g class="spark-node" tabindex="0" data-month="${m}" data-val="${v}" data-delta="${delta}" data-color="${color}">
+          <circle cx="${p[0]}" cy="${p[1]}" r="10" fill="transparent" class="spark-hit"/>
+          <line x1="${p[0]}" y1="0" x2="${p[0]}" y2="${h}" stroke="${color}" stroke-width="1" stroke-dasharray="2 2" class="spark-guide" opacity="0"/>
           <circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#FFFFFF" stroke="${color}" stroke-width="2.2" class="spark-dot"/>
         </g>`;
     }).join('');
@@ -61,7 +61,7 @@ const Charts = (() => {
   function line(el, { labels, series, height = 270, yMin, yMax }) {
     el.innerHTML = '';
     const W = 640, H = height;
-    const pad = { l: 38, r: 16, t: 14, b: 28 };
+    const pad = { l: 38, r: 16, t: 16, b: 28 };
     const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
 
     const vis = series.filter(s => s.visible !== false);
@@ -74,7 +74,26 @@ const Charts = (() => {
     const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, class: 'lc', role: 'img',
       'aria-label': 'Grafik tren indikator' }, el);
 
-    // grid
+    // Helper: calculate smooth cubic spline path
+    function getSpline(pts) {
+      if (pts.length < 2) return '';
+      if (pts.length === 2) return `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)} L ${pts[1][0].toFixed(1)} ${pts[1][1].toFixed(1)}`;
+      let d = `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const p0 = i > 0 ? pts[i - 1] : pts[i];
+        const p1 = pts[i];
+        const p2 = pts[i + 1];
+        const p3 = i < pts.length - 2 ? pts[i + 2] : p2;
+        const cp1x = p1[0] + (p2[0] - p0[0]) / 5.5;
+        const cp1y = p1[1] + (p2[1] - p0[1]) / 5.5;
+        const cp2x = p2[0] - (p3[0] - p1[0]) / 5.5;
+        const cp2y = p2[1] - (p3[1] - p1[1]) / 5.5;
+        d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+      }
+      return d;
+    }
+
+    // Grid lines & labels
     const step = hi - lo > 50 ? 20 : 10;
     for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) {
       svgEl('line', { x1: pad.l, x2: W - pad.r, y1: y(v), y2: y(v), class: 'lc__grid' }, svg);
@@ -82,41 +101,92 @@ const Charts = (() => {
       t.textContent = v;
     }
     labels.forEach((l, i) => {
-      const t = svgEl('text', { x: x(i), y: H - 8, class: 'lc__tick', 'text-anchor': 'middle' }, svg);
+      const t = svgEl('text', { x: x(i), y: H - 8, class: 'lc__tick lc__tick--x', 'text-anchor': 'middle' }, svg);
       t.textContent = l;
     });
 
-    // garis
-    series.forEach(s => {
+    // Render pure clean smooth spline curves (no shadow / no area fill)
+    series.forEach((s, sIdx) => {
       if (s.visible === false) return;
-      const d = s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
-      svgEl('path', { d, fill: 'none', stroke: s.color, 'stroke-width': 3, 'stroke-linecap': 'round',
-        'stroke-linejoin': 'round', pathLength: 1, class: 'lc__path' }, svg);
-      s.values.forEach((v, i) => svgEl('circle', { cx: x(i), cy: y(v), r: 3.5, fill: '#fff',
-        stroke: s.color, 'stroke-width': 2, class: 'lc__pt' }, svg));
+      const pts = s.values.map((v, i) => [x(i), y(v)]);
+      const spline = getSpline(pts);
+
+      // Main curved stroke line (clean without background fill/shadow)
+      svgEl('path', { d: spline, fill: 'none', stroke: s.color, 'stroke-width': 3, 'stroke-linecap': 'round',
+        'stroke-linejoin': 'round', class: 'lc__path' }, svg);
+
+      // Points
+      pts.forEach((pt, i) => {
+        svgEl('circle', { cx: pt[0].toFixed(1), cy: pt[1].toFixed(1), r: 4, fill: '#FFFFFF',
+          stroke: s.color, 'stroke-width': 2.4, class: 'lc__pt', 'data-idx': i, 'data-series': s.name }, svg);
+      });
     });
 
-    // crosshair + tooltip
+    // Crosshair guide line
     const cross = svgEl('line', { y1: pad.t, y2: H - pad.b, class: 'lc__cross', opacity: 0 }, svg);
     const tip = document.createElement('div');
-    tip.className = 'tip';
+    tip.className = 'tip tip--enhanced';
     tip.hidden = true;
     el.appendChild(tip);
 
-    const overlay = svgEl('rect', { x: pad.l, y: pad.t, width: iw, height: ih, fill: 'transparent' }, svg);
+    const overlay = svgEl('rect', { x: pad.l, y: pad.t, width: iw, height: ih, fill: 'transparent', class: 'lc__overlay' }, svg);
     const move = e => {
       const rect = svg.getBoundingClientRect();
       const px = ((e.clientX - rect.left) / rect.width) * W;
       const i = Math.max(0, Math.min(labels.length - 1, Math.round(((px - pad.l) / iw) * (labels.length - 1))));
-      cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('opacity', 1);
+      const currentX = x(i);
+      cross.setAttribute('x1', currentX); cross.setAttribute('x2', currentX); cross.setAttribute('opacity', 1);
+
+      // Highlight active points at month index i
+      svg.querySelectorAll('.lc__pt').forEach(pt => {
+        if (+pt.dataset.idx === i) {
+          pt.setAttribute('r', '6');
+          pt.setAttribute('stroke-width', '2.8');
+          pt.classList.add('is-active');
+        } else {
+          pt.setAttribute('r', '4');
+          pt.setAttribute('stroke-width', '2.4');
+          pt.classList.remove('is-active');
+        }
+      });
+
       tip.hidden = false;
-      tip.innerHTML = `<b>${labels[i]}</b>` + vis.map(s =>
-        `<span><i style="background:${s.color}"></i>${s.name}<em>${s.values[i]}</em></span>`).join('');
-      const left = (x(i) / W) * rect.width;
-      tip.style.left = Math.min(Math.max(left, 70), rect.width - 70) + 'px';
+      tip.innerHTML = `
+        <div class="tip__head">
+          <span class="tip__month">${labels[i]} 2026</span>
+        </div>
+        <div class="tip__rows">
+          ${vis.map(s => {
+            const v = s.values[i];
+            const prev = i > 0 ? s.values[i - 1] : v;
+            const diff = v - prev;
+            const diffHtml = i > 0
+              ? `<span class="tip__diff ${diff >= 0 ? 'tip__diff--up' : 'tip__diff--down'}">${diff >= 0 ? '+' + diff : diff}</span>`
+              : '';
+            return `
+              <div class="tip__row">
+                <i class="tip__dot" style="background:${s.color}"></i>
+                <span class="tip__name">${s.name}</span>
+                <b class="tip__val">${v}</b>
+                ${diffHtml}
+              </div>`;
+          }).join('')}
+        </div>`;
+
+      const left = (currentX / W) * rect.width;
+      tip.style.left = Math.min(Math.max(left, 90), rect.width - 90) + 'px';
     };
+
     overlay.addEventListener('mousemove', move);
-    overlay.addEventListener('mouseleave', () => { cross.setAttribute('opacity', 0); tip.hidden = true; });
+    overlay.addEventListener('mouseleave', () => {
+      cross.setAttribute('opacity', 0);
+      tip.hidden = true;
+      svg.querySelectorAll('.lc__pt').forEach(pt => {
+        pt.setAttribute('r', '4');
+        pt.setAttribute('stroke-width', '2.4');
+        pt.classList.remove('is-active');
+      });
+    });
   }
 
   /* ---------- Donut interaktif ---------- */

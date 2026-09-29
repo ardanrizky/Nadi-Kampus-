@@ -5,13 +5,13 @@
 
 /* Empat indikator utama (Dimensi Pengukuran) */
 var DIMS = [
-  { key: 'wellbeing', label: 'Wellbeing Index',   short: 'Wellbeing',        color: '#059669', good: 'high',
+  { key: 'wellbeing', label: 'Wellbeing Index',   short: 'Wellbeing',        color: '#0D9488', good: 'high',
     about: 'Gabungan kesejahteraan psikologis, kepuasan hidup, dan kondisi emosi mahasiswa dalam sebulan terakhir.' },
-  { key: 'pressure',  label: 'Academic Pressure', short: 'Tekanan akademik', color: '#E0664A', good: 'low',
+  { key: 'pressure',  label: 'Academic Pressure', short: 'Tekanan akademik', color: '#F43F5E', good: 'low',
     about: 'Beban tugas, tekanan ujian, dan kekhawatiran akan capaian akademik. Skor tinggi berarti tekanan tinggi.' },
-  { key: 'social',    label: 'Social Support',    short: 'Dukungan sosial',  color: '#2B65B0', good: 'high',
+  { key: 'social',    label: 'Social Support',    short: 'Dukungan sosial',  color: '#4F46E5', good: 'high',
     about: 'Rasa terhubung dengan teman, dosen, dan komunitas kampus, serta ketersediaan orang untuk berbagi cerita.' },
-  { key: 'career',    label: 'Career Readiness',  short: 'Kesiapan karier',  color: '#D9971E', good: 'high',
+  { key: 'career',    label: 'Career Readiness',  short: 'Kesiapan karier',  color: '#F59E0B', good: 'high',
     about: 'Kejelasan arah karier, kepercayaan diri terhadap keterampilan, dan akses ke magang atau informasi kerja.' }
 ];
 
@@ -20,7 +20,7 @@ var MONTHS = ['Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu'];
 /* Selisih tiap bulan terhadap nilai terkini (bulan terakhir = 0) */
 var TREND_OFFSETS = {
   wellbeing: [-6, -4, -5, -3, -1, 0],
-  pressure:  [ 5,  6,  4,  4,  2, 0],
+  pressure:  [-5, -3,  2, -1,  3, 0],
   social:    [-4, -3, -3, -2, -1, 0],
   career:    [-7, -5, -4, -3, -1, 0]
 };
@@ -45,18 +45,78 @@ var TOPICS = [
 
 /* Data per Program Studi (Prodi). topicW = bobot komentar topik, profile = porsi 4 cluster (jumlah 100) */
 var PRODIS = {
-  ti:  { name: 'Teknik Informatika',     n: 520, wellbeing: 64, pressure: 78, social: 62, career: 62,
-         profile: [34, 22, 16, 28], topicW: [28, 18, 10, 10, 14, 10, 10] },
-  ds:  { name: 'Sains Data Terapan',     n: 410, wellbeing: 67, pressure: 72, social: 65, career: 65,
-         profile: [24, 24, 16, 36], topicW: [22, 20, 12, 12, 12, 10, 12] },
-  si:  { name: 'Sistem Informasi',       n: 460, wellbeing: 68, pressure: 65, social: 66, career: 64,
-         profile: [20, 26, 16, 38], topicW: [18, 20, 14, 12, 12, 10, 14] },
-  el:  { name: 'Teknik Elektro',         n: 435, wellbeing: 59, pressure: 82, social: 60, career: 62,
-         profile: [42, 16, 16, 26], topicW: [32, 12, 12, 14, 10, 10, 10] },
-  tel: { name: 'Teknik Telekomunikasi',  n: 340, wellbeing: 65, pressure: 68, social: 64, career: 58,
-         profile: [24, 28, 18, 30], topicW: [22, 16, 12, 14, 14, 10, 12] },
-  me:  { name: 'Teknik Mekatronika',     n: 316, wellbeing: 63, pressure: 74, social: 61, career: 59,
-         profile: [30, 24, 18, 28], topicW: [26, 16, 10, 12, 14, 10, 12] }
+  ti: {
+    name: 'Teknik Informatika', n: 520,
+    wellbeing: 64, pressure: 78, social: 62, career: 62,
+    trend: {
+      wellbeing: [58, 60, 61, 62, 63, 64], // +6 poin sejak Maret (membaik)
+      pressure:  [70, 73, 81, 79, 79, 78], // +8 poin sejak Maret (tekanan naik tinggi)
+      social:    [64, 63, 62, 61, 62, 62], // -2 poin sejak Maret (sedikit turun)
+      career:    [54, 56, 58, 59, 61, 62]  // +8 poin sejak Maret (naik)
+    },
+    profile: [34, 22, 16, 28],
+    topicW: [28, 18, 10, 10, 14, 10, 10]
+  },
+  ds: {
+    name: 'Sains Data Terapan', n: 410,
+    wellbeing: 67, pressure: 72, social: 65, career: 65,
+    trend: {
+      wellbeing: [63, 64, 65, 65, 66, 67], // +4 poin (stabil naik)
+      pressure:  [65, 68, 75, 74, 73, 72], // +7 poin (naik)
+      social:    [61, 62, 63, 64, 64, 65], // +4 poin (naik)
+      career:    [58, 59, 61, 62, 64, 65]  // +7 poin (naik)
+    },
+    profile: [24, 24, 16, 36],
+    topicW: [22, 20, 12, 12, 12, 10, 12]
+  },
+  si: {
+    name: 'Sistem Informasi', n: 460,
+    wellbeing: 68, pressure: 65, social: 66, career: 64,
+    trend: {
+      wellbeing: [62, 64, 65, 66, 67, 68], // +6 poin (tertinggi di kampus)
+      pressure:  [58, 60, 67, 65, 64, 65], // +7 poin
+      social:    [61, 62, 63, 64, 65, 66], // +5 poin
+      career:    [56, 58, 60, 61, 63, 64]  // +8 poin
+    },
+    profile: [20, 26, 16, 38],
+    topicW: [18, 20, 14, 12, 12, 10, 14]
+  },
+  el: {
+    name: 'Teknik Elektro', n: 435,
+    wellbeing: 59, pressure: 82, social: 60, career: 62,
+    trend: {
+      wellbeing: [64, 63, 58, 58, 58, 59], // -5 poin (turun tertekan)
+      pressure:  [72, 75, 84, 83, 83, 82], // +10 poin (tekanan praktikum & ujian ekstrem)
+      social:    [63, 62, 60, 60, 60, 60], // -3 poin (turun)
+      career:    [55, 56, 58, 59, 61, 62]  // +7 poin (naik)
+    },
+    profile: [42, 16, 16, 26],
+    topicW: [32, 12, 12, 14, 10, 10, 10]
+  },
+  tel: {
+    name: 'Teknik Telekomunikasi', n: 340,
+    wellbeing: 65, pressure: 68, social: 64, career: 58,
+    trend: {
+      wellbeing: [62, 63, 63, 64, 64, 65], // +3 poin
+      pressure:  [61, 64, 71, 70, 69, 68], // +7 poin
+      social:    [60, 61, 62, 63, 63, 64], // +4 poin
+      career:    [52, 53, 55, 56, 57, 58]  // +6 poin
+    },
+    profile: [24, 28, 18, 30],
+    topicW: [22, 16, 12, 14, 14, 10, 12]
+  },
+  me: {
+    name: 'Teknik Mekatronika', n: 316,
+    wellbeing: 63, pressure: 74, social: 61, career: 59,
+    trend: {
+      wellbeing: [66, 65, 61, 60, 62, 63], // -3 poin sejak Maret (kurva menurun tajam saat UTS/UAS)
+      pressure:  [68, 70, 77, 76, 75, 74], // +6 poin sejak Maret (kurva meningkat, tekanan tinggi!)
+      social:    [65, 64, 62, 61, 60, 61], // -4 poin sejak Maret (kurva menurun!)
+      career:    [52, 53, 55, 56, 58, 59]  // +7 poin sejak Maret (kurva meningkat!)
+    },
+    profile: [30, 24, 18, 28],
+    topicW: [26, 16, 10, 12, 14, 10, 12]
+  }
 };
 var FACULTIES = PRODIS;
 
@@ -70,7 +130,7 @@ var CLUSTERS = [
     key: 'ap',
     name: 'Cluster 1: Academic Pressure',
     short: 'Tekanan Akademik',
-    color: '#E0664A',
+    color: '#F43F5E',
     pca: { x: -2.4, y: 1.8 },
     means: { wellbeing: 48, pressure: 82, social: 55, career: 52 },
     desc: 'Centroid didominasi oleh skor Academic Pressure yang sangat tinggi. Kesejahteraan psikologis menurun drastis saat ujian dan deadline menumpuk.',
@@ -86,7 +146,7 @@ var CLUSTERS = [
     key: 'cc',
     name: 'Cluster 2: Career Concern',
     short: 'Kecemasan Karier',
-    color: '#D9971E',
+    color: '#F59E0B',
     pca: { x: 1.1, y: -2.2 },
     means: { wellbeing: 52, pressure: 58, social: 60, career: 34 },
     desc: 'Centroid menunjukkan performa akademik cukup baik, namun Career Readiness sangat rendah. Didominasi mahasiswa tingkat menengah & akhir yang cemas magang.',
@@ -102,7 +162,7 @@ var CLUSTERS = [
     key: 'sa',
     name: 'Cluster 3: Social Adaptation',
     short: 'Adaptasi Sosial',
-    color: '#2B65B0',
+    color: '#4F46E5',
     pca: { x: -0.7, y: -1.0 },
     means: { wellbeing: 50, pressure: 50, social: 32, career: 60 },
     desc: 'Centroid Social Support sangat rendah (32). Mahasiswa merasa terisolasi, kesepian, dan kesulitan membangun jejaring pertemanan di kampus.',
@@ -118,7 +178,7 @@ var CLUSTERS = [
     key: 'bw',
     name: 'Cluster 4: Balanced Wellbeing',
     short: 'Wellbeing Seimbang',
-    color: '#059669',
+    color: '#0D9488',
     pca: { x: 2.3, y: 1.4 },
     means: { wellbeing: 80, pressure: 35, social: 78, career: 74 },
     desc: 'Centroid berada pada spektrum ideal di seluruh dimensi. Tekanan akademik terkontrol dengan dukungan sosial dan kesiapan karier yang solid.',

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=16" />
 </head>
 <body class="page-app">
 
@@ -39,18 +39,16 @@
 
         <!-- Menu Navigasi Interaktif -->
         <nav class="app-nav" role="tablist" aria-orientation="vertical">
-          <button class="app-nav__item is-active" role="tab" aria-selected="true" data-view="executive" id="tab-executive" aria-controls="view-executive">
+          <button class="app-nav__item is-active" role="tab" aria-selected="true" data-view="executive" id="tab-executive" aria-controls="view-executive" title="Executive Dashboard">
             <div class="nav-icon">
               <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
             </div>
             <div class="nav-text">
               <span class="nav-title">Executive Dashboard</span>
-              <span class="nav-sub">Ringkasan 4 Indikator</span>
             </div>
-            <span class="pulse-chip" id="sideWbScore" title="Wellbeing Index Terkini">65</span>
           </button>
 
-          <button class="app-nav__item" role="tab" aria-selected="false" data-view="profile" id="tab-profile" aria-controls="view-profile">
+          <button class="app-nav__item" role="tab" aria-selected="false" data-view="profile" id="tab-profile" aria-controls="view-profile" title="Student Clustering (K-Means)">
             <div class="nav-icon">
               <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 5.2a3.3 3.3 0 0 1 0 6.1M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>
             </div>
@@ -63,7 +61,7 @@
             </span>
           </button>
 
-          <button class="app-nav__item" role="tab" aria-selected="false" data-view="voice" id="tab-voice" aria-controls="view-voice">
+          <button class="app-nav__item" role="tab" aria-selected="false" data-view="voice" id="tab-voice" aria-controls="view-voice" title="Student Voice (NLP & Sentimen)">
             <div class="nav-icon">
               <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg>
             </div>
@@ -76,7 +74,7 @@
             </span>
           </button>
 
-          <button class="app-nav__item" role="tab" aria-selected="false" data-view="reco" id="tab-reco" aria-controls="view-reco">
+          <button class="app-nav__item" role="tab" aria-selected="false" data-view="reco" id="tab-reco" aria-controls="view-reco" title="Recommendations (Program Intervensi)">
             <div class="nav-icon">
               <svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.3 6.8 19.1l1-5.8L3.5 9.2l5.9-.8z"/></svg>
             </div>
@@ -172,12 +170,13 @@
 
           <!-- Trend & Insight Utama -->
           <div class="grid2">
-            <article class="card">
+            <article class="card card--trend">
               <div class="card__head">
                 <h4>Tren 6 bulan terakhir</h4>
                 <div class="seg" id="trendToggles" role="group" aria-label="Pilih indikator tren"></div>
               </div>
               <div class="chart" id="trendChart"></div>
+              <div class="trend-footer" id="trendFooter"></div>
             </article>
 
             <article class="card" id="insight">
@@ -271,11 +270,11 @@
           <article class="card card--voice-chat">
             <div class="card__head">
               <div class="voice-chat__header">
-                <span class="voice-chat__badge">💬 Ruang Curhat &amp; Keluh Kesah</span>
+                <span class="voice-chat__badge"> Ruang Curhat &amp; Keluh Kesah</span>
                 <h4>Sampaikan Suara atau Aspirasi Mahasiswa</h4>
                 <p class="card__hint">Tuliskan kendala akademik, fasilitas, beban tugas, atau kesehatan mentalmu. Sistem NLP NadiKampus akan menganalisis sentimen &amp; memasukkannya secara langsung ke analitik di atas.</p>
               </div>
-              <span class="voice-chat__anon">🔒 100% Anonim &amp; Terenkripsi</span>
+              <span class="voice-chat__anon"> 100% Anonim &amp; Terenkripsi</span>
             </div>
 
             <form class="voice-chat__form" id="voiceForm">
@@ -316,11 +315,11 @@
 
               <!-- Quick Curhat Chips -->
               <div class="voice-chat__quick">
-                <span class="quick-lead">💡 Contoh keluhan cepat:</span>
-                <button type="button" class="quick-chip" data-curhat="Jadwal tugas besar dan ujian praktikum minggu ini bertabrakan, kami begadang 4 hari berturut-turut.">📚 Tugas menumpuk</button>
-                <button type="button" class="quick-chip" data-curhat="Bingung mempersiapkan portofolio magang dan sertifikasi kompetensi untuk semester 6.">💼 Cemas magang &amp; karier</button>
-                <button type="button" class="quick-chip" data-curhat="Wifi di gedung laboratorium sering putus saat sedang submit kode praktikum.">📶 Wifi &amp; fasilitas lab</button>
-                <button type="button" class="quick-chip" data-curhat="Dosen wali sangat responsif dan mendengarkan masalah kendala perkuliahan saya dengan baik.">💚 Dosen wali responsif</button>
+                <span class="quick-lead"> Contoh keluhan cepat:</span>
+                <button type="button" class="quick-chip" data-curhat="Jadwal tugas besar dan ujian praktikum minggu ini bertabrakan, kami begadang 4 hari berturut-turut."> Tugas menumpuk</button>
+                <button type="button" class="quick-chip" data-curhat="Bingung mempersiapkan portofolio magang dan sertifikasi kompetensi untuk semester 6."> Cemas magang &amp; karier</button>
+                <button type="button" class="quick-chip" data-curhat="Wifi di gedung laboratorium sering putus saat sedang submit kode praktikum."> Wifi &amp; fasilitas lab</button>
+                <button type="button" class="quick-chip" data-curhat="Dosen wali sangat responsif dan mendengarkan masalah kendala perkuliahan saya dengan baik."> Dosen wali responsif</button>
               </div>
             </form>
           </article>
@@ -361,8 +360,8 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <!-- Scripts -->
-  <script src="js/data.js?v=4"></script>
-  <script src="js/charts.js?v=4"></script>
-  <script src="js/app.js?v=4"></script>
+  <script src="js/data.js?v=14"></script>
+  <script src="js/charts.js?v=14"></script>
+  <script src="js/app.js?v=14"></script>
 </body>
 </html>

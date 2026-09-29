@@ -59,9 +59,16 @@
         n: total,
         scores: {},
         profile: [0, 1, 2, 3].map(i => wavg(f => f.profile[i])),
-        topicW: TOPICS.map((_, i) => wavg(f => f.topicW[i]))
+        topicW: TOPICS.map((_, i) => wavg(f => f.topicW[i])),
+        trend: {}
       };
-      DIMS.forEach(m => { d.scores[m.key] = Math.round(wavg(f => f[m.key])); });
+      DIMS.forEach(m => {
+        d.scores[m.key] = Math.round(wavg(f => f[m.key]));
+        // Aggregate genuine monthly weighted average across all 6 months
+        d.trend[m.key] = [0, 1, 2, 3, 4, 5].map(idx => {
+          return Math.round(wavg(f => (f.trend && f.trend[m.key] ? f.trend[m.key][idx] : f[m.key])));
+        });
+      });
     } else {
       const f = prodiSource[key];
       d = {
@@ -70,14 +77,16 @@
         n: f.n,
         scores: {},
         profile: f.profile.slice(),
-        topicW: f.topicW.slice()
+        topicW: f.topicW.slice(),
+        trend: {}
       };
-      DIMS.forEach(m => { d.scores[m.key] = f[m.key]; });
+      DIMS.forEach(m => {
+        d.scores[m.key] = f[m.key];
+        d.trend[m.key] = (f.trend && f.trend[m.key])
+          ? f.trend[m.key].slice()
+          : [f[m.key], f[m.key], f[m.key], f[m.key], f[m.key], f[m.key]];
+      });
     }
-    d.trend = {};
-    DIMS.forEach(m => {
-      d.trend[m.key] = TREND_OFFSETS[m.key].map(o => clamp(d.scores[m.key] + o));
-    });
     d.topics = TOPICS.map((t, i) => ({ ...t, i, w: d.topicW[i] }));
     d.sentiment = [0, 1, 2].map(j => d.topics.reduce((a, t) => a + t.w * t.sent[j], 0) / 100);
     return d;
@@ -139,7 +148,7 @@
       const v = D.scores[m.key], lv = level(m, v), tr = D.trend[m.key];
       const delta = v - tr[0];
       const better = m.good === 'high' ? delta > 0 : delta < 0;
-      const dt = (delta > 0 ? '+' : '−') + Math.abs(delta) + ' poin';
+      const dt = (delta > 0 ? "+" : (delta < 0 ? "-" : "")) + Math.abs(delta) + " poin";
       const isSelected = state.selectedKPI === m.key;
       return `
         <article class="kpi ${isSelected ? 'is-selected' : ''}" data-kpi="${m.key}" tabindex="0" role="button" aria-pressed="${isSelected}" style="--c:${m.color}" title="Klik untuk fokus & melihat rincian riwayat bulanan">
@@ -153,14 +162,14 @@
           </div>
           <div class="kpi__foot">
             <span class="delta delta--${better ? 'good' : 'bad'}">${dt} sejak Maret</span>
-            <span class="kpi__action-hint">${isSelected ? '● Fokus Aktif' : '🔍 Klik Detail'}</span>
+            <span class="kpi__action-hint">${isSelected ? 'Fokus Aktif' : 'Lihat Rincian'}</span>
           </div>
           <p class="kpi__about">${m.about}</p>
           ${isSelected ? `
             <div class="kpi__expanded" aria-label="Rincian riwayat 6 bulan">
               <div class="kpi__expanded-header">
                 <span>Riwayat 6 Bulan:</span>
-                <span class="kpi__benchmark">Target: ${m.good === 'high' ? '≥70' : '≤50'}</span>
+                <span class="kpi__benchmark">Target: &le;50'}</span>
               </div>
               <div class="kpi__mo-chips">
                 ${MONTHS.map((mo, idx) => `
@@ -170,7 +179,7 @@
                   </div>
                 `).join('')}
               </div>
-              <p class="kpi__hint-msg">💡 Grafik tren 6 bulan di bawah telah difokuskan pada <strong>${m.label}</strong>.</p>
+              <p class="kpi__hint-msg">Grafik tren 6 bulan di bawah telah difokuskan pada <strong>${m.label}</strong>.</p>
             </div>
           ` : ''}
         </article>`;
@@ -178,14 +187,16 @@
   }
 
   function renderTrend() {
-    const toggles = $('#trendToggles'), chart = $('#trendChart');
+    const toggles = $('#trendToggles'), chart = $('#trendChart'), footer = $('#trendFooter');
     if (!toggles || !chart) return;
     toggles.innerHTML = DIMS.map(m => `
       <button type="button" class="seg__btn" aria-pressed="${state.trend.has(m.key)}" data-trend="${m.key}">
         <i style="background:${m.color}"></i>${m.short}
       </button>`).join('');
+
     Charts.line(chart, {
       labels: MONTHS,
+      height: 280,
       series: DIMS.map(m => ({
         name: m.short,
         color: m.color,
@@ -193,6 +204,45 @@
         visible: state.trend.has(m.key)
       }))
     });
+
+    if (footer) {
+      // Hitung metrik telemetri tren dinamis
+      const pressVals = D.trend.pressure || [66, 68, 76, 75, 74, 73];
+      const maxPress = Math.max(...pressVals);
+      const maxMonthIdx = pressVals.indexOf(maxPress);
+      const maxMonthName = MONTHS[maxMonthIdx] || 'Mei';
+
+      const careerVals = D.trend.career || [55, 56, 58, 59, 61, 62];
+      const careerDelta = careerVals[careerVals.length - 1] - careerVals[0];
+
+      const wbVals = D.trend.wellbeing || [62, 63, 62, 63, 63, 64];
+      const wbDelta = wbVals[wbVals.length - 1] - wbVals[0];
+
+      const scopeName = state.fac === 'all' ? 'seluruh kampus' : D.name;
+
+      footer.innerHTML = `
+        <div class="trend-stats-strip">
+          <div class="trend-stat-card">
+            <span class="trend-stat-card__lbl">Puncak Beban</span>
+            <strong class="trend-stat-card__val" style="color: #E11D48;">${maxMonthName} (${maxPress} Poin)</strong>
+            <span class="trend-stat-card__sub">Periode UTS Kampus</span>
+          </div>
+          <div class="trend-stat-card">
+            <span class="trend-stat-card__lbl">Kenaikan Tertinggi</span>
+            <strong class="trend-stat-card__val" style="color: #D97706;">Karir (+${careerDelta} Poin)</strong>
+            <span class="trend-stat-card__sub">Tren Positif Konsisten</span>
+          </div>
+          <div class="trend-stat-card">
+            <span class="trend-stat-card__lbl">Kondisi Wellbeing</span>
+            <strong class="trend-stat-card__val" style="color: #059669;">Stabil (${wbDelta >= 0 ? '+' + wbDelta : wbDelta} Poin)</strong>
+            <span class="trend-stat-card__sub">Kondisi Relatif Terjaga</span>
+          </div>
+        </div>
+        <div class="trend-summary-note">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>Pola 6 bulan (${scopeName}): Tekanan akademik mencapai puncak saat evaluasi semester (${maxMonthName}), sementara Wellbeing dan Kesiapan Karir bergerak naik secara stabil.</span>
+        </div>`;
+    }
   }
 
   function makeInsights() {
@@ -201,6 +251,8 @@
     const wl = level(worst, D.scores[worst.key]);
     out.push({
       tone: wl.c === 'good' ? 'good' : wl.c,
+      category: 'Prioritas Utama',
+      badgeClass: 'ins-badge--urgent',
       title: `${worst.short} paling perlu perhatian`,
       text: `Dengan skor ${D.scores[worst.key]} (${wl.t.toLowerCase()}), indikator ini menunjukkan urgensi dukungan terbesar di antara empat indikator.`,
       act: { view: 'reco' },
@@ -211,6 +263,8 @@
     const pct = Math.round(D.profile[pi]);
     out.push({
       tone: 'info',
+      category: 'Sebaran Profil',
+      badgeClass: 'ins-badge--info',
       title: `${PROFILES[pi].short} jadi profil terbesar`,
       text: `${pct}% mahasiswa (sekitar ${nf.format(Math.round(D.n * pct / 100))} orang) terpetakan ke ${PROFILES[pi].name}.`,
       act: { view: 'profile', profile: pi },
@@ -220,6 +274,8 @@
     const ti = D.topics.map(t => ({ t, v: t.w * t.sent[2] })).sort((a, b) => b.v - a.v)[0].t;
     out.push({
       tone: 'warn',
+      category: 'Suara Terbanyak',
+      badgeClass: 'ins-badge--warn',
       title: `${ti.name} paling banyak dikeluhkan`,
       text: `${Math.round(ti.w)}% komentar membahas topik ini, dan ${ti.sent[2]}% di antaranya bernada negatif.`,
       act: { view: 'voice', topic: ti.i },
@@ -232,7 +288,9 @@
       const f = prodiSource[ks[0]];
       out.push({
         tone: 'bad',
-        title: `Tekanan akademik tertinggi ada di Prodi ${f.name}`,
+        category: 'Fokus Prodi',
+        badgeClass: 'ins-badge--prodi',
+        title: `Tekanan akademik tertinggi di ${f.name}`,
         text: `Skor ${f.pressure}, ${f.pressure - ALL.scores.pressure} poin di atas rata-rata kampus (${ALL.scores.pressure}).`,
         act: { fac: ks[0] },
         label: `Fokus ke Prodi ${f.name}`
@@ -246,12 +304,20 @@
     if (!list) return;
     const ins = makeInsights();
     list.innerHTML = ins.map((item, i) => `
-      <li class="ins ins--${item.tone}">
-        <span class="ins__dot" aria-hidden="true"></span>
-        <div>
-          <h5>${item.title}</h5>
-          <p>${item.text}</p>
-          <button type="button" class="link" data-ins="${i}">${item.label} →</button>
+      <li class="ins-card ins-card--${item.tone}">
+        <div class="ins-card__header">
+          <div class="ins-card__title-row">
+            <span class="ins-card__dot" aria-hidden="true"></span>
+            <h5 class="ins-card__title">${item.title}</h5>
+          </div>
+          <span class="ins-badge ${item.badgeClass}">${item.category}</span>
+        </div>
+        <p class="ins-card__text">${item.text}</p>
+        <div class="ins-card__footer">
+          <button type="button" class="ins-card__action" data-ins="${i}">
+            <span>${item.label}</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
         </div>
       </li>`).join('');
   }
@@ -573,8 +639,8 @@
       state.topic = null;
       renderVoice();
 
-      const sentEmoji = nlp.sentiment === 'pos' ? 'Positif 😊' : nlp.sentiment === 'neg' ? 'Keluhan / Kritis ⚠️' : 'Netral ℹ️';
-      toast(`✅ Curhat diterima! NLP deteksi: Topik "${TOPICS[nlp.topicIndex].name}" · Sentimen: ${sentEmoji}`);
+      const sentEmoji = nlp.sentiment === 'pos' ? 'Positif ' : nlp.sentiment === 'neg' ? 'Keluhan / Kritis' : 'Netral';
+      toast(`Aspirasi diterima! NLP deteksi: Topik "${TOPICS[nlp.topicIndex].name}" · Sentimen: ${sentEmoji}`);
 
       // Scroll ke komentar baru dan flash highlight
       setTimeout(() => {
@@ -800,8 +866,9 @@
       return setView(t.dataset.view);
     }
 
-    if (t.dataset.ins !== undefined) {
-      const ins = makeInsights()[+t.dataset.ins];
+    const insBtn = e.target.closest('[data-ins]');
+    if (insBtn) {
+      const ins = makeInsights()[+insBtn.dataset.ins];
       if (ins && ins.act) return runAct(ins.act);
     }
 
