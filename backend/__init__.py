@@ -1,3 +1,0 @@
-"""
-NadiKampus Backend Package
-"""
