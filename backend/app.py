@@ -1,10 +1,14 @@
 """
-NadiKampus Intelligence Console — Main Application Runner
-Serves both the interactive frontend and RESTful API endpoints.
+NadiKampus Backend Runner
 """
 
 import os
 import sys
+
+# Ensure root directory is in sys.path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
 def run_server():
     port = int(os.environ.get("PORT", 8000))
@@ -13,23 +17,19 @@ def run_server():
     try:
         import uvicorn
         from fastapi.staticfiles import StaticFiles
-        try:
-            from backend.api.main import app
-        except ImportError:
-            from api.main import app
+        from backend.api.main import app
 
-        frontend_path = os.path.join(os.path.dirname(__file__), "frontend")
+        frontend_path = os.path.join(BASE_DIR, "frontend")
         if os.path.exists(frontend_path):
             app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
 
-        print(f"[*] NadiKampus server running at http://localhost:{port}")
+        print(f"[*] NadiKampus backend server running at http://localhost:{port}")
         uvicorn.run(app, host=host, port=port)
     except ImportError:
-        # Fallback to standard library HTTP server if dependencies are not installed
         import http.server
         import socketserver
 
-        frontend_path = os.path.join(os.path.dirname(__file__), "frontend")
+        frontend_path = os.path.join(BASE_DIR, "frontend")
         os.chdir(frontend_path)
 
         class CustomHandler(http.server.SimpleHTTPRequestHandler):
