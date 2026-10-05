@@ -1,18 +1,21 @@
 """
 NadiKampus Intelligence Console — API Backend
-Endpoints for Student Wellbeing, K-Means Clustering, and NLP Sentiment Analysis.
+Endpoints for Higher Education Student Wellbeing Monitoring,
+Latent Profile Analysis (LPA via GMM, k=5), and Student Analytics.
 """
 
+import os
+import math
+from typing import Dict, List, Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from typing import Dict, List, Optional
-import math
+import pandas as pd
 
 app = FastAPI(
     title="NadiKampus Analytics API",
-    description="RESTful API for higher-education student wellbeing monitoring and machine learning clustering.",
-    version="1.0.0"
+    description="RESTful API for higher-education student wellbeing monitoring and Latent Profile Analysis (GMM).",
+    version="2.0.0"
 )
 
 # Enable CORS for frontend consumption
@@ -24,133 +27,212 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 4 Centroids based on K-Means (k=4) trained on 2,481 student survey responses
-CENTROIDS = [
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUTPUT_DIR = os.path.join(BASE_DIR, "data", "output")
+PROCESSED_DIR = os.path.join(BASE_DIR, "data", "processed")
+
+# Definisi metadata 5 Profil LPA-GMM hasil riset backend
+PROFILE_METADATA = [
     {
-        "cluster_id": 1,
-        "name": "Academic Pressure",
-        "short": "Klaster 1: Tekanan Akademik",
-        "color": "#E0664A",
-        "percentage": 27.0,
-        "n_students": 670,
-        "pca_coordinates": {"x": -0.42, "y": 0.58},
-        "scores": {
-            "wellbeing": 48,
-            "academic_pressure": 82,
-            "social_support": 55,
-            "career_readiness": 52
-        },
-        "recommendation": "Mentoring beban sks & konseling reguler di prodi"
+        "profile_id": 1,
+        "key": "p1",
+        "name": "Socially Supported, Academically Strained",
+        "short": "Profil 1: Sosial Kuat, Akademik Tertekan",
+        "color": "#0284C7",
+        "count": 14,
+        "percentage": 11.76,
+        "pca_coordinates": {"x": -0.37, "y": 0.29},
+        "scores_likert": {"wellbeing": 2.85, "academic": 2.94, "social": 4.10, "career": 3.34},
+        "scores_100": {"wellbeing": 57, "academic": 59, "social": 82, "career": 67},
+        "description": "Dukungan sosial sangat tinggi, namun kesejahteraan psikologis dan ketahanan akademik berada di bawah rata-rata.",
+        "recommendation": "Harmonisasi jadwal tugas antar prodi, mentoring akademik teman sebaya, dan workshop regulasi stres."
     },
     {
-        "cluster_id": 2,
-        "name": "Career Concern",
-        "short": "Klaster 2: Kecemasan Karier",
-        "color": "#D9971E",
-        "percentage": 24.0,
-        "n_students": 595,
-        "pca_coordinates": {"x": 0.52, "y": 0.44},
-        "scores": {
-            "wellbeing": 58,
-            "academic_pressure": 60,
-            "social_support": 62,
-            "career_readiness": 44
-        },
-        "recommendation": "Career clinic, fasilitasi magang, dan sertifikasi"
+        "profile_id": 2,
+        "key": "p2",
+        "name": "Thriving & High Functioning",
+        "short": "Profil 2: Wellbeing & Akademik Positif",
+        "color": "#0D9488",
+        "count": 27,
+        "percentage": 22.69,
+        "pca_coordinates": {"x": 0.97, "y": -0.08},
+        "scores_likert": {"wellbeing": 4.06, "academic": 3.88, "social": 4.25, "career": 3.65},
+        "scores_100": {"wellbeing": 81, "academic": 78, "social": 85, "career": 73},
+        "description": "Performa seimbang dan tinggi di seluruh dimensi dengan strategi adaptasi belajar yang matang.",
+        "recommendation": "Pemberdayaan sebagai peer mentor dan fasilitasi program akselerasi magang industri."
     },
     {
-        "cluster_id": 3,
-        "name": "Social Adaptation",
-        "short": "Klaster 3: Adaptasi Sosial",
-        "color": "#2B65B0",
-        "percentage": 18.0,
-        "n_students": 447,
-        "pca_coordinates": {"x": -0.36, "y": -0.54},
-        "scores": {
-            "wellbeing": 50,
-            "academic_pressure": 62,
-            "social_support": 38,
-            "career_readiness": 58
-        },
-        "recommendation": "Program peer-support & komunitas inklusif kampus"
+        "profile_id": 3,
+        "key": "p3",
+        "name": "Moderate / Average Adaptation",
+        "short": "Profil 3: Adaptasi Moderat (Mayoritas)",
+        "color": "#6366F1",
+        "count": 57,
+        "percentage": 47.90,
+        "pca_coordinates": {"x": -0.46, "y": 0.05},
+        "scores_likert": {"wellbeing": 3.13, "academic": 3.12, "social": 3.70, "career": 3.05},
+        "scores_100": {"wellbeing": 63, "academic": 62, "social": 74, "career": 61},
+        "description": "Kelompok mayoritas (47.9% mahasiswa) dengan performa adaptasi sedang yang rentan jika beban melonjak tiba-tiba.",
+        "recommendation": "Klinik perencanaan karier dan magang terpandu, panduan belajar terstruktur, serta bimbingan berkala."
     },
     {
-        "cluster_id": 4,
-        "name": "Balanced Wellbeing",
-        "short": "Klaster 4: Seimbang & Resilien",
+        "profile_id": 4,
+        "key": "p4",
+        "name": "High Risk / Vulnerable",
+        "short": "Profil 4: Sangat Rentan (Prioritas Intervensi)",
+        "color": "#E11D48",
+        "count": 8,
+        "percentage": 6.72,
+        "pca_coordinates": {"x": -2.65, "y": -0.10},
+        "scores_likert": {"wellbeing": 2.11, "academic": 2.31, "social": 2.41, "career": 1.77},
+        "scores_100": {"wellbeing": 42, "academic": 46, "social": 48, "career": 35},
+        "description": "Seluruh indikator berada di zona kritis (Likert < 2.5). Kesiapan karier sangat rendah dan risiko burnout tinggi.",
+        "recommendation": "Layanan konseling psikologis prioritas (jalur cepat), pendampingan dosen wali intensif, dan advokasi finansial."
+    },
+    {
+        "profile_id": 5,
+        "key": "p5",
+        "name": "Flourishing / Optimal Well-being",
+        "short": "Profil 5: Wellbeing Optimal & Unggul",
         "color": "#059669",
-        "percentage": 31.0,
-        "n_students": 769,
-        "pca_coordinates": {"x": 0.48, "y": -0.48},
-        "scores": {
-            "wellbeing": 76,
-            "academic_pressure": 46,
-            "social_support": 80,
-            "career_readiness": 74
-        },
-        "recommendation": "Program student ambassador & penguatan kepemimpinan"
+        "count": 13,
+        "percentage": 10.92,
+        "pca_coordinates": {"x": 2.04, "y": -0.30},
+        "scores_likert": {"wellbeing": 4.48, "academic": 4.52, "social": 5.00, "career": 4.02},
+        "scores_100": {"wellbeing": 90, "academic": 90, "social": 100, "career": 80},
+        "description": "Profil teladan dengan kepuasan hidup dan resiliensi tertinggi. Dukungan sosial sempurna dan akademik prima.",
+        "recommendation": "Fasilitasi program hibah kompetisi nasional/internasional, kepemimpinan, dan inkubasi riset kampus."
     }
 ]
 
+
 class PredictStudentProfileRequest(BaseModel):
-    wellbeing: float = Field(..., ge=0, le=100, description="Wellbeing Score (0-100)")
-    academic_pressure: float = Field(..., ge=0, le=100, description="Academic Pressure Score (0-100)")
-    social_support: float = Field(..., ge=0, le=100, description="Social Support Score (0-100)")
-    career_readiness: float = Field(..., ge=0, le=100, description="Career Readiness Score (0-100)")
+    wellbeing: float = Field(..., description="Wellbeing score (skala 1-5 atau 0-100)")
+    academic: float = Field(..., description="Academic score (skala 1-5 atau 0-100)")
+    social: float = Field(..., description="Social score (skala 1-5 atau 0-100)")
+    career: float = Field(..., description="Career score (skala 1-5 atau 0-100)")
+
 
 @app.get("/api/v1/health")
 def health_check():
     return {
         "status": "online",
         "service": "NadiKampus Intelligence API",
-        "version": "1.0.0",
-        "bpm": 74,
-        "campus_status": "Terkendali",
-        "total_respondents": 2481
+        "version": "2.0.0",
+        "model_engine": "Latent Profile Analysis (Gaussian Mixture Model)",
+        "k_components": 5,
+        "campus_status": "Optimal",
+        "total_respondents": 119
     }
+
 
 @app.get("/api/v1/kpi")
 def get_kpis():
     return {
         "wellbeing_index": {"score": 65, "status": "Baik", "trend": "+6 poin sejak Maret"},
-        "academic_pressure": {"score": 71, "status": "Tinggi", "trend": "-5 poin sejak Maret"},
+        "academic_readiness": {"score": 71, "status": "Tinggi", "trend": "-5 poin sejak Maret"},
         "social_support": {"score": 64, "status": "Perlu perhatian", "trend": "+4 poin sejak Maret"},
         "career_readiness": {"score": 60, "status": "Perlu perhatian", "trend": "+7 poin sejak Maret"}
     }
 
+
+@app.get("/api/v1/profiles")
 @app.get("/api/v1/clusters")
-def get_clusters():
+def get_profiles():
+    """Mengembalikan 5 profil laten LPA-GMM beserta evaluasi AIC/BIC."""
+    model_summary_path = os.path.join(OUTPUT_DIR, "model_summary.csv")
+    model_evaluation = []
+
+    if os.path.exists(model_summary_path):
+        try:
+            df_eval = pd.read_csv(model_summary_path)
+            model_evaluation = df_eval.to_dict(orient="records")
+        except Exception:
+            pass
+
     return {
-        "algorithm": "K-Means",
-        "k": 4,
-        "silhouette_score": 0.71,
-        "method": "Elbow & Euclidean Centroids",
-        "converged_iterations": 12,
-        "clusters": CENTROIDS
+        "method": "Latent Profile Analysis (LPA)",
+        "algorithm": "GaussianMixture (covariance_type=full)",
+        "k_selected": 5,
+        "best_metrics": {
+            "aic": 955.88,
+            "bic": 1161.53,
+            "log_likelihood": -3.39
+        },
+        "total_respondents": 119,
+        "profiles": PROFILE_METADATA,
+        "model_evaluation_table": model_evaluation
     }
 
-@app.post("/api/v1/predict-cluster")
-def predict_cluster(req: PredictStudentProfileRequest):
-    # Compute Euclidean distance to each centroid
-    best_cluster = None
-    min_distance = float('inf')
 
-    for c in CENTROIDS:
-        s = c["scores"]
+@app.get("/api/v1/respondents")
+def get_respondents():
+    """Mengembalikan sebaran 119 responden riil dengan koordinat PCA dan prodi."""
+    data_lpa_path = os.path.join(PROCESSED_DIR, "data_lpa.csv")
+    if os.path.exists(data_lpa_path):
+        try:
+            df = pd.read_csv(data_lpa_path)
+            from sklearn.decomposition import PCA
+            cols = ["WB_Score", "ACD_Score", "SOC_Score", "CAR_Score"]
+            pca = PCA(n_components=2, random_state=42)
+            coords = pca.fit_transform(df[cols])
+            
+            records = []
+            for i, r in df.iterrows():
+                records.append({
+                    "id": f"MHS-{int(r['Profile'])}-{i+1}",
+                    "profile": int(r["Profile"]),
+                    "prodi": str(r["Program Studi"]),
+                    "pca_x": round(float(coords[i, 0]), 2),
+                    "pca_y": round(float(coords[i, 1]), 2),
+                    "scores": {
+                        "wellbeing": round(float(r["WB_Score"]), 2),
+                        "academic": round(float(r["ACD_Score"]), 2),
+                        "social": round(float(r["SOC_Score"]), 2),
+                        "career": round(float(r["CAR_Score"]), 2)
+                    }
+                })
+            return {"total": len(records), "data": records}
+        except Exception as e:
+            return {"error": str(e)}
+
+    return {"total": 0, "data": []}
+
+
+@app.post("/api/v1/predict-profile")
+@app.post("/api/v1/predict-cluster")
+def predict_profile(req: PredictStudentProfileRequest):
+    """
+    Memprediksi profil mahasiswa berdasarkan 4 dimensi skor.
+    Mendukung input skala Likert (1-5) maupun skala terstandarisasi (0-100).
+    """
+    # Normalisasi ke skala 1-5 jika input berupa 0-100
+    wb = req.wellbeing / 20.0 if req.wellbeing > 5.0 else req.wellbeing
+    acd = req.academic / 20.0 if req.academic > 5.0 else req.academic
+    soc = req.social / 20.0 if req.social > 5.0 else req.social
+    car = req.career / 20.0 if req.career > 5.0 else req.career
+
+    best_p = None
+    min_dist = float("inf")
+
+    for p in PROFILE_METADATA:
+        m = p["scores_likert"]
         dist = math.sqrt(
-            (req.wellbeing - s["wellbeing"]) ** 2 +
-            (req.academic_pressure - s["academic_pressure"]) ** 2 +
-            (req.social_support - s["social_support"]) ** 2 +
-            (req.career_readiness - s["career_readiness"]) ** 2
+            (wb - m["wellbeing"]) ** 2 +
+            (acd - m["academic"]) ** 2 +
+            (soc - m["social"]) ** 2 +
+            (car - m["career"]) ** 2
         )
-        if dist < min_distance:
-            min_distance = dist
-            best_cluster = c
+        if dist < min_dist:
+            min_dist = dist
+            best_p = p
 
     return {
-        "assigned_cluster": best_cluster["cluster_id"],
-        "cluster_name": best_cluster["name"],
-        "short_title": best_cluster["short"],
-        "euclidean_distance": round(min_distance, 2),
-        "recommended_intervention": best_cluster["recommendation"]
+        "assigned_profile": best_p["profile_id"],
+        "name": best_p["name"],
+        "short_title": best_p["short"],
+        "color": best_p["color"],
+        "distance": round(min_dist, 3),
+        "profile_summary": best_p["description"],
+        "recommended_intervention": best_p["recommendation"]
     }

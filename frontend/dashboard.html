@@ -48,16 +48,16 @@
             </div>
           </button>
 
-          <button class="app-nav__item" role="tab" aria-selected="false" data-view="profile" id="tab-profile" aria-controls="view-profile" title="Student Clustering (K-Means)">
+          <button class="app-nav__item" role="tab" aria-selected="false" data-view="profile" id="tab-profile" aria-controls="view-profile" title="Student Profiling (LPA-GMM)">
             <div class="nav-icon">
               <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 5.2a3.3 3.3 0 0 1 0 6.1M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg>
             </div>
             <div class="nav-text">
-              <span class="nav-title">Student Clustering</span>
-              <span class="nav-sub">K-Means (k=4)</span>
+              <span class="nav-title">Student Profiling</span>
+              <span class="nav-sub">LPA-GMM (k=5)</span>
             </div>
-            <span class="cluster-mini-pips" title="4 Klaster Teridentifikasi">
-              <i style="background:#E0664A"></i><i style="background:#D9971E"></i><i style="background:#2B65B0"></i><i style="background:#059669"></i>
+            <span class="cluster-mini-pips" title="5 Profil Laten Teridentifikasi">
+              <i style="background:#0284C7"></i><i style="background:#0D9488"></i><i style="background:#6366F1"></i><i style="background:#E11D48"></i><i style="background:#059669"></i>
             </span>
           </button>
 
@@ -198,44 +198,45 @@
           </article>
         </section>
 
-        <!-- ---------- 2. STUDENT CLUSTERING ANALYSIS (K-MEANS) ---------- -->
+        <!-- ---------- 2. STUDENT PROFILING ANALYSIS (LPA - GMM) ---------- -->
         <section class="view" id="view-profile" role="tabpanel" aria-labelledby="tab-profile" hidden>
           <div class="view__head">
-            <h3>Student Clustering Analysis (K-Means) <span id="prScope">seluruh kampus</span></h3>
-            <p>Hasil K-Means Clustering (k=4): mahasiswa dikelompokkan ke dalam klaster berdasarkan kedekatan jarak Euclidean pada 4 dimensi wellbeing &amp; akademik terhadap titik centroid.</p>
+            <h3>Student Profiling Analysis (LPA via GMM) <span id="prScope">seluruh kampus</span></h3>
+            <p>Hasil Latent Profile Analysis menggunakan Gaussian Mixture Model (GMM, k=5): mengidentifikasi 5 subpopulasi laten mahasiswa berdasarkan probabilitas gabungan pada 4 dimensi indikator kesejahteraan dan akademik.</p>
           </div>
 
           <div class="lpa-note">
-            <span><b>4 Klaster</b> Terpilih (k=4)</span>
-            <span>Silhouette Score <b>0,71</b> (Struktur Klaster Kuat)</span>
-            <span>Metode: <b>Elbow &amp; K-Means Clustering</b></span>
-            <span>Total Iterasi Konvergen: <b>12 Iterasi</b></span>
+            <span><b>5 Profil Laten</b> Terpilih (k=5)</span>
+            <span>AIC: <b>955,88</b> (Optimal)</span>
+            <span>BIC: <b>1.161,53</b> (Model Terbaik)</span>
+            <span>Metode: <b>Latent Profile Analysis (GMM)</b></span>
+            <span>Total Responden: <b>119 Mahasiswa PENS</b></span>
           </div>
 
-          <!-- 4 K-Means Cluster Cards -->
+          <!-- 5 LPA Profile Cards -->
           <div class="profiles" id="profiles"></div>
 
           <!-- Grid 1: Scatter Plot 2D & Pola Centroid -->
           <div class="grid2 grid2--cluster-top">
             <article class="card">
               <div class="card__head">
-                <h4>Sebaran Responden &amp; Centroid 2D (PCA Space)</h4>
-                <span class="card__badge">200 Sampel Representatif</span>
+                <h4>Sebaran Responden &amp; Centroid Profil (PCA Projection)</h4>
+                <span class="card__badge">119 Data Riil Mahasiswa</span>
               </div>
-              <p class="card__hint">Arahkan kursor ke titik mahasiswa atau klik Centroid (C1–C4) untuk memfokuskan klaster.</p>
+              <p class="card__hint">Arahkan kursor ke titik responden atau klik Centroid (P1–P5) untuk memfokuskan analisis profil.</p>
               <div class="chart" id="clusterScatterChart"></div>
             </article>
 
             <article class="card">
               <div class="card__head">
-                <h4>Nilai Centroid Multi-Dimensi (0–100)</h4>
+                <h4>Pola Skor Rata-rata Centroid (0–100 / Likert)</h4>
               </div>
-              <p class="card__hint">Grafik perbandingan skor centroid klaster pada 4 indikator utama.</p>
+              <p class="card__hint">Grafik perbandingan skor tiap profil pada 4 dimensi indikator utama.</p>
               <div class="chart" id="profileChart"></div>
             </article>
           </div>
 
-          <!-- Detail Karakteristik Klaster Centroid -->
+          <!-- Detail Karakteristik Profil Centroid -->
           <article class="card card--cluster-detail" id="profileDetail"></article>
         </section>
 
@@ -287,12 +288,16 @@
                   <label class="select select--sm">
                     <span>Prodi:</span>
                     <select id="voiceProdi">
-                      <option value="ti">Teknik Informatika</option>
-                      <option value="ds">Sains Data Terapan</option>
-                      <option value="si">Sistem Informasi</option>
-                      <option value="el">Teknik Elektro</option>
-                      <option value="tel">Teknik Telekomunikasi</option>
-                      <option value="me">Teknik Mekatronika</option>
+                      <option value="ds">S.Tr. Sains Data Terapan</option>
+                      <option value="ti_d4">S.Tr. Teknik Informatika</option>
+                      <option value="ti_d3">D3 Teknik Informatika</option>
+                      <option value="tk">S.Tr. Teknik Komputer</option>
+                      <option value="tri">S.Tr. Teknologi Rekayasa Internet</option>
+                      <option value="game">S.Tr. Teknologi Game</option>
+                      <option value="me">S.Tr. Teknik Mekatronika</option>
+                      <option value="el_d4">S.Tr. Teknik Elektronika</option>
+                      <option value="eli_d3">D3 Teknik Elektro Industri</option>
+                      <option value="mmb">D3 Teknologi Multimedia &amp; Broadcasting</option>
                     </select>
                   </label>
 

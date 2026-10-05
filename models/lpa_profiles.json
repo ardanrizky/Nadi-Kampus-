@@ -1,115 +1,171 @@
 {
   "algorithm": "Latent Profile Analysis (Gaussian Mixture Model)",
-  "covariance_type": "diag",
-  "k": 4,
-  "bic": 1051.0067213951038,
-  "aic": 955.2397757012965,
-  "entropy": 0.8783220098500463,
-  "total_respondents": 114,
-  "clusters": [
+  "covariance_type": "full",
+  "k": 5,
+  "bic": 1161.5319002948743,
+  "aic": 955.8767618046211,
+  "log_likelihood": -3.3946123948805007,
+  "total_respondents": 119,
+  "profiles": [
     {
-      "cluster_id": 1,
-      "name": "Tekanan Akademik Tinggi",
-      "short": "Klaster 1: Tekanan Akademik",
-      "color": "#E0664A",
-      "percentage": 27.2,
-      "n_students": 31,
+      "profile_id": 1,
+      "name": "Socially Supported, Academically Strained",
+      "short": "Profil 1: Sosial Kuat, Akademik Tertekan",
+      "color": "#0284C7",
+      "count": 14,
+      "percentage": 11.76,
       "pca_coordinates": {
-        "x": -1.23,
+        "x": -0.37,
+        "y": 0.29
+      },
+      "scores_likert": {
+        "wellbeing": 2.85,
+        "academic": 2.94,
+        "social": 4.1,
+        "career": 3.34
+      },
+      "scores_100": {
+        "wellbeing": 57,
+        "academic": 59,
+        "social": 82,
+        "career": 67
+      },
+      "traits": [
+        "Dukungan sosial tinggi (82/100)",
+        "Ketahanan akademik rentan (59/100)",
+        "Wellbeing psikologis tertekan (57/100)"
+      ],
+      "desc": "Dukungan sosial sangat tinggi, namun kesejahteraan psikologis dan ketahanan akademik berada di bawah rata-rata.",
+      "need": "Harmonisasi jadwal tugas antar prodi, mentoring akademik teman sebaya, dan workshop regulasi emosi belajar.",
+      "recommendation": "Harmonisasi jadwal tugas antar prodi dan mentoring akademik"
+    },
+    {
+      "profile_id": 2,
+      "name": "Thriving & High Functioning",
+      "short": "Profil 2: Wellbeing & Akademik Positif",
+      "color": "#0D9488",
+      "count": 27,
+      "percentage": 22.69,
+      "pca_coordinates": {
+        "x": 0.97,
+        "y": -0.08
+      },
+      "scores_likert": {
+        "wellbeing": 4.06,
+        "academic": 3.88,
+        "social": 4.25,
+        "career": 3.65
+      },
+      "scores_100": {
+        "wellbeing": 81,
+        "academic": 78,
+        "social": 85,
+        "career": 73
+      },
+      "traits": [
+        "Kesejahteraan mental tinggi (81/100)",
+        "Performa akademik stabil (78/100)",
+        "Strategi adaptasi belajar matang"
+      ],
+      "desc": "Performa seimbang dan tinggi di seluruh dimensi dengan strategi adaptasi belajar yang matang.",
+      "need": "Pemberdayaan sebagai duta kampus/mentor sebaya dan akses ke program akselerasi karier.",
+      "recommendation": "Pemberdayaan sebagai peer mentor dan program akselerasi magang"
+    },
+    {
+      "profile_id": 3,
+      "name": "Moderate / Average Adaptation",
+      "short": "Profil 3: Adaptasi Moderat (Mayoritas)",
+      "color": "#6366F1",
+      "count": 57,
+      "percentage": 47.9,
+      "pca_coordinates": {
+        "x": -0.46,
+        "y": 0.05
+      },
+      "scores_likert": {
+        "wellbeing": 3.13,
+        "academic": 3.12,
+        "social": 3.7,
+        "career": 3.05
+      },
+      "scores_100": {
+        "wellbeing": 63,
+        "academic": 62,
+        "social": 74,
+        "career": 61
+      },
+      "traits": [
+        "Kelompok mayoritas mahasiswa (47.9%)",
+        "Dukungan sosial cukup baik (74/100)",
+        "Kesiapan karier & akademik perlu diakselerasi"
+      ],
+      "desc": "Mencakup 47.9% populasi mahasiswa. Performa adaptasi sedang yang rentan jika beban melonjak mendadak.",
+      "need": "Klinik perencanaan karier dan magang terpandu, panduan belajar terstruktur, serta bimbingan berkala.",
+      "recommendation": "Klinik perencanaan karier terpandu dan monitoring akademik berkala"
+    },
+    {
+      "profile_id": 4,
+      "name": "High Risk / Vulnerable",
+      "short": "Profil 4: Sangat Rentan (Prioritas Intervensi)",
+      "color": "#E11D48",
+      "count": 8,
+      "percentage": 6.72,
+      "pca_coordinates": {
+        "x": -2.65,
         "y": -0.1
       },
-      "scores": {
-        "wellbeing_score": 76,
-        "academic_pressure": 27,
-        "social_support": 82,
-        "career_readiness": 65
+      "scores_likert": {
+        "wellbeing": 2.11,
+        "academic": 2.31,
+        "social": 2.41,
+        "career": 1.77
+      },
+      "scores_100": {
+        "wellbeing": 42,
+        "academic": 46,
+        "social": 48,
+        "career": 35
       },
       "traits": [
-        "Beban tugas menumpuk",
-        "Jadwal praktikum padat",
-        "Waktu istirahat kurang"
+        "Kesiapan karier sangat rendah (35/100, terendah)",
+        "Wellbeing psikologis kritis (42/100)",
+        "Rasa keterasingan sosial tinggi (48/100)"
       ],
-      "desc": "Mahasiswa dengan beban tugas dan ujian tinggi, jam tidur terbatas, dan rentan kelelahan akademik.",
-      "need": "Penyelarasan jadwal tugas antar dosen & konseling akademik cepat 48 jam.",
-      "recommendation": "Mentoring beban sks & konseling reguler di prodi"
+      "desc": "Seluruh indikator berada di zona kritis (Likert < 2.5). Kesiapan karier sangat rendah dan risiko burnout tinggi.",
+      "need": "Layanan konseling psikologis prioritas (jalur cepat), pendampingan dosen wali intensif, dan advokasi finansial.",
+      "recommendation": "Konseling psikologis jalur cepat & pendampingan dosen wali intensif"
     },
     {
-      "cluster_id": 2,
-      "name": "Kecemasan Karier & Magang",
-      "short": "Klaster 2: Kecemasan Karier",
-      "color": "#D9971E",
-      "percentage": 34.2,
-      "n_students": 39,
-      "pca_coordinates": {
-        "x": 1.51,
-        "y": 0.2
-      },
-      "scores": {
-        "wellbeing_score": 40,
-        "academic_pressure": 56,
-        "social_support": 62,
-        "career_readiness": 47
-      },
-      "traits": [
-        "Portofolio belum siap",
-        "Kurang info magang",
-        "Cemas rekrutmen kerja"
-      ],
-      "desc": "Mahasiswa yang merasa bingung mempersiapkan portofolio, magang industri, dan persaingan kerja pascakampus.",
-      "need": "Klinik CV berkala, pendampingan magang terarah, dan mentoring alumni industri.",
-      "recommendation": "Career clinic, fasilitasi magang, dan sertifikasi"
-    },
-    {
-      "cluster_id": 3,
-      "name": "Kebutuhan Adaptasi Sosial",
-      "short": "Klaster 3: Adaptasi Sosial",
-      "color": "#2B65B0",
-      "percentage": 11.4,
-      "n_students": 13,
-      "pca_coordinates": {
-        "x": -2.7,
-        "y": -0.26
-      },
-      "scores": {
-        "wellbeing_score": 87,
-        "academic_pressure": 12,
-        "social_support": 100,
-        "career_readiness": 75
-      },
-      "traits": [
-        "Lingkaran teman terbatas",
-        "Rentan merasa sendiri",
-        "Minim relasi kampus"
-      ],
-      "desc": "Mahasiswa yang merasa terisolasi, kesepian di perantauan, atau sulit berbaur di lingkungan kampus.",
-      "need": "Program peer-support sebaya, komunitas belajar santai, dan kegiatan prodi yang inklusif.",
-      "recommendation": "Program peer-support & komunitas inklusif kampus"
-    },
-    {
-      "cluster_id": 4,
-      "name": "Seimbang & Resilien",
-      "short": "Klaster 4: Seimbang & Resilien",
+      "profile_id": 5,
+      "name": "Flourishing / Optimal Well-being",
+      "short": "Profil 5: Wellbeing Optimal & Unggul",
       "color": "#059669",
-      "percentage": 27.2,
-      "n_students": 31,
+      "count": 13,
+      "percentage": 10.92,
       "pca_coordinates": {
-        "x": 0.45,
-        "y": -0.05
+        "x": 2.04,
+        "y": -0.3
       },
-      "scores": {
-        "wellbeing_score": 59,
-        "academic_pressure": 45,
-        "social_support": 68,
-        "career_readiness": 51
+      "scores_likert": {
+        "wellbeing": 4.48,
+        "academic": 4.52,
+        "social": 5.0,
+        "career": 4.02
+      },
+      "scores_100": {
+        "wellbeing": 90,
+        "academic": 90,
+        "social": 100,
+        "career": 80
       },
       "traits": [
-        "Manajemen waktu baik",
-        "Dukungan sosial kuat",
-        "Motivasi belajar stabil"
+        "Dukungan sosial sempurna (100/100)",
+        "Akademik & kesiapan karier prima (90/100)",
+        "Resiliensi tinggi dan motivasi berprestasi"
       ],
-      "desc": "Mahasiswa dengan daya kelola wellbeing baik, hubungan sosial positif, dan kesiapan belajar yang matang.",
-      "need": "Diberdayakan sebagai mentor sebaya (Peer Counselor) dan duta kesehatan mental kampus.",
-      "recommendation": "Program student ambassador & penguatan kepemimpinan"
+      "desc": "Profil teladan dengan kepuasan hidup dan resiliensi tertinggi. Dukungan sosial sempurna dan akademik prima.",
+      "need": "Fasilitasi program hibah kompetisi nasional/internasional, kepemimpinan organisasi, dan inkubasi riset kampus.",
+      "recommendation": "Inkubasi riset, kepemimpinan organisasi, dan hibah kompetisi"
     }
   ]
 }

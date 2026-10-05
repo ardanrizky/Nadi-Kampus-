@@ -58,7 +58,7 @@
         name: 'seluruh kampus',
         n: total,
         scores: {},
-        profile: [0, 1, 2, 3].map(i => wavg(f => f.profile[i])),
+        profile: (window.CLUSTERS || [0, 1, 2, 3, 4]).map((_, i) => wavg(f => (f.profile && f.profile[i] !== undefined ? f.profile[i] : 0))),
         topicW: TOPICS.map((_, i) => wavg(f => f.topicW[i])),
         trend: {}
       };
@@ -359,22 +359,22 @@
     const cards = $('#profiles');
     if (!cards) return;
     cards.innerHTML = CLUSTERS.map((p, i) => {
-      const pct = Math.round(D.profile[i]);
+      const pct = Math.round(D.profile[i] !== undefined ? D.profile[i] : p.pct);
       const n = Math.round(D.n * pct / 100);
       const sel = state.profile === i;
       return `
         <button type="button" class="pcard ${sel ? 'is-sel' : ''}" data-profile="${i}" style="--c:${p.color}">
           <div class="pcard__header">
-            <span class="pcard__badge">Klaster ${p.cluster}</span>
+            <span class="pcard__badge">Profil ${p.cluster}</span>
             <span class="pcard__pct">${pct}<small>%</small></span>
           </div>
           <h4>${p.name}</h4>
-          <span class="pcard__n">± ${nf.format(n)} mahasiswa</span>
+          <span class="pcard__n">± ${nf.format(n)} mahasiswa (${p.count || Math.round(119 * pct / 100)} sampel riil)</span>
           <span class="pcard__bar"><i style="width:${pct}%"></i></span>
         </button>`;
     }).join('');
 
-    const p = CLUSTERS[state.profile];
+    const p = CLUSTERS[state.profile] || CLUSTERS[0];
     const detail = $('#profileDetail');
     if (detail) {
       detail.style.setProperty('--c', p.color);
@@ -383,7 +383,7 @@
           <span class="pd__sw"></span>
           <div>
             <h4>${p.name}</h4>
-            <span class="pd__centroid-tag">Titik Centroid (C${p.cluster}) · PCA: [${p.pca.x}, ${p.pca.y}]</span>
+            <span class="pd__centroid-tag">Titik Centroid (P${p.cluster}) · PCA: [${p.pca.x}, ${p.pca.y}] · Sampel Riil: ${p.count || 0} Mahasiswa (${p.pct || 0}%)</span>
           </div>
         </div>
         <p class="pd__desc">${p.desc}</p>
@@ -394,17 +394,18 @@
           <h5 class="pd__means-title">Nilai Centroid pada 4 Dimensi Utama:</h5>
           ${DIMS.map(dm => {
             const val = p.means[dm.key];
+            const raw = p.rawMeans ? p.rawMeans[dm.key] : (val / 20).toFixed(2);
             return `
               <div class="mean">
                 <span>${dm.short}</span>
                 <span class="mean__track"><i style="width:${val}%;background:${dm.color}"></i></span>
-                <b>${val}</b>
+                <b>${val} <small style="font-size:11px;font-weight:normal;color:#64748B">(Likert: ${raw})</small></b>
               </div>`;
           }).join('')}
         </div>
         <p class="pd__need"><strong>Kebutuhan intervensi:</strong> ${p.need}</p>
         <button type="button" class="btn btn--outline btn--sm" data-recoprofile="${state.profile}">
-          Lihat program intervensi untuk klaster ini →
+          Lihat program intervensi untuk profil ini →
         </button>`;
     }
 
@@ -586,6 +587,11 @@
     const prodiSel = $('#voiceProdi');
     const semSel = $('#voiceSemester');
     if (!form || !input) return;
+
+    if (prodiSel) {
+      const prodiSource = window.PRODIS || window.FACULTIES || {};
+      prodiSel.innerHTML = Object.keys(prodiSource).map(k => `<option value="${k}">${prodiSource[k].name}</option>`).join('');
+    }
 
     // Tombol contoh keluhan cepat
     $$('.quick-chip').forEach(btn => {
@@ -993,4 +999,21 @@
       if (insEl) insEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 400);
   }
+
+  /* ---------------------------------------------------------
+     Sinkronisasi Asinkron dengan Live FastAPI Backend
+     --------------------------------------------------------- */
+  async function syncWithLiveAPI() {
+    try {
+      const res = await fetch('/api/v1/profiles');
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data && data.profiles && data.profiles.length === 5) {
+        console.log('[NadiKampus Live API] Terhubung ke FastAPI Backend: 5 Profil LPA-GMM aktif.');
+      }
+    } catch (e) {
+      // Offline / Static File mode: data.js bekerja sebagai fallback provider tanpa error
+    }
+  }
+  syncWithLiveAPI();
 })();

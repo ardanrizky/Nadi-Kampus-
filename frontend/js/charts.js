@@ -266,8 +266,8 @@ const Charts = (() => {
     const pad = { l: 42, r: 24, t: 20, b: 36 };
     const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
 
-    // Koordinat domain PCA [-4.5, 4.5] ke rentang pixel SVG
-    const xRange = [-4.6, 4.6], yRange = [-4.0, 3.8];
+    // Koordinat domain PCA riil mahasiswa ke rentang pixel SVG
+    const xRange = [-3.8, 3.6], yRange = [-2.8, 2.0];
     const mapX = x => pad.l + ((x - xRange[0]) / (xRange[1] - xRange[0])) * iw;
     const mapY = y => pad.t + ih * (1 - (y - yRange[0]) / (yRange[1] - yRange[0]));
 
@@ -275,7 +275,7 @@ const Charts = (() => {
       viewBox: `0 0 ${W} ${H}`,
       class: 'lc lc--scatter',
       role: 'img',
-      'aria-label': 'Visualisasi sebaran mahasiswa dan centroid K-Means'
+      'aria-label': 'Visualisasi sebaran mahasiswa dan centroid LPA via GMM'
     }, el);
 
     // Defs untuk glow & efek
@@ -289,24 +289,24 @@ const Charts = (() => {
 
     // Label Sumbu
     const lblX = svgEl('text', { x: W / 2, y: H - 8, class: 'lc__tick lc__tick--x', 'text-anchor': 'middle' }, svg);
-    lblX.textContent = 'Komponen Utama 1 (Beban Akademik & Kesejahteraan) →';
+    lblX.textContent = 'PC 1 (70.6% Variansi: Kesejahteraan & Kesiapan Kampus) →';
 
     const lblY = svgEl('text', { x: 12, y: H / 2, class: 'lc__tick lc__tick--x', 'text-anchor': 'middle', transform: `rotate(-90 12 ${H / 2})` }, svg);
-    lblY.textContent = 'Komponen Utama 2 (Kesiapan & Jejaring) →';
+    lblY.textContent = 'PC 2 (16.7% Variansi: Orientasi Sosial vs Beban) →';
 
     // Area bayangan cluster lembut (soft cluster halo)
     clusters.forEach((c, i) => {
       const cx = mapX(c.pca.x), cy = mapY(c.pca.y);
       const isSel = i === activeCluster;
       svgEl('ellipse', {
-        cx, cy, rx: isSel ? 74 : 60, ry: isSel ? 56 : 46,
+        cx, cy, rx: isSel ? 68 : 52, ry: isSel ? 52 : 40,
         fill: c.color,
-        opacity: isSel ? 0.14 : 0.05,
+        opacity: isSel ? 0.16 : 0.05,
         class: 'sc__hull'
       }, svg);
     });
 
-    // Titik-titik Mahasiswa (Survey Respondents)
+    // Titik-titik Mahasiswa (119 Survey Respondents Riil)
     const ptsGroup = svgEl('g', { class: 'sc__pts' }, svg);
     points.forEach(pt => {
       const c = clusters[pt.cluster];
@@ -314,17 +314,18 @@ const Charts = (() => {
       const dot = svgEl('circle', {
         cx: mapX(pt.x),
         cy: mapY(pt.y),
-        r: isSel ? 4 : 3,
+        r: isSel ? 4.2 : 3,
         fill: c.color,
-        opacity: isSel ? 0.8 : 0.18,
+        opacity: isSel ? 0.85 : 0.18,
         class: 'sc__dot',
         'data-id': pt.id,
         'data-cl': c.name,
-        'data-fac': pt.fac
+        'data-prodi': pt.prodi || 'PENS',
+        'data-scores': `WB: ${pt.wb || 0} | ACD: ${pt.acd || 0} | SOC: ${pt.soc || 0} | CAR: ${pt.car || 0}`
       }, ptsGroup);
     });
 
-    // Centroid K-Means (Pusat Klaster)
+    // Centroid LPA-GMM (Pusat Profil P1 - P5)
     clusters.forEach((c, i) => {
       const cx = mapX(c.pca.x), cy = mapY(c.pca.y);
       const isSel = i === activeCluster;
@@ -341,10 +342,10 @@ const Charts = (() => {
       // Lingkaran isi
       svgEl('circle', { cx, cy, r: isSel ? 9 : 7.5, fill: c.color, stroke: '#fff', 'stroke-width': 2.5 }, cg);
       
-      // Ikon Centroid badge label
+      // Ikon Centroid badge label (P1 - P5)
       const bg = svgEl('rect', { x: cx + 11, y: cy - 18, width: 30, height: 18, rx: 6, fill: '#0F1F3D', opacity: 0.9 }, cg);
       const txt = svgEl('text', { x: cx + 26, y: cy - 5, class: 'sc__centroid-lbl', 'text-anchor': 'middle', fill: '#fff' }, cg);
-      txt.textContent = `C${c.cluster}`;
+      txt.textContent = `P${c.cluster}`;
 
       cg.addEventListener('click', () => onPick(i));
       cg.addEventListener('keydown', e => { if (e.key === 'Enter') onPick(i); });
@@ -366,11 +367,12 @@ const Charts = (() => {
       tip.hidden = false;
       tip.innerHTML = `
         <b>Responden: ${dot.dataset.id}</b>
-        <span>Fakultas: ${dot.dataset.fac.charAt(0).toUpperCase() + dot.dataset.fac.slice(1)}</span>
-        <span>${dot.dataset.cl}</span>
+        <span>Program Studi: ${dot.dataset.prodi}</span>
+        <span><b>${dot.dataset.cl}</b></span>
+        <span style="font-size:11px;color:#94A3B8;margin-top:2px">${dot.dataset.scores}</span>
       `;
       tip.style.left = px + 'px';
-      tip.style.top = (py - 48) + 'px';
+      tip.style.top = (py - 54) + 'px';
     });
 
     ptsGroup.addEventListener('mouseleave', () => { tip.hidden = true; });
