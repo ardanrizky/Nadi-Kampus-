@@ -1,0 +1,120 @@
+Jenis Kelamin,Semester saat ini,Angkatan,Departemen,Program Studi,WB1,WB2,WB3,WB4,WB5,WB6,WB7,WB8,WB9,ACD1,ACD2,ACD3,ACD4,ACD5,ACD6,ACD7,ACD8,SOC1,SOC2,SOC3,SOC4,SOC5,SOC6,SOC7,SOC8,CAR1,CAR2,CAR3,CAR4,CAR5,CAR6,CAR7,CAR8
+Laki-laki,Semester 5,2024,Departemen Teknik Elektro (DTE),S. Tr. Teknik Elektro Industri,4,4,3,3,3,4,5,4,3,3,3,3,3,3,4,3,4,4,4,4,4,4,4,4,4,3,3,3,3,3,4,3,3
+Perempuan,Semester 3,2025,Departemen Teknologi Multimedia Kreatif (DTMK),D3 Teknologi Multimedia dan Broadcasting,1,4,1,2,1,5,4,4,2,4,1,2,2,1,4,5,4,4,4,5,4,3,1,3,3,2,1,2,1,1,1,1,1
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Informatika,3,4,4,4,2,4,3,3,4,4,3,3,4,4,4,2,3,3,4,4,3,3,4,3,3,1,3,4,2,3,4,3,2
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,3,4,4,3,4,4,3,4,3,4,4,4,4,4,3,3,4,4,4,4,4,4,3,4,3,4,4,4,2,3,3,3,4
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),D3 Teknik Informatika,3,2,4,4,3,3,2,1,3,4,4,4,4,4,4,1,3,4,5,5,5,5,5,4,5,1,1,2,1,1,1,1,1
+Perempuan,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Komputer,3,3,2,3,2,4,4,1,3,3,3,3,3,3,3,2,3,3,3,3,4,4,4,4,4,1,2,2,3,2,2,3,2
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,3,3,3,3,3,3,3
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Sistem Pembangkit Energi,4,4,3,3,3,4,4,3,3,3,3,2,3,3,4,3,3,4,4,3,3,3,4,4,3,4,3,3,3,3,3,3,3
+Laki-laki,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Komputer,3,3,3,3,2,3,3,3,4,3,3,2,3,3,4,3,3,4,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3
+Laki-laki,Semester 7,2023,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Komputer,4,4,1,3,3,2,2,1,3,3,3,4,4,3,3,5,3,4,5,2,4,5,3,3,3,5,4,5,5,5,5,2,5
+Laki-laki,Semester 7,2023,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Teknologi Game,3,2,2,4,3,5,4,4,4,2,3,3,3,2,3,4,4,5,5,5,5,4,4,4,4,2,3,3,3,4,2,4,2
+Laki-laki,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Informatika,5,5,5,5,5,5,5,2,4,5,5,4,5,5,5,3,5,5,5,5,5,5,5,5,5,5,5,3,3,4,5,2,5
+Laki-laki,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknik Telekomunikasi,3,3,1,3,3,3,3,1,2,3,2,2,3,3,3,2,2,3,3,3,3,3,2,1,2,3,3,3,3,3,3,3,3
+Perempuan,Semester 7,2023,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,3,4,2,4,4,5,5,1,4,4,2,4,5,2,4,4,5,5,5,5,5,5,5,5,5,4,3,5,5,5,3,4,4
+Perempuan,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),D3 Teknologi Multimedia dan Broadcasting,4,4,4,4,4,4,5,4,4,2,2,3,4,4,3,2,4,4,4,5,4,3,4,4,4,5,4,2,2,4,3,2,3
+Perempuan,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),D3 Teknik Informatika,4,4,2,2,3,5,5,5,4,3,3,4,4,4,4,4,4,4,4,5,3,4,3,4,3,2,2,4,4,4,1,3,1
+Perempuan,Semester 1,2026,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Internet,3,3,2,5,4,5,3,1,3,3,2,5,5,3,3,4,5,5,5,3,5,2,4,5,5,5,2,3,3,3,3,3,3
+Perempuan,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknik Mekatronika,3,4,2,5,3,1,4,5,5,4,4,5,4,4,4,4,5,5,5,4,5,5,5,5,5,4,4,4,3,4,3,3,3
+Perempuan,Semester 5,2024,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknik Mekatronika,4,4,3,3,4,4,2,2,4,4,3,4,4,4,3,4,4,3,3,3,4,3,3,3,2,4,3,3,4,3,3,2,2
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Informatika,4,3,4,4,2,5,4,2,4,4,4,4,4,4,4,2,4,4,5,4,4,5,4,4,4,3,3,4,3,3,3,3,3
+Laki-laki,Semester 3,2025,Departemen Teknik Mekanika Energi (DTME),S.Tr. Sistem Pembangkit Energi,3,3,2,4,2,3,3,2,3,2,3,3,3,2,3,2,3,3,3,3,4,4,4,4,4,3,3,3,3,3,4,2,3
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Keselamatan K3,1,1,1,1,1,3,4,2,1,1,1,3,1,1,3,3,4,5,5,5,5,3,2,4,4,5,3,4,4,4,3,3,3
+Laki-laki,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,3,3,4,4,5,5,5,4,4,4,4,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,4,4,4,4
+Laki-laki,Semester 5,2024,Departemen Teknik Elektro (DTE),S. Tr. Teknik Elektro Industri,2,2,2,4,3,4,2,3,3,3,3,3,4,2,2,3,4,4,5,4,4,2,2,4,4,5,4,4,5,4,5,5,4
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Sistem Pembangkit Energi,3,3,3,4,3,4,4,3,3,3,3,3,3,3,3,3,4,4,4,4,3,4,4,4,4,4,4,3,3,3,3,3,3
+Perempuan,Semester 7,2023,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Informatika,2,1,2,1,2,1,1,1,1,1,2,2,2,2,2,4,3,3,3,1,2,2,2,3,2,1,2,4,5,2,1,4,1
+Perempuan,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Teknologi Rekayasa Multimedia,3,4,3,4,3,4,3,3,3,4,2,3,3,3,3,2,3,3,3,3,3,2,3,3,3,4,4,3,2,2,3,2,3
+Laki-laki,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,2,3,2,3,2,3,3,2,3,2,2,1,3,2,3,3,3,3,4,3,3,3,3,4,4,4,4,4,4,3,2,2,2
+Laki-laki,Semester 5,2024,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Internet,3,4,1,4,2,5,3,3,2,4,2,3,2,4,3,2,4,4,4,3,4,5,4,4,3,5,4,4,3,4,4,3,3
+Laki-laki,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknik Telekomunikasi,3,3,3,4,2,5,4,2,3,3,3,4,3,3,3,4,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Internet,4,3,3,4,2,5,5,3,3,3,3,4,3,3,3,2,4,4,4,4,4,4,4,4,4,3,3,4,2,4,3,2,3
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),S.Tr. Teknik Elektronika,5,4,3,5,5,5,5,5,5,4,3,4,5,5,5,4,5,5,5,5,5,5,5,5,5,4,5,5,5,5,5,5,5
+Perempuan,Semester 3,2025,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Teknologi Rekayasa Multimedia,2,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+Perempuan,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,2,3,1,4,2,5,5,3,2,3,4,2,2,2,3,5,5,3,4,5,4,5,4,5,5,1,4,4,4,5,2,3,2
+Laki-laki,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),D3 Teknologi Multimedia dan Broadcasting,5,5,5,5,5,5,5,1,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,2,5,5,1,5
+Laki-laki,Semester 5,2024,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Teknologi Game,4,5,4,4,4,4,4,5,4,3,4,4,4,3,3,4,4,5,4,5,5,5,5,5,4,3,4,4,3,3,4,2,3
+Perempuan,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Internet,2,2,3,2,3,2,2,2,1,3,3,2,2,3,3,2,3,2,2,2,2,4,1,4,1,1,2,2,2,1,1,2,1
+Perempuan,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Internet,3,2,3,5,3,2,4,1,3,3,3,2,2,1,2,3,2,3,2,2,3,3,3,4,2,1,1,3,1,1,1,1,2
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknologi Rekayasa Perancangan Manufaktur,4,4,3,5,4,5,1,4,4,4,4,2,4,4,4,1,4,5,3,1,4,5,3,4,4,4,5,5,3,4,5,5,5
+Laki-laki,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Bisnis Digital,3,2,3,4,3,3,4,2,3,2,3,2,3,3,4,1,3,3,3,4,3,2,3,3,3,4,3,2,2,3,3,2,3
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknik Mekatronika,4,4,2,5,2,3,4,1,4,4,2,4,4,3,3,4,3,4,4,4,5,3,5,5,5,5,5,5,4,4,5,1,5
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektro Industri,3,3,1,4,3,4,4,3,2,3,1,4,4,3,3,3,3,4,4,4,4,4,4,4,4,3,4,4,4,4,4,4,4
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),D3 Teknik Informatika,3,2,3,3,1,3,2,5,3,2,3,3,1,2,2,5,3,3,3,2,3,1,3,3,3,3,3,3,2,2,1,3,3
+Perempuan,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknik Elektronika,2,3,2,2,1,4,3,4,2,2,1,1,2,1,3,3,3,5,5,3,3,5,5,5,5,1,1,2,2,1,1,3,1
+Perempuan,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknik Elektronika,3,3,2,2,2,2,4,4,3,3,2,2,3,3,3,5,4,5,5,5,5,5,3,4,5,3,3,2,3,3,2,3,3
+Laki-laki,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Bisnis Digital,3,3,3,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,3,4,3,3,3,3,3,3,3,3,3,3,3
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektro Industri,3,4,4,4,4,4,4,4,4,4,4,4,4,4,3,4,4,4,4,4,4,4,4,4,4,4,4,4,3,4,4,4,4
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektro Industri,2,2,2,2,2,5,2,5,2,2,1,3,1,1,2,3,3,5,5,3,4,4,4,5,3,3,3,4,3,4,4,2,5
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektro Industri,5,4,4,4,4,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
+Perempuan,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknik Elektronika,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Internet,5,5,2,3,5,5,1,3,5,4,1,4,5,5,3,3,5,5,3,3,5,5,4,5,5,2,3,5,3,5,1,4,5
+Laki-laki,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),D3 Teknologi Multimedia dan Broadcasting,5,3,3,5,5,5,5,3,4,3,3,4,5,2,5,5,5,5,5,4,5,3,3,5,5,5,4,5,4,4,5,5,5
+Laki-laki,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),D3 Teknologi Multimedia dan Broadcasting,4,3,4,5,4,3,4,3,4,4,3,4,4,3,3,3,3,3,4,3,3,4,3,4,3,3,3,3,2,2,3,3,3
+Perempuan,Semester 3,2025,Departemen Teknologi Multimedia Kreatif (DTMK),D3 Teknologi Multimedia dan Broadcasting,3,3,4,2,3,4,4,4,4,2,3,3,3,3,3,3,3,3,3,3,3,4,3,3,3,2,3,3,3,3,3,3,3
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,5,4,4,5,5,5,4,5,5,4,4,5,4,4,4,4,4,5,5,5,5,5,5,5,3,4,4,3,4,3,3,4
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,2,2,5,3,4,4,2,3,3,2,3,3,3,4,4,3,4,4,4,4,3,4,4,4,4,4,4,4,3,3,3,3
+Laki-laki,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Teknologi Game,5,5,3,3,3,5,4,2,3,5,5,5,5,4,3,5,5,5,5,5,5,3,5,5,5,3,4,3,2,1,2,1,2
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),S. Tr. Teknik Elektro Industri,4,4,2,5,3,5,5,3,4,4,3,4,5,5,3,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknik Mekatronika,4,4,4,5,4,5,5,4,5,5,5,4,4,4,4,3,4,5,5,4,5,4,5,4,5,5,5,4,4,5,5,5,5
+Laki-laki,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),D3 Teknik Elektronika,3,4,5,4,4,5,4,3,5,5,4,3,4,4,4,5,4,5,5,5,3,3,5,4,3,4,4,4,4,4,4,4,3
+Laki-laki,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),D3 Teknik Informatika,4,4,3,4,4,3,3,4,5,4,4,3,5,2,3,4,4,4,4,4,4,4,5,5,4,1,3,4,2,3,3,3,3
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Internet,3,3,2,3,3,4,3,1,3,3,3,3,3,3,3,4,3,4,4,4,3,3,3,3,3,5,4,3,3,4,3,3,3
+Perempuan,Semester 1,2026,Departemen Teknik Elektro (DTE),S.Tr. Teknik Elektronika,5,3,1,4,2,3,3,4,3,2,1,2,1,2,4,1,3,4,5,4,4,4,4,4,3,4,4,4,2,3,3,4,3
+Laki-laki,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),D3 Teknik Informatika,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
+Laki-laki,Semester 5,2024,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Internet,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,5,4,4,4,5,5,5,4,4,4,4,5,5,4,4,5,5,3,5,4,5,4,5,4,5,4,5,4,5,4,5,4,3
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektronika,4,5,1,3,2,3,1,4,3,3,2,5,4,2,4,4,3,4,5,2,4,2,4,5,4,5,4,3,1,5,5,4,5
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektronika,4,3,2,2,3,4,2,4,4,4,2,3,3,3,3,4,4,4,4,4,4,4,5,5,5,5,4,4,4,4,4,4,4
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknologi Rekayasa Perancangan Manufaktur,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,4,4,4,4,4,4,4,3,5,5,5,5
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektronika,4,4,4,4,4,5,5,5,4,3,3,4,3,4,4,4,4,4,4,5,4,4,4,4,4,4,4,3,3,4,3,3,4
+Perempuan,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Teknologi Rekayasa Multimedia,3,3,2,3,3,5,5,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektronika,5,5,5,5,5,5,5,5,5,5,5,5,5,4,5,5,4,5,5,5,5,5,5,5,5,3,3,3,2,3,3,2,2
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,3,5,4,4,2,5,3,4,3,4,3,3,4,4,3,4,4,4,5,5,4,5,5,5,3,2,2,3,2,2,3,3
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,3,4,2,2,2,3,2,3,4,3,2,4,2,2,4,4,5,5,4,3,4,3,5,4,2,3,5,5,3,3,2,3
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,3,2,4,4,2,5,4,3,3,1,3,3,3,1,2,4,4,4,5,4,4,5,4,3,3,4,3,4,4,3,2,1,3
+Perempuan,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Komputer,4,4,3,5,3,5,3,5,4,5,3,3,5,5,3,2,4,5,5,3,4,4,5,4,5,3,3,5,3,5,3,2,4
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknik Mekatronika,3,4,3,5,3,4,4,5,5,4,4,3,4,4,2,3,3,4,4,4,4,3,4,4,4,3,3,2,2,4,4,4,3
+Perempuan,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,5,5,2,4,4,5,5,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,3,4,4,3,3,3,2,4
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,3,2,3,2,4,4,2,3,2,2,3,2,1,3,5,4,4,4,4,3,4,3,5,4,4,4,5,4,4,5,5,5
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,4,3,3,4,4,5,2,4,4,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,4,3,3,3,3
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,4,5,4,4,5,4,3,4,4,3,3,4,3,4,3,4,5,4,4,3,4,4,4,4,2,3,4,4,3,2,4,3
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Sistem Pembangkit Energi,5,5,3,5,5,5,5,4,5,5,4,5,5,5,5,4,5,5,5,5,5,5,5,5,5,4,4,5,4,5,4,3,4
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektronika,4,4,2,3,2,4,3,2,3,3,2,3,3,2,3,3,2,3,4,3,3,3,4,3,3,2,2,3,2,2,2,2,2
+Laki-laki,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,3,2,4,4,5,3,1,2,2,3,4,3,2,3,4,3,3,4,3,4,5,4,5,3,2,4,4,3,1,2,2,5
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Sistem Pembangkit Energi,3,2,1,4,4,5,4,1,3,3,1,3,4,1,3,3,4,3,4,3,3,5,3,4,3,4,1,3,1,3,1,2,3
+Perempuan,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Teknologi Game,4,5,5,5,5,5,3,1,4,5,5,4,5,4,5,3,5,5,5,5,5,5,5,5,5,2,1,3,1,1,1,1,1
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknik Mekatronika,2,3,2,3,3,4,5,5,2,4,2,2,3,4,4,3,4,3,5,1,3,2,3,3,3,3,4,2,3,4,2,4,3
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),S. Tr. Teknik Elektro Industri,4,5,2,5,3,3,4,5,4,5,2,3,4,4,3,3,3,5,5,5,4,5,3,4,4,3,2,3,2,1,3,1,4
+Perempuan,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Informatika,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknik Mekatronika,1,1,2,2,2,5,2,1,2,2,3,1,2,1,2,2,2,3,3,1,2,3,2,4,2,2,3,2,2,1,1,1,2
+Perempuan,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Komputer,5,4,4,5,4,5,5,4,4,4,4,4,4,3,4,3,5,5,4,5,4,3,4,4,4,4,4,5,4,4,4,4,4
+Perempuan,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,3,5,3,3,3,5,5,5,5,5,5,5,5,5,5,4,5,5,5,5,5,5,5,5,5,4,3,4,3,3,5,5,3
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),S.Tr. Teknik Telekomunikasi,1,3,3,1,2,1,3,5,1,3,2,2,2,5,5,4,3,3,3,3,3,4,4,3,5,3,3,3,4,3,2,3,1
+Laki-laki,Semester 1,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Komputer,3,4,2,5,3,5,5,5,5,4,3,4,4,3,2,3,5,5,5,5,5,5,5,5,5,5,5,5,1,5,5,1,4
+Laki-laki,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),D3 Teknologi Multimedia dan Broadcasting,5,3,3,5,5,2,5,2,3,3,3,4,4,3,5,3,5,5,5,1,5,2,5,4,5,3,3,3,3,3,3,3,3
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,3,1,3,1,4,5,2,3,3,2,4,3,3,3,5,5,5,5,5,5,4,5,5,5,5,4,3,4,2,3,4,4
+Perempuan,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektro Industri,5,5,5,5,5,5,5,5,5,4,2,5,5,5,5,5,5,5,5,5,5,5,5,5,5,3,5,5,3,4,5,5,5
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),D3 Teknik Elektro Industri,2,3,1,4,2,5,4,3,5,3,1,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+Laki-laki,Semester 1,2026,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknologi Rekayasa Perancangan Manufaktur,4,4,3,5,3,4,4,2,4,3,3,3,3,4,4,3,4,5,5,5,5,2,4,4,4,3,3,3,3,3,3,3,3
+Perempuan,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Informatika,5,4,2,5,4,5,5,1,4,4,5,4,5,5,5,3,5,5,4,5,5,5,3,3,5,5,5,5,5,5,4,5,3
+Laki-laki,Semester 1,2026,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Teknologi Game,4,4,4,5,4,3,4,4,4,3,4,4,4,4,4,4,4,4,4,4,4,4,5,5,4,4,2,3,3,3,3,4,3
+Perempuan,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,2,4,1,2,3,2,4,2,2,2,1,3,2,2,2,3,2,4,3,5,4,4,3,3,3,4,4,3,1,3,2,3,2
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Komputer,2,2,2,3,3,2,4,2,3,3,3,3,4,3,3,1,3,4,5,4,4,4,4,4,4,2,2,3,2,4,3,3,3
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,4,3,2,2,3,2,3,4,4,3,4,2,3,3,2,3,3,3,4,2,3,3,2,2,3,1,2,4,2,3,2,3
+Laki-laki,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknik Elektronika,2,3,2,2,2,3,3,2,4,3,2,3,3,3,3,3,3,4,4,4,3,4,4,4,4,3,2,2,3,2,1,2,2
+Perempuan,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,4,5,3,3,5,4,5,5,4,3,5,4,5,4,5,5,4,4,5,5,4,5,4,5,4,5,5,5,4,5,4,5
+Perempuan,Semester 5,2024,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,3,4,1,3,3,2,2,4,3,3,3,4,3,4,4,4,2,5,5,2,4,5,4,4,4,3,4,4,3,3,3,2,2
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,3,3,2,4,4,4,3,3,3,3,1,2,3,3,4,4,4,3,4,3,3,3,3,3,3,4,3,4,4,3,3,2,3
+Perempuan,Semester 3,2026,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Sains Data Terapan,4,3,3,5,4,5,4,4,4,4,3,3,4,4,4,3,4,4,5,5,5,4,4,5,4,3,3,4,2,2,2,4,3
+Laki-laki,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknik Elektronika,3,3,2,3,4,2,2,2,3,3,2,3,2,3,3,4,5,4,3,4,4,4,4,4,4,3,3,3,3,4,4,4,4
+Laki-laki,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknologi Rekayasa Internet,3,4,3,4,4,2,3,2,4,4,4,3,3,4,3,4,4,3,4,3,4,4,4,4,4,3,4,4,2,3,4,2,4
+Laki-laki,Semester 3,2025,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknik Mekatronika,5,5,3,4,5,5,5,3,4,5,3,3,5,5,4,3,4,5,5,5,5,5,4,5,4,4,4,5,4,4,5,4,5
+Laki-laki,Semester 3,2025,Departemen Teknologi Multimedia Kreatif (DTMK),S.Tr. Teknologi Game,1,5,3,1,2,1,1,3,1,3,4,2,3,3,1,5,3,1,1,1,1,4,1,4,1,1,1,4,2,3,5,1,2
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Informatika,3,3,2,2,3,2,3,3,2,3,3,3,3,3,3,3,3,3,3,5,3,3,3,3,3,3,3,3,3,3,3,3,3
+Laki-laki,Semester 3,2025,Departemen Teknik Informatika dan Komputer (DTIK),S.Tr. Teknik Komputer,4,2,1,3,2,4,2,1,3,2,4,2,4,3,1,4,3,4,5,4,5,5,5,5,5,1,1,4,2,2,2,1,1
+Laki-laki,Semester 3,2025,Departemen Teknik Mekanika Energi (DTME),S.Tr. Teknik Mekatronika,2,3,4,2,3,5,4,1,3,3,3,3,4,3,3,3,3,4,5,4,4,4,4,4,4,4,4,4,2,4,3,4,4
+Perempuan,Semester 3,2025,Departemen Teknik Elektro (DTE),S.Tr. Teknik Elektronika,2,2,1,3,1,4,2,1,1,2,2,1,2,2,1,2,1,3,2,1,3,4,3,2,1,1,3,1,1,2,1,1,1
+Laki-laki,Semester 3,2025,Departemen Teknik Elektro (DTE),D3 Teknik Elektro Industri,4,4,4,4,4,3,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
+Laki-laki,Semester 1,2026,Departemen Teknik Elektro (DTE),S. Tr. Teknik Elektro Industri,2,3,1,3,2,4,5,2,2,2,1,2,3,3,3,2,3,4,4,4,3,3,3,5,4,4,4,3,3,3,2,2,3
