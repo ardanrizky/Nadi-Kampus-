@@ -307,7 +307,6 @@
       <li class="ins-card ins-card--${item.tone}">
         <div class="ins-card__header">
           <div class="ins-card__title-row">
-            <span class="ins-card__dot" aria-hidden="true"></span>
             <h5 class="ins-card__title">${item.title}</h5>
           </div>
           <span class="ins-badge ${item.badgeClass}">${item.category}</span>

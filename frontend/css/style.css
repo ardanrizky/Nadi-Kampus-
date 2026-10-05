@@ -1703,44 +1703,37 @@ svg { display: block; }
   padding: 0 !important;
   margin: 0 !important;
 }
-
 .ins-card {
   position: relative !important;
-  background: #F8FAFC !important;
+  background: #FFFFFF !important;
   border: 1px solid #E2E8F0 !important;
-  border-radius: 14px !important;
-  padding: 14px 16px !important;
-  border-left: 4.5px solid var(--accent, #0D9488) !important;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02) !important;
-  transition: transform .22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .22s, background .22s, border-color .22s !important;
+  border-radius: 12px !important;
+  padding: 16px 18px !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03) !important;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease !important;
 }
 
 .ins-card:hover {
   background: #FFFFFF !important;
-  transform: translateX(4px) !important;
-  box-shadow: 0 8px 22px -4px rgba(15, 23, 42, 0.08) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.06) !important;
   border-color: #CBD5E1 !important;
 }
 
-.ins-card--bad {
-  --accent: #F43F5E;
-}
-.ins-card--warn {
-  --accent: #F59E0B;
-}
-.ins-card--info {
-  --accent: #4F46E5;
-}
+/* Hilangkan garis aksen tebal pelangi */
+.ins-card--bad,
+.ins-card--warn,
+.ins-card--info,
 .ins-card--good {
-  --accent: #10B981;
+  border-left: 1px solid #E2E8F0 !important;
 }
 
 .ins-card__header {
   display: flex !important;
   align-items: flex-start !important;
   justify-content: space-between !important;
-  gap: 10px !important;
-  margin-bottom: 6px !important;
+  gap: 12px !important;
+  margin-bottom: 8px !important;
 }
 
 .ins-card__title-row {
@@ -1749,67 +1742,69 @@ svg { display: block; }
   gap: 8px !important;
 }
 
+/* Hapus lampu neon warna-warni yang terlihat seperti template AI */
 .ins-card__dot {
-  width: 8px !important;
-  height: 8px !important;
-  border-radius: 50% !important;
-  background: var(--accent) !important;
-  flex-shrink: 0 !important;
-  box-shadow: 0 0 6px var(--accent) !important;
+  display: none !important;
 }
 
 .ins-card__title {
-  font-size: 14px !important;
-  font-weight: 700 !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
   color: #0F172A !important;
-  line-height: 1.35 !important;
+  line-height: 1.4 !important;
   margin: 0 !important;
 }
 
+/* Badge yang rapi, tenang, dan profesional */
 .ins-badge {
   font-size: 11px !important;
-  font-weight: 700 !important;
-  padding: 2.5px 9px !important;
-  border-radius: 999px !important;
+  font-weight: 600 !important;
+  padding: 3px 9px !important;
+  border-radius: 6px !important;
   white-space: nowrap !important;
-  letter-spacing: .02em !important;
+  letter-spacing: .01em !important;
   flex-shrink: 0 !important;
+  background: #F1F5F9 !important;
+  color: #475569 !important;
+  border: 1px solid #E2E8F0 !important;
 }
 
 .ins-badge--urgent {
-  background: #FFF1F2 !important;
-  color: #BE123C !important;
-  border: 1px solid #FECDD3 !important;
+  background: #FEF2F2 !important;
+  color: #991B1B !important;
+  border: 1px solid #FEE2E2 !important;
 }
 
 .ins-badge--info {
-  background: #EEF2FF !important;
-  color: #4338CA !important;
-  border: 1px solid #C7D2FE !important;
+  background: #F0FDFA !important;
+  color: #0F766E !important;
+  border: 1px solid #CCFBF1 !important;
 }
 
 .ins-badge--warn {
   background: #FFFBEB !important;
-  color: #B45309 !important;
-  border: 1px solid #FDE68A !important;
+  color: #92400E !important;
+  border: 1px solid #FEF3C7 !important;
 }
 
 .ins-badge--prodi {
-  background: #FFF1F2 !important;
-  color: #E11D48 !important;
-  border: 1px solid #FFE4E6 !important;
+  background: #F8FAFC !important;
+  color: #334155 !important;
+  border: 1px solid #E2E8F0 !important;
 }
 
 .ins-card__text {
   font-size: 13.5px !important;
-  line-height: 1.5 !important;
+  line-height: 1.55 !important;
   color: #475569 !important;
-  margin: 0 0 10px 0 !important;
+  margin: 0 0 12px 0 !important;
 }
 
 .ins-card__footer {
   display: flex !important;
   align-items: center !important;
+  border-top: 1px solid #F1F5F9 !important;
+  padding-top: 10px !important;
 }
 
 .ins-card__action {
@@ -1820,8 +1815,8 @@ svg { display: block; }
   border: 0 !important;
   padding: 0 !important;
   color: #0D9488 !important;
-  font-size: 12.5px !important;
-  font-weight: 700 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
   cursor: pointer !important;
   transition: gap .2s ease, color .2s ease !important;
 }
@@ -1831,12 +1826,13 @@ svg { display: block; }
 }
 
 .ins-card__action:hover {
-  color: #059669 !important;
-  gap: 9px !important;
+  color: #0F766E !important;
+  gap: 8px !important;
 }
 
 .ins-card__action:hover svg {
   transform: translateX(3px) !important;
+}
 }
 /* =========================================================
    SIDEBAR & TATA LETAK BERSIH (TOGGLE NORMAL & SCROLL UTUH)
