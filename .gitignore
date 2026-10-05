@@ -33,3 +33,17 @@ desktop.ini
 .temp/
 dist/
 build/
+
+
+# Data survei (privasi responden)
+data/raw/
+data/processed/
+data_survei_mahasiswa.csv
+student_features_clean.csv
+SURVEI KESMA.csv
+
+# Model terlatih berukuran besar
+models/*.pkl
+models/*.joblib
+
+backup_nadikampus/
