@@ -292,11 +292,11 @@ svg { display: block; }
 .kpi.is-selected::before { transform: scaleX(1); }
 .kpi__top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 8px; min-height: 48px; align-content: flex-start; }
 .kpi__label { font-size: 13.5px; font-weight: 700; color: var(--muted); }
-.kpi__main { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; }
-.kpi__ring { position: relative; width: 92px; height: 92px; flex: none; }
+.kpi__main { display: flex; align-items: center; justify-content: center; margin: 12px 0 10px; }
+.kpi__ring { position: relative; width: 96px; height: 96px; flex: none; display: flex; align-items: center; justify-content: center; }
 .ring__val { transition: stroke-dashoffset 1.1s var(--ease); }
-.kpi__num { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--serif); font-size: 28px; font-weight: 800; color: var(--navy); }
-.kpi__side { flex: 1; min-width: 0; display: flex; justify-content: flex-end; }
+.kpi__num { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--serif); font-size: 30px; font-weight: 800; color: var(--navy); }
+.kpi__side { display: none; }
 .kpi__foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; }
 .kpi__action-hint { font-size: 11px; font-weight: 700; color: var(--c); background: var(--mint); padding: 2px 8px; border-radius: 999px; transition: background .2s, color .2s; }
 .kpi:hover .kpi__action-hint { background: var(--c); color: #fff; }
@@ -336,7 +336,7 @@ svg { display: block; }
 .lc__tick--x { font-size: 12.5px; font-weight: 600; fill: #566A80; }
 .lc__path { filter: none !important; transition: stroke-width .2s, opacity .2s; }
 @keyframes lineDraw { to { stroke-dashoffset: 0; } }
-.lc__pt { transition: r .2s; }
+.lc__pt { opacity: 0; pointer-events: none; transition: opacity .2s ease, r .2s; }
 .lc__cross { stroke: #9FB6AA; stroke-width: 1.5; stroke-dasharray: 4 4; pointer-events: none; }
 .tip {
   position: absolute; top: 4px; transform: translateX(-50%); pointer-events: none;
@@ -1464,14 +1464,17 @@ svg { display: block; }
 .lc__path { filter: none !important; transition: stroke-width .2s, opacity .2s; }
 
 .lc__pt {
+  opacity: 0 !important;
+  pointer-events: none;
   cursor: pointer;
-  transition: r .2s cubic-bezier(0.16, 1, 0.3, 1), stroke-width .2s, filter .2s;
+  transition: opacity .2s ease, r .2s cubic-bezier(0.16, 1, 0.3, 1), stroke-width .2s, filter .2s;
 }
 
 .lc__pt.is-active {
-  r: 6.5px !important;
-  stroke-width: 3px !important;
-  filter: drop-shadow(0 0 8px rgba(15, 23, 42, 0.25)) !important;
+  opacity: 1 !important;
+  r: 6px !important;
+  stroke-width: 2.8px !important;
+  filter: drop-shadow(0 2px 6px rgba(15, 23, 42, 0.25)) !important;
 }
 
 .lc__cross {

@@ -157,8 +157,7 @@
             <span class="pill pill--${lv.c}">${lv.t}</span>
           </div>
           <div class="kpi__main">
-            <div class="kpi__ring">${Charts.ring(v, m.color, 92, 10, m.label)}<b class="kpi__num" data-count="${v}">${v}</b></div>
-            <div class="kpi__side">${Charts.spark(tr, m.color, 110, 42, MONTHS)}</div>
+            <div class="kpi__ring">${Charts.ring(v, m.color, 96, 10, m.label)}<b class="kpi__num" data-count="${v}">${v}</b></div>
           </div>
           <div class="kpi__foot">
             <span class="delta delta--${better ? 'good' : 'bad'}">${dt} sejak Maret</span>
@@ -169,7 +168,7 @@
             <div class="kpi__expanded" aria-label="Rincian riwayat 6 bulan">
               <div class="kpi__expanded-header">
                 <span>Riwayat 6 Bulan:</span>
-                <span class="kpi__benchmark">Target: &le;50'}</span>
+                <span class="kpi__benchmark">${m.good === 'high' ? 'Target: &ge; 65' : 'Target: &le; 50'}</span>
               </div>
               <div class="kpi__mo-chips">
                 ${MONTHS.map((mo, idx) => `

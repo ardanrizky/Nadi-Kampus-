@@ -115,10 +115,10 @@ const Charts = (() => {
       svgEl('path', { d: spline, fill: 'none', stroke: s.color, 'stroke-width': 3, 'stroke-linecap': 'round',
         'stroke-linejoin': 'round', class: 'lc__path' }, svg);
 
-      // Points
+      // Points (default bersih tanpa bulatan, muncul dinamis saat hover interaktif)
       pts.forEach((pt, i) => {
-        svgEl('circle', { cx: pt[0].toFixed(1), cy: pt[1].toFixed(1), r: 4, fill: '#FFFFFF',
-          stroke: s.color, 'stroke-width': 2.4, class: 'lc__pt', 'data-idx': i, 'data-series': s.name }, svg);
+        svgEl('circle', { cx: pt[0].toFixed(1), cy: pt[1].toFixed(1), r: 5, fill: '#FFFFFF',
+          stroke: s.color, 'stroke-width': 2.6, opacity: 0, class: 'lc__pt', 'data-idx': i, 'data-series': s.name }, svg);
       });
     });
 
@@ -137,15 +137,15 @@ const Charts = (() => {
       const currentX = x(i);
       cross.setAttribute('x1', currentX); cross.setAttribute('x2', currentX); cross.setAttribute('opacity', 1);
 
-      // Highlight active points at month index i
+      // Highlight active points at month index i secara interaktif
       svg.querySelectorAll('.lc__pt').forEach(pt => {
         if (+pt.dataset.idx === i) {
-          pt.setAttribute('r', '6');
+          pt.setAttribute('r', '5.5');
           pt.setAttribute('stroke-width', '2.8');
+          pt.setAttribute('opacity', '1');
           pt.classList.add('is-active');
         } else {
-          pt.setAttribute('r', '4');
-          pt.setAttribute('stroke-width', '2.4');
+          pt.setAttribute('opacity', '0');
           pt.classList.remove('is-active');
         }
       });
@@ -182,8 +182,7 @@ const Charts = (() => {
       cross.setAttribute('opacity', 0);
       tip.hidden = true;
       svg.querySelectorAll('.lc__pt').forEach(pt => {
-        pt.setAttribute('r', '4');
-        pt.setAttribute('stroke-width', '2.4');
+        pt.setAttribute('opacity', '0');
         pt.classList.remove('is-active');
       });
     });
