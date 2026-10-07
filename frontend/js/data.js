@@ -263,7 +263,7 @@ var CLUSTERS = [
     key: 'p5',
     name: 'Profil 5: Flourishing / Optimal Well-being',
     short: 'Wellbeing Optimal & Unggul',
-    color: '#059669',
+    color: '#D97706',
     pca: { x: 2.04, y: -0.30 },
     rawMeans: { wellbeing: 4.48, pressure: 4.52, social: 5.00, career: 4.02 },
     means: { wellbeing: 90, pressure: 90, social: 100, career: 80 },

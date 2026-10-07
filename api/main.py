@@ -94,7 +94,7 @@ PROFILE_METADATA = [
         "key": "p5",
         "name": "Flourishing / Optimal Well-being",
         "short": "Profil 5: Wellbeing Optimal & Unggul",
-        "color": "#059669",
+        "color": "#D97706",
         "count": 13,
         "percentage": 10.92,
         "pca_coordinates": {"x": 2.04, "y": -0.30},
