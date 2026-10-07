@@ -97,14 +97,17 @@ svg { display: block; }
 .hero {
   --p: 0;
   position: relative;
-  padding: 96px 24px 140px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 96px 24px 60px;
   background: linear-gradient(180deg, #ffffff 0%, #ffffff 34%, #CFF0DF 72%, #8ED9B8 100%);
   background-size: 100% 260%;
   background-position: 0 calc(var(--p) * 100%);
   overflow: hidden;
 }
 .hero__inner {
-  position: relative; z-index: 2; max-width: 1200px; margin: 0 auto;
+  position: relative; z-index: 2; max-width: 1200px; width: 100%; margin: 0 auto;
   display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 36px; align-items: center;
 }
 .hero__pill {
