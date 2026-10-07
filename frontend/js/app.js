@@ -17,8 +17,8 @@
       sub: 'Ringkasan indikator wellbeing dan permasalahan mahasiswa untuk pengambil kebijakan.'
     },
     profile: {
-      title: 'Student Clustering (K-Means)',
-      sub: 'Hasil K-Means Clustering (k=4): pemetaan kelompok mahasiswa berdasarkan kedekatan jarak Euclidean ke 4 centroid.'
+      title: 'Student Profiling',
+      sub: 'Pemetaan 5 profil mahasiswa berdasarkan tingkat kesejahteraan dan kondisi akademik.'
     },
     voice: {
       title: 'Student Voice (NLP)',
