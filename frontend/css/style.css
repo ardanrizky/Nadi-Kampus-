@@ -433,22 +433,13 @@ svg { display: block; }
 .pd__centroid-tag { display: inline-block; font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 2px; }
 .pd__means-title { font-size: 13.5px; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
 
-/* Scatter Plot K-Means 2D */
+/* Sebaran 5 Kolom Profil Mahasiswa */
 .lc--scatter { width: 100%; height: auto; overflow: visible; }
-.sc__axis { stroke: var(--navy); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: .3; }
-.sc__hull { transition: opacity .35s var(--ease), rx .3s, ry .3s; pointer-events: none; }
-.sc__dot { cursor: pointer; transition: r .2s, opacity .25s; }
-.sc__dot:hover { r: 6.5px !important; stroke: #fff; stroke-width: 2px; opacity: 1 !important; }
-.sc__centroid { cursor: pointer; transition: transform .2s var(--ease); }
-.sc__centroid:hover { transform: scale(1.12); transform-origin: center; }
-.sc__centroid-ring { animation: pulseCentroid 2.2s infinite ease-out; transform-box: fill-box; transform-origin: center; }
-@keyframes pulseCentroid {
-  0% { transform: scale(.8); opacity: .8; }
-  70% { transform: scale(1.4); opacity: 0; }
-  100% { transform: scale(1.4); opacity: 0; }
-}
-.sc__centroid-lbl { font-size: 10.5px; font-weight: 700; font-family: var(--sans); }
-.tip--scatter { position: absolute; pointer-events: none; z-index: 25; min-width: 180px; transform: translate(-50%, -100%); }
+.sc__lane { transition: fill-opacity .2s, stroke .2s; }
+.sc__lane:hover { fill-opacity: 0.18 !important; }
+.sc__dot { cursor: pointer; transition: r .2s, opacity .2s, stroke-width .2s, filter .2s; }
+.sc__dot:hover { r: 7px !important; stroke: #fff !important; stroke-width: 2.5px !important; opacity: 1 !important; filter: drop-shadow(0 2px 8px rgba(15, 23, 42, 0.4)) !important; }
+.tip--scatter { position: absolute; pointer-events: none; z-index: 25; min-width: 200px; transform: translate(-50%, -100%); background: #0F1F3D; color: #fff; padding: 10px 14px; border-radius: 12px; box-shadow: 0 16px 36px -12px rgba(15, 31, 61, 0.6); }
 
 /* Voice */
 .donutwrap { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
