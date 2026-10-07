@@ -258,147 +258,150 @@ const Charts = (() => {
     });
   }
 
-  /* ---------- Sebaran 119 Responden per 5 Profil Mahasiswa (Beeswarm Strip Plot) ---------- */
+  /* ---------- Peta Klaster 2D Standar (Wellbeing vs Ketahanan Akademik) ---------- */
   function clusterScatter(el, points, clusters, activeCluster, onPick) {
     el.innerHTML = '';
-    const W = 640, H = 320;
-    const pad = { l: 44, r: 16, t: 32, b: 38 };
+    const W = 640, H = 340;
+    const pad = { l: 48, r: 24, t: 42, b: 44 };
     const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
 
-    const y = v => pad.t + ih * (1 - Math.max(0, Math.min(100, v)) / 100);
+    // Rentang domain nilai skor 20 s/d 100
+    const minVal = 20, maxVal = 100, span = maxVal - minVal;
+    const mapX = v => pad.l + ((Math.max(minVal, Math.min(maxVal, v)) - minVal) / span) * iw;
+    const mapY = v => pad.t + ih * (1 - (Math.max(minVal, Math.min(maxVal, v)) - minVal) / span);
 
     const svg = svgEl('svg', {
       viewBox: `0 0 ${W} ${H}`,
       class: 'lc lc--scatter',
       role: 'img',
-      'aria-label': 'Visualisasi sebaran 119 responden pada 5 profil mahasiswa'
+      'aria-label': 'Peta klaster 2D sebaran mahasiswa pada dimensi Wellbeing dan Akademik'
     }, el);
 
-    // Grid garis horizontal & label skor
-    [25, 50, 75, 100].forEach(v => {
-      svgEl('line', { x1: pad.l, x2: W - pad.r, y1: y(v), y2: y(v), class: 'lc__grid' }, svg);
-      const t = svgEl('text', { x: pad.l - 8, y: y(v) + 4, class: 'lc__tick', 'text-anchor': 'end' }, svg);
-      t.textContent = v;
+    // 1. Grid Garis & Label Sumbu
+    [20, 40, 60, 80, 100].forEach(v => {
+      // Garis horizontal
+      svgEl('line', { x1: pad.l, x2: W - pad.r, y1: mapY(v), y2: mapY(v), class: v === 60 ? 'sc__axis-mid' : 'lc__grid' }, svg);
+      const yt = svgEl('text', { x: pad.l - 8, y: mapY(v) + 4, class: 'lc__tick', 'text-anchor': 'end' }, svg);
+      yt.textContent = v;
+
+      // Garis vertikal
+      svgEl('line', { x1: mapX(v), x2: mapX(v), y1: pad.t, y2: H - pad.b, class: v === 60 ? 'sc__axis-mid' : 'lc__grid' }, svg);
+      const xt = svgEl('text', { x: mapX(v), y: H - pad.b + 16, class: 'lc__tick lc__tick--x', 'text-anchor': 'middle' }, svg);
+      xt.textContent = v;
     });
 
-    const colW = iw / clusters.length;
-    const ptsGroup = svgEl('g', { class: 'sc__pts' }, svg);
+    // Label Deskriptif Sumbu
+    const lblX = svgEl('text', { x: pad.l + iw / 2, y: H - 8, class: 'lc__tick lc__tick--x', 'text-anchor': 'middle', 'font-weight': '700' }, svg);
+    lblX.textContent = 'Skor Kesejahteraan Mahasiswa (Wellbeing) →';
 
-    // Render 5 Kolom Profil (Lanes)
-    clusters.forEach((c, i) => {
-      const colX = pad.l + i * colW;
-      const colCenter = colX + colW / 2;
-      const isSel = activeCluster === i;
+    const lblY = svgEl('text', { x: 14, y: pad.t + ih / 2, class: 'lc__tick lc__tick--x', 'text-anchor': 'middle', 'font-weight': '700', transform: `rotate(-90 14 ${pad.t + ih / 2})` }, svg);
+    lblY.textContent = 'Ketahanan Akademik →';
 
-      // 1. Jalur kolom (Lane backdrop)
-      const lane = svgEl('rect', {
-        x: colX + 3,
-        y: pad.t,
-        width: colW - 6,
-        height: ih,
-        rx: 10,
-        fill: c.color,
-        opacity: isSel ? 0.12 : 0.035,
-        stroke: isSel ? c.color : 'transparent',
-        'stroke-width': 1.5,
-        class: 'sc__lane',
-        style: 'cursor: pointer;'
-      }, svg);
-      lane.addEventListener('click', () => onPick(i));
-
-      // 2. Badge Header Profil di bagian atas kolom
-      const headG = svgEl('g', { style: 'cursor: pointer;' }, svg);
-      headG.addEventListener('click', () => onPick(i));
+    // 2. Legend Filter Interaktif di Bagian Atas
+    const filterG = svgEl('g', { class: 'sc__filters' }, svg);
+    const filterPills = [
+      { id: null, label: 'Semua (119)', color: '#334155' },
+      ...clusters.map((c, idx) => ({ id: idx, label: `P${c.cluster} (${c.count})`, color: c.color }))
+    ];
+    let fOffset = pad.l;
+    filterPills.forEach(fp => {
+      const isAct = fp.id === activeCluster || (fp.id === null && activeCluster === null);
+      const pillW = fp.id === null ? 76 : 64;
+      const g = svgEl('g', { style: 'cursor: pointer;' }, filterG);
       svgEl('rect', {
-        x: colCenter - 36,
-        y: pad.t - 24,
-        width: 72,
-        height: 20,
-        rx: 10,
-        fill: isSel ? c.color : '#F8FAFC',
-        stroke: isSel ? c.color : '#CBD5E1',
+        x: fOffset, y: pad.t - 32, width: pillW, height: 20, rx: 10,
+        fill: isAct ? fp.color : '#F1F5F9',
+        stroke: isAct ? fp.color : '#CBD5E1',
         'stroke-width': 1
-      }, headG);
-      const headTxt = svgEl('text', {
-        x: colCenter,
-        y: pad.t - 10,
-        'text-anchor': 'middle',
-        'font-size': '10.5px',
-        'font-weight': '700',
-        fill: isSel ? '#FFFFFF' : '#334155'
-      }, headG);
-      headTxt.textContent = `P${c.cluster} (${c.count} Mhs)`;
-
-      // 3. Garis Indikator Rata-rata Centroid (Wellbeing Score)
-      const avgScore = c.means ? c.means.wellbeing : 60;
-      const avgY = y(avgScore);
-      svgEl('line', {
-        x1: colX + 8,
-        x2: colX + colW - 8,
-        y1: avgY,
-        y2: avgY,
-        stroke: c.color,
-        'stroke-width': isSel ? 2.5 : 1.8,
-        'stroke-dasharray': isSel ? 'none' : '3 3',
-        opacity: isSel ? 0.95 : 0.65
-      }, svg);
-
-      // Label kecil skor rata-rata
-      const dotCentroid = svgEl('circle', {
-        cx: colCenter,
-        cy: avgY,
-        r: isSel ? 5.5 : 4,
-        fill: '#FFFFFF',
-        stroke: c.color,
-        'stroke-width': 2.2,
-        style: 'cursor: pointer;'
-      }, svg);
-      dotCentroid.addEventListener('click', () => onPick(i));
-
-      // 4. Label Bawah Kolom (Nama Pendek Profil)
-      const botLbl = svgEl('text', {
-        x: colCenter,
-        y: H - 12,
-        'text-anchor': 'middle',
-        'font-size': '11px',
-        'font-weight': isSel ? '800' : '600',
-        fill: isSel ? c.color : '#64748B',
-        style: 'cursor: pointer;'
-      }, svg);
-      botLbl.textContent = c.short ? c.short.split('(')[0].trim() : `Profil ${c.cluster}`;
-      botLbl.addEventListener('click', () => onPick(i));
-
-      // 5. Sebaran 119 Responden (Titik-titik Mahasiswa dengan Symmetrical Jitter)
-      const cPts = points.filter(p => p.cluster === i);
-      cPts.forEach(pt => {
-        let hash = 0;
-        for (let k = 0; k < pt.id.length; k++) hash = (hash * 31 + pt.id.charCodeAt(k)) & 0xff;
-        const maxJitter = (colW / 2) - 14;
-        const jx = ((hash % 100) / 50 - 1) * maxJitter;
-        const dotX = colCenter + jx;
-        const dotY = y(pt.wb);
-
-        svgEl('circle', {
-          cx: dotX.toFixed(1),
-          cy: dotY.toFixed(1),
-          r: isSel ? 4.8 : 3.5,
-          fill: c.color,
-          stroke: '#FFFFFF',
-          'stroke-width': 1.4,
-          opacity: isSel ? 0.95 : 0.35,
-          class: 'sc__dot',
-          'data-id': pt.id,
-          'data-cl': c.name,
-          'data-prodi': pt.prodi || 'PENS',
-          'data-wb': pt.wb,
-          'data-acd': pt.acd,
-          'data-soc': pt.soc,
-          'data-car': pt.car
-        }, ptsGroup);
-      });
+      }, g);
+      const txt = svgEl('text', {
+        x: fOffset + pillW / 2, y: pad.t - 18,
+        'text-anchor': 'middle', 'font-size': '10px', 'font-weight': '700',
+        fill: isAct ? '#FFFFFF' : '#475569'
+      }, g);
+      txt.textContent = fp.label;
+      g.addEventListener('click', () => onPick(fp.id));
+      fOffset += pillW + 6;
     });
 
-    // Tooltip interaktif saat mengarahkan kursor ke responden
+    // 3. Titik-titik Responden (119 Mahasiswa)
+    const ptsGroup = svgEl('g', { class: 'sc__pts' }, svg);
+    points.forEach(pt => {
+      const c = clusters[pt.cluster];
+      const isSel = activeCluster === null || pt.cluster === activeCluster;
+
+      // Sedikit deterministik micro-jitter agar titik berskor sama tetap terlihat
+      let hash = 0;
+      for (let k = 0; k < pt.id.length; k++) hash = (hash * 31 + pt.id.charCodeAt(k)) & 0xff;
+      const jx = ((hash % 11) - 5) * 0.45;
+      const jy = (((hash >> 2) % 11) - 5) * 0.45;
+
+      const px = mapX(pt.wb) + jx;
+      const py = mapY(pt.acd) + jy;
+
+      svgEl('circle', {
+        cx: px.toFixed(1),
+        cy: py.toFixed(1),
+        r: isSel ? 4.8 : 3.2,
+        fill: c.color,
+        stroke: '#FFFFFF',
+        'stroke-width': 1.4,
+        opacity: isSel ? 0.88 : 0.16,
+        class: 'sc__dot',
+        'data-id': pt.id,
+        'data-cl': c.name,
+        'data-prodi': pt.prodi || 'PENS',
+        'data-wb': pt.wb,
+        'data-acd': pt.acd,
+        'data-soc': pt.soc,
+        'data-car': pt.car
+      }, ptsGroup);
+    });
+
+    // 4. Centroid Klaster (Titik Pusat Rata-rata P1 - P5)
+    clusters.forEach((c, i) => {
+      const cx = mapX(c.means.wellbeing);
+      const cy = mapY(c.means.pressure);
+      const isSel = activeCluster === null || activeCluster === i;
+
+      const cg = svgEl('g', {
+        class: 'sc__centroid ' + (activeCluster === i ? 'is-active' : ''),
+        role: 'button',
+        tabindex: 0,
+        style: 'cursor: pointer;',
+        'aria-label': `Centroid ${c.name}`
+      }, svg);
+
+      // Lingkaran luar berdenyut
+      svgEl('circle', {
+        cx, cy, r: activeCluster === i ? 16 : 12,
+        fill: 'none', stroke: c.color, 'stroke-width': 2, opacity: isSel ? 0.6 : 0.2,
+        class: 'sc__centroid-ring'
+      }, cg);
+
+      // Lingkaran isi centroid
+      svgEl('circle', {
+        cx, cy, r: activeCluster === i ? 8.5 : 7,
+        fill: c.color, stroke: '#FFFFFF', 'stroke-width': 2.5,
+        opacity: isSel ? 1 : 0.4
+      }, cg);
+
+      // Label Badge Centroid (P1 s/d P5)
+      svgEl('rect', {
+        x: cx + 10, y: cy - 16, width: 28, height: 17, rx: 5,
+        fill: activeCluster === i ? c.color : '#0F1F3D', opacity: isSel ? 0.95 : 0.4
+      }, cg);
+      const txt = svgEl('text', {
+        x: cx + 24, y: cy - 4,
+        class: 'sc__centroid-lbl', 'text-anchor': 'middle', fill: '#FFFFFF'
+      }, cg);
+      txt.textContent = `P${c.cluster}`;
+
+      cg.addEventListener('click', () => onPick(i));
+      cg.addEventListener('keydown', e => { if (e.key === 'Enter') onPick(i); });
+    });
+
+    // Tooltip interaktif
     const tip = document.createElement('div');
     tip.className = 'tip tip--scatter';
     tip.hidden = true;
@@ -417,7 +420,7 @@ const Charts = (() => {
         <span style="color:#94A3B8;font-size:11px;">Program Studi: ${dot.dataset.prodi}</span>
         <span style="color:#38BDF8;font-weight:600;font-size:11.5px;margin-top:2px">${dot.dataset.cl}</span>
         <div style="font-size:11px;color:#CBD5E1;margin-top:4px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.15)">
-          Wellbeing: <b>${dot.dataset.wb}</b> | Tekanan: <b>${dot.dataset.acd}</b><br>
+          Wellbeing: <b>${dot.dataset.wb}</b> | Akademik: <b>${dot.dataset.acd}</b><br>
           Sosial: <b>${dot.dataset.soc}</b> | Karier: <b>${dot.dataset.car}</b>
         </div>
       `;
