@@ -2,32 +2,22 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script>
-    function autoScaleDesktop() {
-      if (window.innerWidth < 1200) {
-        var el = document.querySelector('.app-layout');
-        if (el) el.style.zoom = (window.innerWidth / 1200);
-      } else {
-        var el = document.querySelector('.app-layout');
-        if (el) el.style.zoom = '1';
-      }
-    }
-    window.addEventListener('resize', autoScaleDesktop);
-    window.addEventListener('DOMContentLoaded', autoScaleDesktop);
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>NadiKampus Analytics — Dashboard Mahasiswa</title>
   <meta name="description" content="Aplikasi analitik wellbeing dan permasalahan mahasiswa berbasis Latent Profile Analysis dan NLP." />
   <link rel="icon" type="image/png" href="img/logo_mark.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=23" />
+  <link rel="stylesheet" href="css/style.css?v=24" />
 </head>
 <body class="page-app">
 
   <div class="app-layout">
-    <!-- ============ SIDEBAR KIRI ============ -->
+    <!-- Overlay Backdrop untuk Mobile Drawer (Seperti ETHOL PENS) -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+
+    <!-- ============ SIDEBAR KIRI (OFFCANVAS DRAWER DI MOBILE) ============ -->
     <aside class="app-sidebar" id="appSidebar" aria-label="Navigasi aplikasi">
       <div class="app-sidebar__top">
         <div class="sidebar-brand-row">
@@ -39,7 +29,15 @@
             </div>
           </a>
 
-          <!-- Tombol Collapse / Expand Sidebar -->
+          <!-- Tombol Close Sidebar (Khusus Mobile Drawer) -->
+          <button class="sidebar-close-btn" id="sidebarCloseBtn" type="button" aria-label="Tutup menu sidebar" title="Tutup Menu">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+
+          <!-- Tombol Collapse / Expand Sidebar (Desktop) -->
           <button class="sidebar-collapse-btn" id="btnToggleSidebar" type="button" aria-label="Ciutkan / Perlebar sidebar" title="Toggle Sidebar">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="15 18 9 12 15 6"></polyline>
@@ -127,12 +125,42 @@
     <div class="app-main">
       <!-- Topbar Header Bersih & Terintegrasi -->
       <header class="app-topbar">
-        <div class="app-topbar__crumb">
-          <span class="crumb-lead">Dashboard</span>
-          <span class="crumb-slash">/</span>
-          <h1 class="crumb-title" id="viewHeading">Executive Dashboard</h1>
+        <div class="app-topbar__nav-row">
+          <div class="topbar-left-group">
+            <!-- Tombol Hamburger Mobile (Seperti ETHOL PENS) -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Buka menu navigasi" title="Buka Menu">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+
+            <!-- Brand Logo Ringkas di Mobile Header -->
+            <a class="mobile-brand-link" href="index.html" title="Kembali ke Beranda">
+              <img src="img/logo_mark.png" alt="Logo Nadi Kampus" class="mobile-brand-logo" />
+              <span class="mobile-brand-title">Nadi<b>Kampus</b></span>
+            </a>
+
+            <!-- Breadcrumb Desktop & Mobile -->
+            <div class="app-topbar__crumb">
+              <span class="crumb-lead">Dashboard</span>
+              <span class="crumb-slash">/</span>
+              <h1 class="crumb-title" id="viewHeading">Executive Dashboard</h1>
+            </div>
+          </div>
+
+          <!-- Quick Actions di Header Mobile (Data Survei) -->
+          <a href="data.html" class="mobile-quick-data-btn" title="Kelola Data Survei (Admin)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>Data 🔒</span>
+          </a>
         </div>
 
+        <!-- Filter & Aksi Tambahan (Desktop & Mobile) -->
         <div class="app-topbar__actions">
           <div class="app-badge">
             <span class="badge-dot"></span>
@@ -145,7 +173,7 @@
           </label>
 
           <div class="app-topbar__btn-group">
-            <a href="data.html" class="btn btn--outline btn--sm" title="Kelola &amp; Ingest Data Survei Baru (Admin)">
+            <a href="data.html" class="btn btn--outline btn--sm desktop-only-btn" title="Kelola &amp; Ingest Data Survei Baru (Admin)">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
@@ -408,5 +436,37 @@
   <script src="js/data.js?v=21"></script>
   <script src="js/charts.js?v=21"></script>
   <script src="js/app.js?v=21"></script>
+
+  <!-- Mobile Drawer Controller (seperti ETHOL PENS) -->
+  <script>
+    (function() {
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+      const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+      const appSidebar = document.getElementById('appSidebar');
+
+      function openDrawer() {
+        if (appSidebar) appSidebar.classList.add('is-open');
+        if (sidebarBackdrop) sidebarBackdrop.classList.add('is-open');
+        document.body.classList.add('drawer-locked');
+      }
+
+      function closeDrawer() {
+        if (appSidebar) appSidebar.classList.remove('is-open');
+        if (sidebarBackdrop) sidebarBackdrop.classList.remove('is-open');
+        document.body.classList.remove('drawer-locked');
+      }
+
+      if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openDrawer);
+      if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeDrawer);
+      if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeDrawer);
+
+      document.querySelectorAll('.app-nav__item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          if (window.innerWidth <= 992) closeDrawer();
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

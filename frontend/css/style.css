@@ -1941,35 +1941,623 @@ svg { display: block; }
 }
 
 /* =========================================================
-   DESKTOP FIDELITY SCALING: SAMA PERSIS SEPERTI DI LAPTOP
-   Mempertahankan Tata Letak Desktop 100% Utuh di Semua Ukuran Layar
+   NAVIGASI MOBILE DRAWER & ADAPTIF SELARAS (SEPERTI ETHOL PENS)
    ========================================================= */
-@media (max-width: 1200px) {
-  html, body {
+
+/* State Desktop Default (> 992px) */
+.mobile-menu-btn,
+.mobile-brand-link,
+.mobile-quick-data-btn,
+.sidebar-close-btn,
+.sidebar-backdrop {
+  display: none !important;
+}
+
+.topbar-left-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-topbar__nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Ketiadaan scroll saat drawer terbuka */
+body.drawer-locked {
+  overflow: hidden !important;
+}
+
+/* =========================================================
+   TAMPILAN MOBILE (<= 992px)
+   Struktur Rapi, Nyaman di HP, dan Selaras seperti ETHOL PENS
+   ========================================================= */
+@media (max-width: 992px) {
+  /* Halaman Utama */
+  .page-app {
+    height: auto !important;
+    min-height: 100vh !important;
     overflow-x: hidden !important;
+    overflow-y: auto !important;
   }
+
   .app-layout {
-    width: 1200px !important;
-    min-width: 1200px !important;
-    transform-origin: top left;
-    zoom: calc(100vw / 1200);
+    display: block !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
   }
+
+  /* 1. SIDEBAR MENJADI OFFCANVAS DRAWER (SEPERTI ETHOL PENS) */
+  .app-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 285px !important;
+    max-width: 82vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    background: #FFFFFF !important;
+    z-index: 1050 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 4px 0 25px rgba(15, 23, 42, 0.18) !important;
+    border-right: 1px solid #E2E8F0 !important;
+    padding: 18px 16px !important;
+    overflow-y: auto !important;
+  }
+
+  .app-sidebar.is-open {
+    transform: translateX(0) !important;
+  }
+
+  /* Backdrop Overlay Gelap di Belakang Drawer */
+  .sidebar-backdrop {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(15, 23, 42, 0.45) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    z-index: 1040 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.25s ease !important;
+  }
+
+  .sidebar-backdrop.is-open {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Header di dalam Sidebar Drawer */
+  .sidebar-brand-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 4px 0 16px !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+  }
+
+  .sidebar-collapse-btn {
+    display: none !important;
+  }
+
+  .sidebar-close-btn {
+    display: grid !important;
+    place-items: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+    border: 1px solid #E2E8F0 !important;
+    background: #F8FAFC !important;
+    color: #64748B !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+  }
+
+  .app-sidebar__bottom {
+    margin-top: 24px !important;
+    padding-top: 16px !important;
+    border-top: 1px solid #F1F5F9 !important;
+  }
+
+  /* 2. HEADER ATAS (TOPBAR) RAMPING SEPERTI ETHOL PENS */
+  .app-main {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+  }
+
+  .app-topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 50 !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+    padding: 10px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03) !important;
+  }
+
+  .app-topbar__nav-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+
+  .topbar-left-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  /* Tombol Menu Hamburger */
+  .mobile-menu-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 10px !important;
+    border: 1px solid #E2E8F0 !important;
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  }
+
+  /* Logo dan Teks di Header Mobile */
+  .mobile-brand-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-decoration: none !important;
+  }
+
+  .mobile-brand-logo {
+    height: 30px !important;
+    width: auto !important;
+    object-fit: contain !important;
+  }
+
+  .mobile-brand-title {
+    font-size: 17px !important;
+    font-family: var(--serif) !important;
+    font-weight: 600 !important;
+    color: var(--navy) !important;
+  }
+
+  .mobile-brand-title b {
+    color: var(--em-600) !important;
+    font-weight: 700 !important;
+  }
+
+  /* Sembunyikan breadcrumb di layar kecil */
+  .app-topbar__crumb {
+    display: none !important;
+  }
+
+  /* Tombol Cepat Data di Header */
+  .mobile-quick-data-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 6px 12px !important;
+    border-radius: 999px !important;
+    background: #F0FDFA !important;
+    border: 1px solid #CCFBF1 !important;
+    color: #0D9488 !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+  }
+
+  /* Filter Prodi di Header Baris Kedua */
+  .app-topbar__actions {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .app-topbar__actions .app-badge {
+    display: none !important;
+  }
+
+  .app-topbar__actions .select--app {
+    width: 100% !important;
+    flex: 1 !important;
+    padding: 2px 8px 2px 10px !important;
+  }
+
+  .app-topbar__actions .select--app select {
+    font-size: 13px !important;
+    padding: 6px 28px 6px 6px !important;
+    width: 100% !important;
+  }
+
+  .desktop-only-btn {
+    display: none !important;
+  }
+
+  .app-topbar__btn-group {
+    display: inline-flex !important;
+    flex-shrink: 0 !important;
+  }
+
+  .app-topbar__btn-group .btn {
+    padding: 7px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* 3. KONTEN DASHBOARD ADAPTIF DI HP */
+  .app-content {
+    padding: 16px 14px 60px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .view__head {
+    margin-bottom: 16px !important;
+  }
+
+  .view__head h3 {
+    font-size: 18px !important;
+    line-height: 1.35 !important;
+    color: #0F172A !important;
+  }
+
+  .view__head p {
+    font-size: 13px !important;
+    color: #64748B !important;
+    line-height: 1.45 !important;
+  }
+
+  /* 4. KPI CARDS: GRID 2 KOLOM RAPI & COMPACT */
+  .kpis {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .kpi {
+    padding: 12px 10px 12px !important;
+    border-radius: 14px !important;
+    border: 1px solid #E2E8F0 !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  }
+
+  .kpi__top {
+    min-height: auto !important;
+    gap: 4px !important;
+    margin-bottom: 6px !important;
+    align-items: flex-start !important;
+  }
+
+  .kpi__label {
+    font-size: 11.5px !important;
+    line-height: 1.25 !important;
+    color: #64748B !important;
+    font-weight: 700 !important;
+  }
+
+  .kpi .pill {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+  }
+
+  .kpi__main {
+    margin: 6px 0 4px !important;
+  }
+
+  .kpi__ring {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  .kpi__ring svg {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  .kpi__num {
+    font-size: 22px !important;
+    font-weight: 800 !important;
+  }
+
+  .kpi__foot {
+    margin-top: 4px !important;
+    font-size: 11px !important;
+  }
+
+  .kpi__action-hint {
+    display: none !important;
+  }
+
+  .kpi > .delta {
+    font-size: 11px !important;
+    margin-top: 4px !important;
+  }
+
+  /* 5. DUA KOLOM GRID BERUBAH 1 KOLOM VERTIKAL TERATUR */
+  .grid2, .grid2--cluster-top, .grid2--voice {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .card {
+    padding: 14px !important;
+    border-radius: 14px !important;
+    border: 1px solid #E2E8F0 !important;
+    background: #FFFFFF !important;
+    margin-bottom: 14px !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03) !important;
+  }
+
+  .card__head {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .card__head h4 {
+    font-size: 15px !important;
+  }
+
+  /* Segmented Toggles Pills */
+  #trendToggles.seg, .seg {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 2px !important;
+  }
+
+  #trendToggles.seg::-webkit-scrollbar, .seg::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  #trendToggles .seg__btn, .seg__btn {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    font-size: 11.5px !important;
+    padding: 5px 10px !important;
+  }
+
+  .trend-stats-strip {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .fbar {
+    grid-template-columns: 100px 1fr 32px !important;
+    gap: 8px !important;
+    padding: 7px 8px !important;
+    font-size: 12px !important;
+  }
+
+  .fbar__name {
+    font-size: 11.5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Tab 2: Profiling */
+  .profiles {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .pcard {
+    padding: 14px !important;
+  }
+
+  .pcard__pct {
+    font-size: 30px !important;
+  }
+
+  /* Tab 3: Student Voice */
+  .sent-kpis {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  .sent-kpi {
+    padding: 8px 4px !important;
+    text-align: center !important;
+  }
+
+  .sent-kpi__lbl {
+    font-size: 9.5px !important;
+  }
+
+  .sent-kpi__val {
+    font-size: 17px !important;
+  }
+
+  .sent-kpi__sub {
+    display: none !important;
+  }
+
+  .voice-chat__controls {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  .voice-chat__meta-selects {
+    flex-direction: column !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  .voice-chat__meta-selects .select {
+    width: 100% !important;
+  }
+
+  .voice-chat__meta-selects .select select {
+    width: 100% !important;
+  }
+
+  #btnSubmitVoice {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .voice-chat__quick {
+    flex-wrap: wrap !important;
+  }
+
+  /* Tab 4: Recommendations */
+  .recos {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .reco {
+    padding: 14px !important;
+  }
+
+  /* 6. LANDING PAGE MOBILE RAPI */
   .page-landing {
-    width: 1200px !important;
-    min-width: 1200px !important;
-    zoom: calc(100vw / 1200);
     overflow-x: hidden !important;
   }
-  .page-landing .nav {
-    width: 1200px !important;
+
+  .nav__inner {
+    padding: 10px 14px !important;
+    justify-content: space-between !important;
   }
-  .data-page {
-    width: 1200px !important;
-    min-width: 1200px !important;
-    zoom: calc(100vw / 1200);
-    overflow-x: hidden !important;
+
+  .nav__links {
+    display: none !important;
   }
-  .data-page .nav {
-    width: 1200px !important;
+
+  .brand__logo-img {
+    height: 32px !important;
+  }
+
+  .brand__name {
+    font-size: 18px !important;
+  }
+
+  .hero {
+    padding: 80px 16px 50px !important;
+    min-height: auto !important;
+  }
+
+  .hero__inner {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .hero__art {
+    order: 2 !important;
+    width: min(88%, 280px) !important;
+    margin: 10px auto 0 !important;
+  }
+
+  .hero__title {
+    font-size: 27px !important;
+    line-height: 1.2 !important;
+  }
+
+  .hero__sub {
+    font-size: 14.5px !important;
+  }
+
+  .hero__facts {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .hero__facts li {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 8px 14px !important;
+    background: #F0FDFA !important;
+    border-radius: 10px !important;
+  }
+
+  .hero__facts strong {
+    font-size: 18px !important;
+    order: 2 !important;
+  }
+
+  .hero__facts span {
+    font-size: 12px !important;
+    order: 1 !important;
+    margin-top: 0 !important;
+  }
+
+  .chip {
+    padding: 6px 10px !important;
+    border-radius: 10px !important;
+  }
+
+  .chip__row b {
+    font-size: 18px !important;
+  }
+
+  .chip--c {
+    display: none !important;
+  }
+
+  .chip--a {
+    left: -2% !important;
+    top: 2% !important;
+    transform: scale(0.8) !important;
+  }
+
+  .chip--b {
+    right: -2% !important;
+    top: 0 !important;
+    transform: scale(0.8) !important;
+  }
+
+  .band {
+    padding: 40px 16px 60px !important;
+  }
+
+  .band__checks {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .steps {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* 7. PORTAL DATA MOBILE RAPI */
+  .data-container {
+    margin: 64px auto 30px !important;
+    padding: 0 14px !important;
+  }
+
+  .auth-gate {
+    padding: 22px 16px !important;
+    margin: 20px auto !important;
+    border-radius: 16px !important;
   }
 }
