@@ -11,6 +11,21 @@
   const CLUSTERS = window.CLUSTERS || window.PROFILES || [];
   const CLUSTER_POINTS = window.CLUSTER_POINTS || [];
 
+  /* ---------------------------------------------------------
+     Supabase Client & Konfigurasi Cloud Database
+     --------------------------------------------------------- */
+  const SUPABASE_URL = 'https://xmabdgvmsljwzrffwvng.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtYWJkZ3Ztc2xqd3pyZmZ3dm5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDAyMzEsImV4cCI6MjEwNzIxNjIzMX0.-9rWHxVm72u6IK7oQtULKuqphO8-VxbKfWnS7gOB5Ww';
+  let supabaseClient = null;
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    try {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+      console.log('[NadiKampus] Supabase terhubung ke:', SUPABASE_URL);
+    } catch (e) {
+      console.warn('[NadiKampus] Gagal inisialisasi Supabase:', e);
+    }
+  }
+
   const VIEW_META = {
     executive: {
       title: 'Executive Dashboard',
@@ -21,8 +36,8 @@
       sub: 'Pemetaan 5 profil mahasiswa berdasarkan tingkat kesejahteraan dan kondisi akademik.'
     },
     voice: {
-      title: 'Student Voice (NLP)',
-      sub: 'Analisis ribuan komentar terbuka: sentimen, topik dominan, dan representasi suara mahasiswa.'
+      title: 'Student Voice',
+      sub: 'Analisis komentar terbuka: sentimen, topik dominan, dan representasi suara mahasiswa.'
     },
     reco: {
       title: 'Recommendation Program',
@@ -479,6 +494,14 @@
           <span>${p.label}</span>
           <b>${Math.round(p.value)}%</b>
         </button>`).join('');
+
+      // Sinkronisasi angka kartu ringkasan sentimen
+      const totalNEl = $('#sentTotalN');
+      const negValEl = $('#sentNegVal');
+      const posNeuValEl = $('#sentPosNeuVal');
+      if (totalNEl) totalNEl.textContent = D.n || 119;
+      if (negValEl) negValEl.textContent = `${Math.round(D.sentiment[2])}%`;
+      if (posNeuValEl) posNeuValEl.textContent = `${Math.round(D.sentiment[0] + D.sentiment[1])}%`;
     }
 
     const topicsBox = $('#topics');
@@ -542,10 +565,14 @@
         qList.innerHTML = `<li class="empty">Tidak ada komentar untuk kombinasi filter ini.</li>`;
       } else {
         qList.innerHTML = filtered.map(q => `
-          <li class="quote quote--${q.s} ${q.isNew ? 'quote--new' : ''}">
+          <li class="quote ${q.isNew ? 'quote--new' : ''}">
             ${q.isNew ? `<span class="quote__new-tag">✨ Curhat Baru (Anonim${q.prodi ? ' · ' + q.prodi : ''}${q.sem ? ' · Sem ' + q.sem : ''})</span>` : ''}
             <p>“${q.x}”</p>
-            <span><i></i>${TOPICS[q.t].name} · ${q.s === 'pos' ? 'Positif' : q.s === 'neg' ? 'Negatif' : 'Netral'}</span>
+            <div class="quote__meta">
+              <span class="quote__topic">${TOPICS[q.t].name}</span>
+              <span class="quote__bullet">•</span>
+              <span class="quote__sent quote__sent--${q.s}">${q.s === 'pos' ? 'Positif' : q.s === 'neg' ? 'Negatif' : 'Netral'}</span>
+            </div>
           </li>`).join('');
       }
     }
@@ -631,7 +658,7 @@
       });
     });
 
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', async e => {
       e.preventDefault();
       const text = input.value.trim();
       if (!text) return;
@@ -672,7 +699,32 @@
       renderVoice();
 
       const sentEmoji = nlp.sentiment === 'pos' ? 'Positif ' : nlp.sentiment === 'neg' ? 'Keluhan / Kritis' : 'Netral';
-      toast(`Aspirasi diterima! NLP deteksi: Topik "${TOPICS[nlp.topicIndex].name}" · Sentimen: ${sentEmoji}`);
+
+      // Simpan permanen ke Supabase Cloud Database
+      if (supabaseClient) {
+        try {
+          const { error } = await supabaseClient.from('student_voice').insert([{
+            text: text,
+            topic_index: nlp.topicIndex,
+            topic_name: TOPICS[nlp.topicIndex].name,
+            sentiment: nlp.sentiment,
+            prodi: prodiName,
+            semester: parseInt(semVal, 10) || 5
+          }]);
+          if (error) {
+            console.error('[Supabase Error]:', error);
+            toast(`Aspirasi diterima! NLP deteksi: Topik "${TOPICS[nlp.topicIndex].name}"`);
+          } else {
+            console.log('[Supabase Success]: Aspirasi mahasiswa tersimpan permanen di Supabase.');
+            toast(`Aspirasi diterima & tersimpan ke Cloud! Topik: "${TOPICS[nlp.topicIndex].name}" · Sentimen: ${sentEmoji}`);
+          }
+        } catch (err) {
+          console.error('[Supabase Exception]:', err);
+          toast(`Aspirasi diterima! Topik: "${TOPICS[nlp.topicIndex].name}"`);
+        }
+      } else {
+        toast(`Aspirasi diterima! Topik: "${TOPICS[nlp.topicIndex].name}" · Sentimen: ${sentEmoji}`);
+      }
 
       // Scroll ke komentar baru dan flash highlight
       setTimeout(() => {
@@ -1028,8 +1080,74 @@
   }
 
   /* ---------------------------------------------------------
-     Sinkronisasi Asinkron dengan Live FastAPI Backend
+     Sinkronisasi Asinkron dengan Live FastAPI Backend & Supabase
      --------------------------------------------------------- */
+  async function loadSupabaseVoice() {
+    if (!supabaseClient) return;
+    try {
+      const { data, error } = await supabaseClient
+        .from('student_voice')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) {
+        console.warn('[Supabase] Gagal memuat suara mahasiswa:', error);
+        return;
+      }
+      if (data && data.length > 0) {
+        const existingTexts = new Set(QUOTES.map(q => q.x));
+        const newItems = data
+          .filter(d => !existingTexts.has(d.text))
+          .map(d => ({
+            t: d.topic_index,
+            s: d.sentiment,
+            x: d.text,
+            isNew: false,
+            prodi: d.prodi || 'Anonim',
+            sem: d.semester ? String(d.semester) : '',
+            time: new Date(d.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+          }));
+
+        if (newItems.length > 0) {
+          QUOTES.unshift(...newItems);
+          if (state.view === 'voice') renderVoice();
+          console.log(`[Supabase] Berhasil memuat ${newItems.length} curhat mahasiswa dari database.`);
+        }
+      }
+    } catch (err) {
+      console.warn('[Supabase] Error fetch:', err);
+    }
+  }
+
+  function initSupabaseRealtime() {
+    if (!supabaseClient) return;
+    try {
+      supabaseClient
+        .channel('student_voice_live')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'student_voice' }, payload => {
+          const d = payload.new;
+          if (d && !QUOTES.some(q => q.x === d.text)) {
+            QUOTES.unshift({
+              t: d.topic_index,
+              s: d.sentiment,
+              x: d.text,
+              isNew: true,
+              prodi: d.prodi || 'Anonim',
+              sem: d.semester ? String(d.semester) : '',
+              time: 'Baru saja'
+            });
+            if (state.view === 'voice') {
+              renderVoice();
+              toast('✨ Ada aspirasi mahasiswa baru masuk secara real-time!');
+            }
+          }
+        })
+        .subscribe();
+    } catch (err) {
+      console.warn('[Supabase] Realtime error:', err);
+    }
+  }
+
   async function syncWithLiveAPI() {
     try {
       const res = await fetch('/api/v1/profiles');
@@ -1042,5 +1160,8 @@
       // Offline / Static File mode: data.js bekerja sebagai fallback provider tanpa error
     }
   }
+
+  loadSupabaseVoice();
+  initSupabaseRealtime();
   syncWithLiveAPI();
 })();

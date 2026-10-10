@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=16" />
+  <link rel="stylesheet" href="css/style.css?v=20" />
 </head>
 <body class="page-app">
 
@@ -57,17 +57,13 @@
             </div>
           </button>
 
-          <button class="app-nav__item" role="tab" aria-selected="false" data-view="voice" id="tab-voice" aria-controls="view-voice" title="Student Voice (NLP & Sentimen)">
+          <button class="app-nav__item" role="tab" aria-selected="false" data-view="voice" id="tab-voice" aria-controls="view-voice" title="Student Voice">
             <div class="nav-icon">
               <svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg>
             </div>
             <div class="nav-text">
               <span class="nav-title">Student Voice</span>
-              <span class="nav-sub">NLP &amp; Sentimen</span>
             </div>
-            <span class="nlp-soundwave" title="Pemrosesan Suara Mahasiswa">
-              <i></i><i></i><i></i><i></i>
-            </span>
           </button>
 
           <button class="app-nav__item" role="tab" aria-selected="false" data-view="reco" id="tab-reco" aria-controls="view-reco" title="Recommendations (Program Intervensi)">
@@ -233,11 +229,11 @@
           <article class="card card--cluster-detail" id="profileDetail"></article>
         </section>
 
-        <!-- ---------- 3. STUDENT VOICE (NLP) ---------- -->
+        <!-- ---------- 3. STUDENT VOICE ---------- -->
         <section class="view" id="view-voice" role="tabpanel" aria-labelledby="tab-voice" hidden>
           <div class="view__head">
-            <h3>Student Voice (NLP) <span id="vcScope">seluruh kampus</span></h3>
-            <p>Ribuan komentar terbuka dianalisis dengan Natural Language Processing: distribusi sentimen, ekstraksi topik dominan, dan representasi suara mahasiswa anonim.</p>
+            <h3>Student Voice <span id="vcScope">seluruh kampus</span></h3>
+            <p>Aspirasi dan komentar terbuka mahasiswa: distribusi sentimen, ekstraksi topik dominan, dan representasi suara mahasiswa anonim.</p>
           </div>
 
           <div class="grid2 grid2--voice">
@@ -248,6 +244,36 @@
               <div class="donutwrap">
                 <div class="donut" id="donut"></div>
                 <div class="legend" id="sentLegend"></div>
+              </div>
+
+              <!-- Ringkasan & Barometer Sentimen Mahasiswa -->
+              <div class="sent-overview">
+                <div class="sent-kpis">
+                  <div class="sent-kpi">
+                    <span class="sent-kpi__lbl">Total Respon</span>
+                    <strong class="sent-kpi__val" id="sentTotalN">119</strong>
+                    <span class="sent-kpi__sub">Data survei riil</span>
+                  </div>
+                  <div class="sent-kpi">
+                    <span class="sent-kpi__lbl">Perlu Evaluasi</span>
+                    <strong class="sent-kpi__val" id="sentNegVal" style="color: #E0664A;">52%</strong>
+                    <span class="sent-kpi__sub">Sentimen negatif</span>
+                  </div>
+                  <div class="sent-kpi">
+                    <span class="sent-kpi__lbl">Positif &amp; Netral</span>
+                    <strong class="sent-kpi__val" id="sentPosNeuVal" style="color: #059669;">48%</strong>
+                    <span class="sent-kpi__sub">Kondisi terkendali</span>
+                  </div>
+                </div>
+
+                <div class="sent-highlight">
+                  <div class="sent-highlight__icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  </div>
+                  <p class="sent-highlight__text">
+                    Keluhan negatif terbanyak dipicu oleh <strong>beban tugas menumpuk dan jadwal evaluasi bersamaan</strong>. Klik salah satu sentimen untuk menyaring komentar di bawah.
+                  </p>
+                </div>
               </div>
             </article>
 
@@ -357,9 +383,12 @@
   <!-- Toast Notifikasi -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <!-- Supabase JS Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <!-- Scripts -->
-  <script src="js/data.js?v=14"></script>
-  <script src="js/charts.js?v=14"></script>
-  <script src="js/app.js?v=14"></script>
+  <script src="js/data.js?v=20"></script>
+  <script src="js/charts.js?v=20"></script>
+  <script src="js/app.js?v=20"></script>
 </body>
 </html>
