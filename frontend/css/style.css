@@ -83,6 +83,7 @@ svg { display: block; }
 .nav__inner { max-width: 1240px; margin: 0 auto; padding: 14px 28px; display: flex; align-items: center; gap: 28px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--em-600); text-decoration: none; }
 .brand__mark { width: 34px; height: 34px; }
+.brand__logo-img { height: 38px; width: auto; object-fit: contain; display: block; }
 .brand__name { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--navy); letter-spacing: -.01em; }
 .brand__name b { font-weight: 700; color: var(--em-600); }
 .nav__links { margin-left: auto; display: flex; gap: 6px; }
@@ -861,6 +862,13 @@ svg { display: block; }
   width: 34px;
   height: 34px;
   color: var(--em-600);
+}
+
+.brand--app .brand__logo-img {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .brand--app .brand__name {
