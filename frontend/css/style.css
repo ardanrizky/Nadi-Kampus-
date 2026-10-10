@@ -1818,126 +1818,131 @@ svg { display: block; }
    SIDEBAR & TATA LETAK BERSIH (TOGGLE NORMAL & SCROLL UTUH)
    ========================================================= */
 
-/* Pastikan page-app dan app-layout membentang penuh 100vh */
-.page-app {
-  height: 100vh !important;
-  overflow: hidden !important;
-}
+/* =========================================================
+   DESKTOP ONLY (>= 993px): 100vh Fixed Layout dengan Independent Scroll
+   ========================================================= */
+@media (min-width: 993px) {
+  /* Pastikan page-app dan app-layout membentang penuh 100vh hanya di desktop */
+  .page-app {
+    height: 100vh !important;
+    overflow: hidden !important;
+  }
 
-.app-layout {
-  height: 100vh !important;
-  width: 100% !important;
-  overflow: hidden !important;
-  display: flex !important;
-}
+  .app-layout {
+    height: 100vh !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    display: flex !important;
+  }
 
-/* Sidebar kiri selalu 100vh, border-right utuh dari atas ke bawah */
-.app-sidebar {
-  width: 276px;
-  flex: 0 0 276px;
-  height: 100vh !important;
-  max-height: 100vh !important;
-  border-right: 1px solid var(--line) !important;
-  background: #FFFFFF !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  position: relative !important;
-  top: 0 !important;
-  bottom: 0 !important;
-  box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03) !important;
-  z-index: 40 !important;
-  padding: 20px 16px !important;
-  transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), flex .3s cubic-bezier(0.16, 1, 0.3, 1), padding .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
+  /* Sidebar kiri selalu 100vh, border-right utuh dari atas ke bawah */
+  .app-sidebar {
+    width: 276px;
+    flex: 0 0 276px;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-right: 1px solid var(--line) !important;
+    background: #FFFFFF !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03) !important;
+    z-index: 40 !important;
+    padding: 20px 16px !important;
+    transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), flex .3s cubic-bezier(0.16, 1, 0.3, 1), padding .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
 
-/* Tombol Toggle Collapse: Tampil normal di header samping logo, tidak sembunyi/terpotong */
-.sidebar-collapse-btn {
-  width: 30px !important;
-  height: 30px !important;
-  border-radius: 8px !important;
-  background: #F8FAFC !important;
-  border: 1px solid #E2E8F0 !important;
-  color: #64748B !important;
-  display: grid !important;
-  place-items: center !important;
-  cursor: pointer !important;
-  position: static !important;
-  flex-shrink: 0 !important;
-  transition: background .2s, color .2s, border-color .2s, transform .2s !important;
-}
+  /* Tombol Toggle Collapse: Tampil normal di header samping logo */
+  .sidebar-collapse-btn {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    color: #64748B !important;
+    display: grid !important;
+    place-items: center !important;
+    cursor: pointer !important;
+    position: static !important;
+    flex-shrink: 0 !important;
+    transition: background .2s, color .2s, border-color .2s, transform .2s !important;
+  }
 
-.sidebar-collapse-btn:hover {
-  background: var(--mint) !important;
-  border-color: var(--em-200) !important;
-  color: var(--em-700) !important;
-  transform: scale(1.06) !important;
-}
+  .sidebar-collapse-btn:hover {
+    background: var(--mint) !important;
+    border-color: var(--em-200) !important;
+    color: var(--em-700) !important;
+    transform: scale(1.06) !important;
+  }
 
-/* Mode Ciutkan: Sidebar menyusut rapi ke 76px, konten bergeser mulus ke kiri */
-.app-sidebar.is-collapsed {
-  width: 76px !important;
-  flex: 0 0 76px !important;
-  padding: 18px 8px !important;
-  margin-left: 0 !important;
-}
+  /* Mode Ciutkan: Sidebar menyusut rapi ke 76px, konten bergeser mulus ke kiri */
+  .app-sidebar.is-collapsed {
+    width: 76px !important;
+    flex: 0 0 76px !important;
+    padding: 18px 8px !important;
+    margin-left: 0 !important;
+  }
 
-.app-sidebar.is-collapsed .brand__text,
-.app-sidebar.is-collapsed .nav-text,
-.app-sidebar.is-collapsed .nav-badge,
-.app-sidebar.is-collapsed .pulse-chip,
-.app-sidebar.is-collapsed .cluster-mini-pips,
-.app-sidebar.is-collapsed .nlp-soundwave,
-.app-sidebar.is-collapsed .prio-counter,
-.app-sidebar.is-collapsed .campus-ekg-card,
-.app-sidebar.is-collapsed .app-back-btn__text {
-  display: none !important;
-}
+  .app-sidebar.is-collapsed .brand__text,
+  .app-sidebar.is-collapsed .nav-text,
+  .app-sidebar.is-collapsed .nav-badge,
+  .app-sidebar.is-collapsed .pulse-chip,
+  .app-sidebar.is-collapsed .cluster-mini-pips,
+  .app-sidebar.is-collapsed .nlp-soundwave,
+  .app-sidebar.is-collapsed .prio-counter,
+  .app-sidebar.is-collapsed .campus-ekg-card,
+  .app-sidebar.is-collapsed .app-back-btn__text {
+    display: none !important;
+  }
 
-.app-sidebar.is-collapsed .sidebar-brand-row {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 12px !important;
-  padding: 4px 0 16px !important;
-}
+  .app-sidebar.is-collapsed .sidebar-brand-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    padding: 4px 0 16px !important;
+  }
 
-.app-sidebar.is-collapsed .brand--app {
-  padding: 0 !important;
-  justify-content: center !important;
-  gap: 0 !important;
-}
+  .app-sidebar.is-collapsed .brand--app {
+    padding: 0 !important;
+    justify-content: center !important;
+    gap: 0 !important;
+  }
 
-.app-sidebar.is-collapsed .sidebar-collapse-btn svg {
-  transform: rotate(180deg) !important;
-}
+  .app-sidebar.is-collapsed .sidebar-collapse-btn svg {
+    transform: rotate(180deg) !important;
+  }
 
-.app-sidebar.is-collapsed .app-nav__item {
-  justify-content: center !important;
-  padding: 10px 0 !important;
-  border-radius: 10px !important;
-}
+  .app-sidebar.is-collapsed .app-nav__item {
+    justify-content: center !important;
+    padding: 10px 0 !important;
+    border-radius: 10px !important;
+  }
 
-.app-sidebar.is-collapsed .app-back-btn {
-  justify-content: center !important;
-  padding: 10px 0 !important;
-}
+  .app-sidebar.is-collapsed .app-back-btn {
+    justify-content: center !important;
+    padding: 10px 0 !important;
+  }
 
-/* Area konten utama memiliki scrollbar tersendiri */
-.app-main {
-  height: 100vh !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  flex: 1 !important;
-  min-width: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
+  /* Area konten utama memiliki scrollbar tersendiri */
+  .app-main {
+    height: 100vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
 
-.app-topbar {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 35 !important;
+  .app-topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 35 !important;
+  }
 }
 
 /* =========================================================
@@ -1976,19 +1981,28 @@ body.drawer-locked {
    Struktur Rapi, Nyaman di HP, dan Selaras seperti ETHOL PENS
    ========================================================= */
 @media (max-width: 992px) {
-  /* Halaman Utama */
+  /* Halaman Utama: Scroll Alami Penuh Tanpa Terpotong */
+  html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
   .page-app {
     height: auto !important;
-    min-height: 100vh !important;
+    min-height: 100% !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
   }
 
   .app-layout {
     display: block !important;
-    min-height: 100vh !important;
+    height: auto !important;
+    min-height: 100% !important;
     width: 100% !important;
-    overflow-x: hidden !important;
+    overflow: visible !important;
   }
 
   /* 1. SIDEBAR MENJADI OFFCANVAS DRAWER (SEPERTI ETHOL PENS) */
@@ -2015,9 +2029,9 @@ body.drawer-locked {
     transform: translateX(0) !important;
   }
 
-  /* Backdrop Overlay Gelap di Belakang Drawer */
+  /* Backdrop Overlay Gelap: Hanya aktif saat is-open agar tidak memblokir scroll */
   .sidebar-backdrop {
-    display: block !important;
+    display: none !important;
     position: fixed !important;
     inset: 0 !important;
     background: rgba(15, 23, 42, 0.45) !important;
@@ -2030,6 +2044,7 @@ body.drawer-locked {
   }
 
   .sidebar-backdrop.is-open {
+    display: block !important;
     opacity: 1 !important;
     pointer-events: auto !important;
   }
@@ -2071,7 +2086,31 @@ body.drawer-locked {
     display: block !important;
     width: 100% !important;
     height: auto !important;
-    min-height: 100vh !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    position: relative !important;
+  }
+
+  .app-content {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    padding: 16px 14px 100px !important;
+    box-sizing: border-box !important;
+  }
+
+  .view {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  .view.is-active {
+    display: block !important;
+    height: auto !important;
+    min-height: auto !important;
     overflow: visible !important;
   }
 

@@ -13,17 +13,26 @@
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
+      html, body {
+        height: auto !important;
+        min-height: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
       body.page-app {
         height: auto !important;
-        min-height: 100vh !important;
+        min-height: 100% !important;
         overflow-x: hidden !important;
+        overflow-y: auto !important;
         background: #F1F5F9 !important;
       }
       .app-layout {
         display: block !important;
         width: 100% !important;
-        min-height: 100vh !important;
-        overflow-x: hidden !important;
+        height: auto !important;
+        min-height: 100% !important;
+        overflow: visible !important;
       }
       /* Sidebar Drawer Offcanvas */
       .app-sidebar {
@@ -46,9 +55,9 @@
       .app-sidebar.is-open {
         transform: translateX(0) !important;
       }
-      /* Backdrop Overlay */
+      /* Backdrop Overlay: HANYA aktif saat is-open agar tidak mengganggu scroll */
       .sidebar-backdrop {
-        display: block !important;
+        display: none !important;
         position: fixed !important;
         inset: 0 !important;
         background: rgba(15, 23, 42, 0.45) !important;
@@ -60,6 +69,7 @@
         transition: opacity 0.25s ease !important;
       }
       .sidebar-backdrop.is-open {
+        display: block !important;
         opacity: 1 !important;
         pointer-events: auto !important;
       }
@@ -70,11 +80,33 @@
         display: grid !important;
       }
 
-      /* Konten Utama & Topbar */
+      /* Konten Utama & Topbar: Scroll Bebas Tanpa Terpotong */
       .app-main {
         display: block !important;
         width: 100% !important;
-        min-height: 100vh !important;
+        height: auto !important;
+        min-height: 100% !important;
+        overflow: visible !important;
+        position: relative !important;
+      }
+      .app-content {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        padding: 16px 14px 100px !important;
+        box-sizing: border-box !important;
+      }
+      .view {
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+      }
+      .view.is-active {
+        display: block !important;
+        height: auto !important;
+        min-height: auto !important;
         overflow: visible !important;
       }
       .app-topbar {
