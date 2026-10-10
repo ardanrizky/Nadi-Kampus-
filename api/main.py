@@ -8,6 +8,8 @@ import os
 import math
 from typing import Dict, List, Optional
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import pandas as pd
@@ -30,6 +32,33 @@ app.add_middleware(
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_DIR = os.path.join(BASE_DIR, "data", "output")
 PROCESSED_DIR = os.path.join(BASE_DIR, "data", "processed")
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+
+# Sajikan Frontend secara langsung
+@app.get("/", include_in_schema=False)
+def serve_root():
+    index_path = os.path.join(FRONTEND_DIR, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return {"service": "NadiKampus Intelligence API", "status": "online", "docs": "/docs"}
+
+@app.get("/index.html", include_in_schema=False)
+def serve_index_html():
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
+
+@app.get("/dashboard.html", include_in_schema=False)
+def serve_dashboard():
+    return FileResponse(os.path.join(FRONTEND_DIR, "dashboard.html"))
+
+@app.get("/data.html", include_in_schema=False)
+def serve_data_page():
+    return FileResponse(os.path.join(FRONTEND_DIR, "data.html"))
+
+# Mount CSS & JS statis
+if os.path.exists(os.path.join(FRONTEND_DIR, "css")):
+    app.mount("/css", StaticFiles(directory=os.path.join(FRONTEND_DIR, "css")), name="css")
+if os.path.exists(os.path.join(FRONTEND_DIR, "js")):
+    app.mount("/js", StaticFiles(directory=os.path.join(FRONTEND_DIR, "js")), name="js")
 
 # Definisi metadata 5 Profil LPA-GMM hasil riset backend
 PROFILE_METADATA = [
