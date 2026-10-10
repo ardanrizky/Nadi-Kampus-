@@ -167,7 +167,42 @@ def get_profiles():
 
 @app.get("/api/v1/respondents")
 def get_respondents():
-    """Mengembalikan sebaran 119 responden riil dengan koordinat PCA dan prodi."""
+    """Mengembalikan sebaran seluruh responden riil (dari Supabase / fallback local) dengan koordinat PCA dan prodi."""
+    # 1. Coba ambil data live dari Supabase
+    try:
+        import urllib.request
+        import json
+        supa_url = "https://xmabdgvmsljwzrffwvng.supabase.co/rest/v1/student_surveys?select=*&order=id.asc"
+        headers = {
+            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtYWJkZ3Ztc2xqd3pyZmZ3dm5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDAyMzEsImV4cCI6MjEwNzIxNjIzMX0.-9rWHxVm72u6IK7oQtULKuqphO8-VxbKfWnS7gOB5Ww",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtYWJkZ3Ztc2xqd3pyZmZ3dm5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDAyMzEsImV4cCI6MjEwNzIxNjIzMX0.-9rWHxVm72u6IK7oQtULKuqphO8-VxbKfWnS7gOB5Ww"
+        }
+        req = urllib.request.Request(supa_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            if data and len(data) > 0:
+                records = []
+                for r in data:
+                    records.append({
+                        "id": r.get("respondent_id"),
+                        "profile": int(r.get("profile", 3)),
+                        "prodi": str(r.get("prodi", "")),
+                        "gender": str(r.get("gender", "")),
+                        "semester": str(r.get("semester", "")),
+                        "pca_x": float(r.get("pca_x", 0)),
+                        "pca_y": float(r.get("pca_y", 0)),
+                        "scores": {
+                            "wellbeing": float(r.get("wb_score", 0)),
+                            "academic": float(r.get("acd_score", 0)),
+                            "social": float(r.get("soc_score", 0)),
+                            "career": float(r.get("car_score", 0))
+                        }
+                    })
+                return {"total": len(records), "data": records, "source": "supabase"}
+    except Exception:
+        pass
+
+    # 2. Fallback ke CSV lokal jika offline
     data_lpa_path = os.path.join(PROCESSED_DIR, "data_lpa.csv")
     if os.path.exists(data_lpa_path):
         try:
@@ -192,7 +227,7 @@ def get_respondents():
                         "career": round(float(r["CAR_Score"]), 2)
                     }
                 })
-            return {"total": len(records), "data": records}
+            return {"total": len(records), "data": records, "source": "local_csv"}
         except Exception as e:
             return {"error": str(e)}
 
