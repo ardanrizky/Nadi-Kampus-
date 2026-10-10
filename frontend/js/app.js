@@ -41,7 +41,7 @@
     },
     reco: {
       title: 'Recommendation Program',
-      sub: 'Katalog program intervensi terprioritas sesuai profil mahasiswa dan temuan suara kritis.'
+      sub: 'Rekomendasi program intervensi untuk mendukung kesejahteraan dan akademik mahasiswa.'
     }
   };
 
@@ -744,10 +744,11 @@
   function rankRecos() {
     return RECOS.map(r => {
       const m = dim(r.metric);
-      const t = TOPICS[r.t];
-      const prioScore = need(m, D.scores[m.key]) * 0.6 + (t.sent[2] * t.w / 100) * 0.4;
+      const t = (D.topics && D.topics[r.t]) ? D.topics[r.t] : { ...TOPICS[r.t], w: 15 };
+      const tw = t.w || 15;
+      const prioScore = need(m, D.scores[m.key]) * 0.6 + (t.sent[2] * tw / 100) * 0.4;
       const pr = prioScore >= 45 ? 'Tinggi' : prioScore >= 30 ? 'Sedang' : 'Rendah';
-      return { r, prioScore, pr, m, t };
+      return { r, prioScore, pr, m, t: { ...t, w: tw } };
     }).sort((a, b) => b.prioScore - a.prioScore);
   }
 
