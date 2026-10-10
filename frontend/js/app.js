@@ -1089,16 +1089,16 @@
         .from('student_voice')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(50);
+        .limit(100);
       if (error) {
         console.warn('[Supabase] Gagal memuat suara mahasiswa:', error);
         return;
       }
       if (data && data.length > 0) {
-        const existingTexts = new Set(QUOTES.map(q => q.x));
-        const newItems = data
-          .filter(d => !existingTexts.has(d.text))
-          .map(d => ({
+        // Jadikan data cloud Supabase sebagai data utama
+        QUOTES.length = 0;
+        data.forEach(d => {
+          QUOTES.push({
             t: d.topic_index,
             s: d.sentiment,
             x: d.text,
@@ -1106,13 +1106,11 @@
             prodi: d.prodi || 'Anonim',
             sem: d.semester ? String(d.semester) : '',
             time: new Date(d.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
-          }));
+          });
+        });
 
-        if (newItems.length > 0) {
-          QUOTES.unshift(...newItems);
-          if (state.view === 'voice') renderVoice();
-          console.log(`[Supabase] Berhasil memuat ${newItems.length} curhat mahasiswa dari database.`);
-        }
+        if (state.view === 'voice') renderVoice();
+        console.log(`[Supabase] Berhasil memuat ${data.length} suara mahasiswa dari database cloud.`);
       }
     } catch (err) {
       console.warn('[Supabase] Error fetch:', err);
