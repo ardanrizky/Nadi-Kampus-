@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    function autoScaleDesktop() {
+      if (window.innerWidth < 1200) {
+        var el = document.querySelector('.app-layout');
+        if (el) el.style.zoom = (window.innerWidth / 1200);
+      } else {
+        var el = document.querySelector('.app-layout');
+        if (el) el.style.zoom = '1';
+      }
+    }
+    window.addEventListener('resize', autoScaleDesktop);
+    window.addEventListener('DOMContentLoaded', autoScaleDesktop);
+  </script>
   <title>NadiKampus Analytics — Dashboard Mahasiswa</title>
   <meta name="description" content="Aplikasi analitik wellbeing dan permasalahan mahasiswa berbasis Latent Profile Analysis dan NLP." />
   <link rel="icon" type="image/png" href="img/logo_mark.png" />

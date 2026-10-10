@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    function autoScaleDesktop() {
+      if (window.innerWidth < 1200) {
+        document.body.style.zoom = (window.innerWidth / 1200);
+      } else {
+        document.body.style.zoom = '1';
+      }
+    }
+    window.addEventListener('resize', autoScaleDesktop);
+    window.addEventListener('DOMContentLoaded', autoScaleDesktop);
+  </script>
   <title>NadiKampus — Analitik Wellbeing &amp; Permasalahan Mahasiswa</title>
   <meta name="description" content="Analitik wellbeing dan permasalahan mahasiswa untuk mendukung keputusan kampus berbasis data." />
   <link rel="icon" type="image/png" href="img/logo_mark.png" />
