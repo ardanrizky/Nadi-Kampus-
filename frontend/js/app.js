@@ -378,6 +378,34 @@
     if (detail) {
       detail.style.setProperty('--c', p.color);
       detail.innerHTML = `
+        <div class="pd__nav-bar">
+          <div class="pd__nav-title">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <span>Pilih Profil untuk Dibedah:</span>
+          </div>
+          <div class="pd__tabs" role="tablist" aria-label="Pilih Profil Klaster">
+            ${CLUSTERS.map((cl, idx) => {
+              const isSel = state.profile === idx;
+              return `
+                <button type="button" class="pd__tab ${isSel ? 'is-active' : ''}" data-profile="${idx}" style="--tc:${cl.color}">
+                  <span class="pd__tab-dot"></span>
+                  <strong class="pd__tab-label">P${cl.cluster}</strong>
+                  <span class="pd__tab-name">${cl.short}</span>
+                  <span class="pd__tab-pct">${cl.pct}%</span>
+                </button>`;
+            }).join('')}
+          </div>
+          <div class="pd__nav-pager">
+            <button type="button" class="pd__pager-btn" data-profile="${(state.profile - 1 + CLUSTERS.length) % CLUSTERS.length}" title="Profil Sebelumnya" aria-label="Profil Sebelumnya">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <span class="pd__pager-idx">P${p.cluster} (${state.profile + 1}/5)</span>
+            <button type="button" class="pd__pager-btn" data-profile="${(state.profile + 1) % CLUSTERS.length}" title="Profil Berikutnya" aria-label="Profil Berikutnya">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+
         <div class="pd__head">
           <span class="pd__sw"></span>
           <div>

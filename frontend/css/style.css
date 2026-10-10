@@ -408,20 +408,40 @@ svg { display: block; }
 .pl.is-off:hover { opacity: .8; }
 .pl__val { font-size: 12.5px; font-weight: 700; font-family: var(--sans); }
 
-#profileDetail { --c: var(--em-600); border-top: 4px solid var(--c); }
+#profileDetail { --c: var(--em-600); border-top: 4px solid var(--c); transition: border-color .3s ease; }
+
+/* Profile Detail Navigation Toolbar */
+.pd__nav-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px solid #EDF3F0; flex-wrap: wrap; }
+.pd__nav-title { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.pd__tabs { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pd__tab { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 8px; border: 1px solid #E2E8F0; background: #FFFFFF; color: #475569; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s ease; line-height: 1.2; }
+.pd__tab:hover { background: #F8FAFC; border-color: #CBD5E1; color: var(--navy); }
+.pd__tab.is-active { background: #FFFFFF; border-color: var(--tc, var(--em-600)); border-width: 1.5px; color: var(--navy); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.pd__tab-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--tc, #94A3B8); flex-shrink: 0; }
+.pd__tab-label { font-weight: 800; color: var(--navy); }
+.pd__tab-name { color: #64748B; font-weight: 500; font-size: 11.5px; }
+.pd__tab.is-active .pd__tab-name { color: var(--navy); font-weight: 600; }
+.pd__tab-pct { font-size: 10.5px; background: #F1F5F9; padding: 2px 6px; border-radius: 999px; color: #475569; font-weight: 700; }
+.pd__tab.is-active .pd__tab-pct { background: rgba(15, 23, 42, 0.08); color: var(--navy); }
+
+.pd__nav-pager { display: inline-flex; align-items: center; gap: 6px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 3px 6px; }
+.pd__pager-btn { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; border: none; background: transparent; color: #475569; cursor: pointer; transition: all .15s ease; }
+.pd__pager-btn:hover { background: #FFFFFF; color: var(--navy); box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.pd__pager-idx { font-size: 11.5px; font-weight: 700; color: var(--navy); padding: 0 4px; white-space: nowrap; }
+
 .pd__head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.pd__sw { width: 12px; height: 12px; border-radius: 50%; background: var(--c); }
-.pd__head h4 { font-size: 18px; font-weight: 700; }
-.pd__desc { font-size: 14.5px; color: var(--muted); }
+.pd__sw { width: 14px; height: 14px; border-radius: 50%; background: var(--c); flex-shrink: 0; }
+.pd__head h4 { font-size: 18px; font-weight: 700; color: var(--navy); }
+.pd__desc { font-size: 14.5px; color: var(--muted); line-height: 1.6; }
 .pd__traits { margin: 14px 0; display: flex; flex-direction: column; gap: 7px; }
-.pd__traits li { position: relative; padding-left: 20px; font-size: 14px; }
+.pd__traits li { position: relative; padding-left: 20px; font-size: 14px; color: var(--navy); }
 .pd__traits li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
-.pd__means { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; border-top: 1px solid #EDF3F0; border-bottom: 1px solid #EDF3F0; margin-bottom: 14px; }
-.mean { display: grid; grid-template-columns: 112px 1fr 28px; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
-.mean b { color: var(--navy); text-align: right; }
+.pd__means { display: flex; flex-direction: column; gap: 9px; padding: 14px 0; border-top: 1px solid #EDF3F0; border-bottom: 1px solid #EDF3F0; margin-bottom: 14px; }
+.mean { display: grid; grid-template-columns: 130px 1fr 110px; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+.mean b { color: var(--navy); text-align: right; white-space: nowrap; }
 .mean__track { height: 8px; border-radius: 8px; background: #EAF1EE; }
 .mean__track i { display: block; height: 100%; border-radius: 8px; transform-origin: left; animation: grow .8s var(--ease) both; }
-.pd__need { font-size: 14px; margin-bottom: 16px; }
+.pd__need { font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
 
 /* K-Means Cluster Components */
 .pcard__header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
