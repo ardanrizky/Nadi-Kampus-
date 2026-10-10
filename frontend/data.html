@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NadiKampus — Kelola &amp; Import Data Survei</title>
+  <meta name="description" content="Portal khusus administrator untuk mengimpor dan memproses data survei kuesioner mahasiswa ke Supabase via model LPA-GMM." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23059669'/%3E%3Cpath d='M4 17h6l3-7 5 13 3-6h7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=21" />
+  <style>
+    /* Styling khusus portal Data Ingestion */
+    .data-page {
+      background: #F8FAFC;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .data-container {
+      max-width: 1080px;
+      margin: 90px auto 40px;
+      padding: 0 24px;
+      width: 100%;
+      flex: 1;
+    }
+    /* Gerbang Sandi / Auth Lock Box */
+    .auth-gate {
+      max-width: 460px;
+      margin: 60px auto;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 20px;
+      padding: 36px 32px;
+      box-shadow: 0 16px 40px -12px rgba(15, 31, 61, 0.08);
+      text-align: center;
+      animation: fadeIn .3s ease-out;
+    }
+    .auth-gate__icon {
+      width: 64px;
+      height: 64px;
+      background: #F0FDFA;
+      border: 2px solid #CCFBF1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      color: #0D9488;
+    }
+    .auth-gate__title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0F1F3D;
+      margin-bottom: 8px;
+    }
+    .auth-gate__desc {
+      font-size: 14px;
+      color: #64748B;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .auth-input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .auth-input-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .auth-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .auth-input {
+      width: 100%;
+      padding: 12px 44px 12px 14px;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .auth-input:focus {
+      border-color: #0D9488;
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    }
+    .auth-toggle-pwd {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #94A3B8;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .auth-toggle-pwd:hover { color: #475569; }
+    .auth-error {
+      display: none;
+      color: #E11D48;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 10px;
+      background: #FFE4E6;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+    .auth-hint {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #94A3B8;
+    }
+
+    /* Tampilan Utama Admin Portal */
+    .admin-portal {
+      display: none;
+      animation: fadeIn .3s ease-out;
+    }
+    .portal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .portal-title-block h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0F1F3D;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .portal-title-block p {
+      font-size: 14px;
+      color: #64748B;
+      margin-top: 4px;
+    }
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #CCFBF1;
+      color: #0F766E;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* KPI Grid */
+    .portal-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .portal-kpi-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 6px rgba(15, 31, 61, 0.03);
+    }
+    .portal-kpi-card .lbl {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748B;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .portal-kpi-card .val {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0F1F3D;
+      margin-top: 4px;
+    }
+    .portal-kpi-card .sub {
+      font-size: 12px;
+      color: #0D9488;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Dropzone Upload */
+    .upload-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 4px 16px rgba(15, 31, 61, 0.04);
+      margin-bottom: 28px;
+    }
+    .dropzone {
+      border: 2px dashed #CBD5E1;
+      border-radius: 16px;
+      padding: 42px 24px;
+      text-align: center;
+      background: #F8FAFC;
+      transition: all .25s ease;
+      cursor: pointer;
+    }
+    .dropzone:hover, .dropzone.is-dragover {
+      border-color: #0D9488;
+      background: #F0FDFA;
+    }
+    .dropzone__icon {
+      width: 52px;
+      height: 52px;
+      background: #FFFFFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      color: #0D9488;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
+    }
+    .dropzone__title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0F1F3D;
+      margin-bottom: 6px;
+    }
+    .dropzone__desc {
+      font-size: 13px;
+      color: #64748B;
+      margin-bottom: 16px;
+    }
+    .file-preview {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      max-width: 440px;
+      margin: 16px auto 0;
+    }
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+    }
+    .file-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0F1F3D;
+    }
+    .file-size {
+      font-size: 12px;
+      color: #94A3B8;
+    }
+    .btn-remove-file {
+      background: none;
+      border: none;
+      color: #E11D48;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* Output Results Box */
+    .result-box {
+      display: none;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(15, 31, 61, 0.04);
+      margin-top: 24px;
+      animation: fadeIn .3s ease-out;
+    }
+    .result-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .result-banner h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #166534;
+    }
+    .result-banner p {
+      font-size: 13px;
+      color: #15803D;
+    }
+
+    /* Profiling pills */
+    .profile-breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .p-stat-card {
+      border-radius: 12px;
+      padding: 12px 14px;
+      border: 1px solid #E2E8F0;
+      background: #FAFAFA;
+    }
+    .p-stat-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+    .p-stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0F1F3D;
+    }
+    .p-stat-name {
+      font-size: 11px;
+      color: #64748B;
+      line-height: 1.3;
+      margin-top: 2px;
+    }
+
+    /* Table Preview */
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+    }
+    .preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    .preview-table th {
+      background: #F8FAFC;
+      padding: 10px 14px;
+      font-weight: 700;
+      color: #475569;
+      border-bottom: 1px solid #E2E8F0;
+      white-space: nowrap;
+    }
+    .preview-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #F1F5F9;
+      color: #1E293B;
+      white-space: nowrap;
+    }
+    .preview-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, .3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s ease-in-out infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .nav__lock-icon {
+      font-size: 12px;
+      margin-left: 2px;
+    }
+  </style>
+</head>
+<body class="data-page">
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="nav is-stuck" id="nav">
+    <div class="nav__inner">
+      <a class="brand" href="index.html" aria-label="NadiKampus, ke beranda">
+        <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="currentColor"/>
+          <path d="M4 17h6l3-7 5 13 3-6h7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand__name">Nadi<b>Kampus</b></span>
+      </a>
+
+      <!-- Menu Navigasi Sesuai Permintaan: Beranda | Explore Dashboard | Data -->
+      <nav class="nav__links" aria-label="Navigasi utama">
+        <a href="index.html">Beranda</a>
+        <a href="dashboard.html">Explore Dashboard</a>
+        <a href="data.html" class="is-current">Data <span class="nav__lock-icon">🔒</span></a>
+      </nav>
+
+      <a class="btn btn--navy btn--sm" href="dashboard.html">Explore Dashboard</a>
+    </div>
+  </header>
+
+  <!-- ============ CONTAINER ============ -->
+  <main class="data-container">
+
+    <!-- 1. GERBANG SANDI (AUTH GATE) -->
+    <section class="auth-gate" id="authGate">
+      <div class="auth-gate__icon">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      <h2 class="auth-gate__title">Akses Khusus Administrator</h2>
+      <p class="auth-gate__desc">
+        Halaman ini digunakan untuk mengunggah dan memproses data survei kuesioner baru ke Supabase via model <b>LPA-GMM</b>.
+      </p>
+
+      <form id="adminLoginForm">
+        <div class="auth-input-group">
+          <label for="adminPwd">Kata Sandi Admin</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="adminPwd" class="auth-input" placeholder="Masukkan kata sandi..." required autocomplete="current-password" />
+            <button type="button" class="auth-toggle-pwd" id="btnTogglePwd" title="Tampilkan/sembunyikan sandi">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+          <div class="auth-error" id="authError">Kata sandi salah! Akses ditolak.</div>
+        </div>
+
+        <button type="submit" class="btn btn--em" style="width: 100%; border-radius: 10px;">
+          <span>Buka Akses Admin</span>
+        </button>
+        <p class="auth-hint">💡 Kata sandi default: <code>admin123</code></p>
+      </form>
+    </section>
+
+    <!-- 2. HALAMAN PENGELOLAAN DATA (TERBUKA SETELAH LOGIN) -->
+    <section class="admin-portal" id="adminPortal">
+      <div class="portal-header">
+        <div class="portal-title-block">
+          <h1>
+            <span>Pengelolaan &amp; Ingest Data Survei</span>
+            <span class="admin-badge">🔒 Sesi Admin Aktif</span>
+          </h1>
+          <p>Unggah file CSV kuesioner baru untuk otomatis dihitung 4 dimensi dan diklasifikasikan ke Profil LPA-GMM.</p>
+        </div>
+        <div class="admin-actions">
+          <a href="dashboard.html" class="btn btn--outline btn--sm">
+            <span>Buka Dashboard</span>
+          </a>
+          <button type="button" class="btn btn--ghost btn--sm" id="btnLogoutAdmin" title="Kunci sesi admin">
+            <span>Kunci Sesi</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Kartu Status Database -->
+      <div class="portal-kpis">
+        <div class="portal-kpi-card">
+          <div class="lbl">Total Responden di Supabase</div>
+          <div class="val" id="kpiTotalResp">122</div>
+          <div class="sub">Tabel: student_surveys</div>
+        </div>
+        <div class="portal-kpi-card">
+          <div class="lbl">Model Klastering</div>
+          <div class="val" style="font-size: 18px; margin-top: 8px;">LPA — GMM (k=5)</div>
+          <div class="sub">Covariance: Full</div>
+        </div>
+        <div class="portal-kpi-card">
+          <div class="lbl">Program Studi Terpetakan</div>
+          <div class="val" id="kpiTotalProdi">18 Prodi</div>
+          <div class="sub">PENS Institutional</div>
+        </div>
+        <div class="portal-kpi-card">
+          <div class="lbl">Koneksi Database</div>
+          <div class="val" style="color: #0D9488; font-size: 18px; margin-top: 8px;">Supabase Cloud</div>
+          <div class="sub">Status: Terhubung Aktif</div>
+        </div>
+      </div>
+
+      <!-- Card Upload CSV -->
+      <div class="upload-card">
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone__icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <div class="dropzone__title">Tarik &amp; Letakkan File CSV di Sini</div>
+          <div class="dropzone__desc">Atau klik tombol di bawah untuk memilih file dari komputer Anda.</div>
+          
+          <input type="file" id="fileInput" accept=".csv" style="display: none;" />
+          <button type="button" class="btn btn--outline btn--sm" id="btnBrowseFile">
+            <span>Pilih File CSV</span>
+          </button>
+          
+          <div style="margin-top: 14px; font-size: 12px; color: #94A3B8;">
+            Mendukung format Google Form mentah maupun kode indikator (WB1..WB9, ACD1..ACD8, SOC1..SOC8, CAR1..CAR8).
+          </div>
+        </div>
+
+        <!-- Preview File Terpilih -->
+        <div class="file-preview" id="filePreview">
+          <div class="file-info">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <div>
+              <div class="file-name" id="previewFileName">survei_batch_2.csv</div>
+              <div class="file-size" id="previewFileSize">14.2 KB</div>
+            </div>
+          </div>
+          <button type="button" class="btn-remove-file" id="btnRemoveFile" title="Batalkan file">&times;</button>
+        </div>
+
+        <div style="margin-top: 24px; text-align: center;">
+          <button type="button" class="btn btn--em" id="btnUploadSubmit" style="padding: 12px 32px; border-radius: 10px;" disabled>
+            <span id="btnUploadText">Mulai Proses &amp; Simpan ke Supabase</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Output Hasil Pemrosesan -->
+      <div class="result-box" id="resultBox">
+        <div class="result-banner">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <div>
+            <h3 id="resBannerTitle">Data Berhasil Diproses &amp; Masuk ke Supabase!</h3>
+            <p id="resBannerSub">Berhasil menambahkan <b>+3 responden baru</b>. Total responden sekarang: <b>125</b>.</p>
+          </div>
+        </div>
+
+        <h4 style="font-size: 15px; font-weight: 700; color: #0F1F3D; margin-bottom: 12px;">
+          Distribusi 5 Profil LPA-GMM Data Baru:
+        </h4>
+        <div class="profile-breakdown-grid" id="profileBreakdownGrid">
+          <!-- Diisi dinamis via JS -->
+        </div>
+
+        <h4 style="font-size: 15px; font-weight: 700; color: #0F1F3D; margin-bottom: 12px;">
+          Preview Data Responden Baru yang Terunggah:
+        </h4>
+        <div class="table-container">
+          <table class="preview-table">
+            <thead>
+              <tr>
+                <th>ID Responden</th>
+                <th>Program Studi</th>
+                <th>Semester</th>
+                <th>Wellbeing</th>
+                <th>Akademik</th>
+                <th>Sosial</th>
+                <th>Karier</th>
+                <th>Profil LPA</th>
+              </tr>
+            </thead>
+            <tbody id="previewTableBody">
+              <!-- Diisi dinamis via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end;">
+          <button type="button" class="btn btn--outline btn--sm" id="btnResetUpload">
+            <span>Unggah File Lain</span>
+          </button>
+          <a href="dashboard.html" class="btn btn--navy btn--sm">
+            <span>Lihat di Dashboard</span>
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Script Interaksi Halaman Data -->
+  <script>
+    (() => {
+      const AUTH_KEY = 'nadi_admin_session_auth';
+      const authGate = document.getElementById('authGate');
+      const adminPortal = document.getElementById('adminPortal');
+      const loginForm = document.getElementById('adminLoginForm');
+      const pwdInput = document.getElementById('adminPwd');
+      const authError = document.getElementById('authError');
+      const btnTogglePwd = document.getElementById('btnTogglePwd');
+      const btnLogout = document.getElementById('btnLogoutAdmin');
+
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const btnBrowse = document.getElementById('btnBrowseFile');
+      const filePreview = document.getElementById('filePreview');
+      const previewFileName = document.getElementById('previewFileName');
+      const previewFileSize = document.getElementById('previewFileSize');
+      const btnRemoveFile = document.getElementById('btnRemoveFile');
+      const btnUpload = document.getElementById('btnUploadSubmit');
+      const btnUploadText = document.getElementById('btnUploadText');
+
+      const resultBox = document.getElementById('resultBox');
+      const resBannerTitle = document.getElementById('resBannerTitle');
+      const resBannerSub = document.getElementById('resBannerSub');
+      const profileBreakdownGrid = document.getElementById('profileBreakdownGrid');
+      const previewTableBody = document.getElementById('previewTableBody');
+      const btnResetUpload = document.getElementById('btnResetUpload');
+
+      let selectedFile = null;
+
+      const PROFILES_META = {
+        1: { name: 'Sosial Kuat, Akademik Tertekan', color: '#0284C7', bg: '#E0F2FE' },
+        2: { name: 'Wellbeing & Akademik Positif (Thriving)', color: '#0D9488', bg: '#CCFBF1' },
+        3: { name: 'Adaptasi Moderat (Mayoritas)', color: '#6366F1', bg: '#EEF2FF' },
+        4: { name: 'Sangat Rentan (High Risk)', color: '#E11D48', bg: '#FFE4E6' },
+        5: { name: 'Wellbeing Optimal & Unggul', color: '#D97706', bg: '#FEF3C7' }
+      };
+
+      // 1. Cek Sesi Auth
+      function checkAuth() {
+        const authed = sessionStorage.getItem(AUTH_KEY);
+        if (authed === 'true') {
+          authGate.style.display = 'none';
+          adminPortal.style.display = 'block';
+          loadSurveyStats();
+        } else {
+          authGate.style.display = 'block';
+          adminPortal.style.display = 'none';
+        }
+      }
+
+      // 2. Login Handle
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const entered = pwdInput.value.trim();
+        // Verifikasi ke backend atau default admin123
+        if (entered === 'admin123') {
+          sessionStorage.setItem(AUTH_KEY, 'true');
+          authError.style.display = 'none';
+          checkAuth();
+        } else {
+          authError.style.display = 'block';
+          pwdInput.focus();
+        }
+      });
+
+      btnTogglePwd.addEventListener('click', () => {
+        pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
+      });
+
+      btnLogout.addEventListener('click', () => {
+        sessionStorage.removeItem(AUTH_KEY);
+        checkAuth();
+      });
+
+      // 3. Load Statistik Supabase
+      async function loadSurveyStats() {
+        try {
+          const res = await fetch('/api/v1/survey-stats');
+          if (res.ok) {
+            const data = await res.json();
+            document.getElementById('kpiTotalResp').textContent = data.total_respondents || 122;
+            document.getElementById('kpiTotalProdi').textContent = (data.total_prodi || 18) + ' Prodi';
+          }
+        } catch (err) {
+          console.warn('Fallback data:', err);
+        }
+      }
+
+      // 4. File Drop & Selection
+      btnBrowse.addEventListener('click', () => fileInput.click());
+      dropzone.addEventListener('click', (e) => {
+        if (e.target !== btnBrowse) fileInput.click();
+      });
+
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('is-dragover');
+      });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('is-dragover'));
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('is-dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files && fileInput.files.length > 0) {
+          handleFile(fileInput.files[0]);
+        }
+      });
+
+      function handleFile(file) {
+        if (!file.name.toLowerCase().endsWith('.csv')) {
+          alert('Format file harus berupa CSV (.csv)!');
+          return;
+        }
+        selectedFile = file;
+        previewFileName.textContent = file.name;
+        previewFileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+        filePreview.style.display = 'flex';
+        btnUpload.disabled = false;
+      }
+
+      btnRemoveFile.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedFile = null;
+        fileInput.value = '';
+        filePreview.style.display = 'none';
+        btnUpload.disabled = true;
+      });
+
+      // 5. Upload File ke Backend /api/v1/import-survey
+      btnUpload.addEventListener('click', async () => {
+        if (!selectedFile) return;
+
+        btnUpload.disabled = true;
+        btnUploadText.innerHTML = '<span class="spinner"></span> Memproses Model LPA-GMM...';
+
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('password', 'admin123');
+
+        try {
+          const resp = await fetch('/api/v1/import-survey', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!resp.ok) {
+            const errData = await resp.json().catch(() => ({}));
+            throw new Error(errData.detail || 'Terjadi kesalahan saat memproses data.');
+          }
+
+          const resData = await resp.json();
+          renderSuccessResult(resData);
+          loadSurveyStats();
+        } catch (err) {
+          alert('Gagal: ' + err.message);
+        } finally {
+          btnUpload.disabled = false;
+          btnUploadText.textContent = 'Mulai Proses & Simpan ke Supabase';
+        }
+      });
+
+      // 6. Render Output Hasil
+      function renderSuccessResult(data) {
+        resultBox.style.display = 'block';
+        resBannerTitle.textContent = `Data Berhasil Diproses & Masuk ke Supabase!`;
+        resBannerSub.innerHTML = `Berhasil menambahkan <b>+${data.added_count} responden baru</b>. Total responden sekarang: <b>${data.total_now}</b>.`;
+
+        // Render profile distribution
+        profileBreakdownGrid.innerHTML = '';
+        for (let pId = 1; pId <= 5; pId++) {
+          const cnt = data.profile_distribution[pId] || 0;
+          const meta = PROFILES_META[pId];
+          const div = document.createElement('div');
+          div.className = 'p-stat-card';
+          div.innerHTML = `
+            <span class="p-stat-badge" style="background: ${meta.bg}; color: ${meta.color};">Profil ${pId}</span>
+            <div class="p-stat-val">${cnt} <span style="font-size: 13px; font-weight: normal; color: #64748B;">mhs</span></div>
+            <div class="p-stat-name">${meta.name}</div>
+          `;
+          profileBreakdownGrid.appendChild(div);
+        }
+
+        // Render preview table
+        previewTableBody.innerHTML = '';
+        (data.preview || []).forEach(r => {
+          const meta = PROFILES_META[r.profile] || PROFILES_META[3];
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><code>${r.respondent_id}</code></td>
+            <td>${r.prodi}</td>
+            <td>${r.semester}</td>
+            <td><b>${r.wb_score.toFixed(2)}</b></td>
+            <td><b>${r.acd_score.toFixed(2)}</b></td>
+            <td><b>${r.soc_score.toFixed(2)}</b></td>
+            <td><b>${r.car_score.toFixed(2)}</b></td>
+            <td><span class="p-stat-badge" style="background: ${meta.bg}; color: ${meta.color};">Profil ${r.profile}</span></td>
+          `;
+          previewTableBody.appendChild(tr);
+        });
+
+        // Scroll halus ke hasil
+        resultBox.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      btnResetUpload.addEventListener('click', () => {
+        selectedFile = null;
+        fileInput.value = '';
+        filePreview.style.display = 'none';
+        btnUpload.disabled = true;
+        resultBox.style.display = 'none';
+        dropzone.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // Init on load
+      checkAuth();
+    })();
+  </script>
+</body>
+</html>
