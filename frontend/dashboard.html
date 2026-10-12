@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261011_porsi_hp_v5" />
+  <link rel="stylesheet" href="css/style.css?v=20261012_mobile_fix_v8" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -77,7 +77,24 @@
         display: none !important;
       }
       .sidebar-close-btn {
-        display: grid !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+        border: 1px solid #E2E8F0 !important;
+        background: #F8FAFC !important;
+        color: #475569 !important;
+        cursor: pointer !important;
+        flex-shrink: 0 !important;
+        padding: 0 !important;
+        transform: none !important;
+      }
+      .sidebar-close-btn svg {
+        display: block !important;
+        margin: auto !important;
+        transform: none !important;
       }
 
       /* Konten Utama & Topbar: Scroll Bebas Tanpa Terpotong */
@@ -92,10 +109,11 @@
       .app-content {
         display: block !important;
         width: 100% !important;
+        max-width: 100% !important;
         height: auto !important;
         min-height: auto !important;
         overflow: visible !important;
-        padding: 16px 14px 100px !important;
+        padding: 14px 12px 100px !important;
         box-sizing: border-box !important;
       }
       .view {
@@ -150,6 +168,7 @@
         border-radius: 14px !important;
         border: 1px solid #E2E8F0 !important;
         background: #FFFFFF !important;
+        box-sizing: border-box !important;
       }
       .kpi__ring {
         width: 68px !important;
@@ -162,14 +181,165 @@
         display: none !important;
       }
 
-      /* Grids 1 Kolom Vertikal */
+      /* 1 & 2. PERBAIKAN TREN & INSIGHT TIDAK KEGESER / OVERFLOW */
       .grid2, .grid2--cluster-top, .grid2--voice {
-        grid-template-columns: 1fr !important;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
         gap: 14px !important;
+        margin-bottom: 16px !important;
       }
+      .grid2 > *, .grid2--cluster-top > *, .grid2--voice > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+      }
+
+      .card {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        padding: 14px 12px !important;
+        border-radius: 14px !important;
+      }
+
+      .chart, #trendChart {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        overflow: hidden !important;
+        position: relative !important;
+      }
+      .lc {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        display: block !important;
+      }
+
+      #trendToggles {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        gap: 6px !important;
+        padding: 2px 0 4px !important;
+      }
+      #trendToggles::-webkit-scrollbar {
+        display: none !important;
+      }
+      #trendToggles .seg__btn {
+        flex: 0 0 auto !important;
+        font-size: 11px !important;
+        padding: 5px 9px !important;
+        white-space: nowrap !important;
+      }
+
       .trend-stats-strip {
-        grid-template-columns: 1fr !important;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        gap: 8px !important;
       }
+      .trend-stat-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .trend-summary-note {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        word-break: break-word !important;
+      }
+
+      .insights {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        gap: 10px !important;
+      }
+      .ins-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        padding: 12px 14px !important;
+        word-break: break-word !important;
+      }
+
+      /* 4. PERBAIKAN BAR TOPIK DOMINAN MUNCUL PERSEN & INDIKATOR WARNA */
+      .topic {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 8px 10px !important;
+      }
+      .topic__row {
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .topic__track {
+        display: flex !important;
+        width: 100% !important;
+        height: 8px !important;
+        border-radius: 999px !important;
+        overflow: hidden !important;
+        background: #E2E8F0 !important;
+        gap: 2px !important;
+        margin-top: 6px !important;
+        transform: none !important;
+        animation: none !important;
+      }
+      .topic__track i {
+        display: block !important;
+        height: 100% !important;
+        border-radius: 1px !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* 5. PERBAIKAN RUANG CURHAT / VOICE CHAT TIDAK TENGGELAM */
+      .card--voice-chat {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+      }
+      .card--voice-chat .card__head {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+      }
+      .voice-chat__form, .voice-chat__input-row {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .voice-chat__textarea {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        min-height: 105px !important;
+        padding: 10px 12px !important;
+        font-size: 13.5px !important;
+        line-height: 1.5 !important;
+        border-radius: 10px !important;
+        resize: vertical !important;
+      }
+
       .profiles {
         grid-template-columns: 1fr !important;
       }
@@ -199,9 +369,8 @@
 
           <!-- Tombol Close Sidebar (Khusus Mobile Drawer) -->
           <button class="sidebar-close-btn" id="sidebarCloseBtn" type="button" aria-label="Tutup menu sidebar" title="Tutup Menu">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
           </button>
 
@@ -513,7 +682,7 @@
 
             <form class="voice-chat__form" id="voiceForm">
               <div class="voice-chat__input-row">
-                <textarea class="voice-chat__textarea" id="voiceInput" rows="3" placeholder="Ketik keluh kesahmu di sini... (Contoh: Beban praktikum dan tugas besar semester ini bersamaan membuat waktu istirahat kurang, butuh penyesuaian jadwal...)" required></textarea>
+                <textarea class="voice-chat__textarea" id="voiceInput" rows="4" placeholder="Ketik keluh kesah atau aspirasimu di sini... (Contoh: Beban praktikum dan tugas besar semester ini bersamaan membuat waktu istirahat kurang, mohon evaluasi jadwal)" required></textarea>
               </div>
 
               <div class="voice-chat__controls">
