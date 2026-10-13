@@ -6,6 +6,8 @@ Latent Profile Analysis (LPA via GMM, k=5), and Student Analytics.
 
 import os
 import math
+import joblib
+from pathlib import Path
 from typing import Dict, List, Optional
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import FileResponse
@@ -19,6 +21,18 @@ app = FastAPI(
     description="RESTful API for higher-education student wellbeing monitoring and Latent Profile Analysis (GMM).",
     version="2.0.0"
 )
+
+# Path absolut ke folder models
+MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
+
+# Load scaler dan model GMM yang sudah kita buat
+try:
+    scaler = joblib.load(MODELS_DIR / "scaler.joblib")
+    # Sesuaikan dengan nama file model k=3 atau k=4 milikmu
+    gmm_model = joblib.load(MODELS_DIR / "gmm_k3.joblib") 
+    print("Model GMM & Scaler berhasil dimuat!")
+except Exception as e:
+    print(f"Peringatan: Gagal memuat model machine learning: {e}")
 
 # Enable CORS for frontend consumption
 app.add_middleware(
@@ -65,133 +79,34 @@ PROFILE_METADATA = [
     {
         "profile_id": 1,
         "key": "p1",
-        "name": "Socially Supported, Academically Strained",
-        "short": "Profil 1: Sosial Kuat, Akademik Tertekan",
-        "color": "#0284C7",
-        "count": 14,
-        "percentage": 11.76,
-        "pca_coordinates": {"x": -0.37, "y": 0.29},
-        "scores_likert": {"wellbeing": 2.85, "academic": 2.94, "social": 4.10, "career": 3.34},
-        "scores_100": {"wellbeing": 57, "academic": 59, "social": 82, "career": 67},
-        "description": "Dukungan sosial sangat tinggi, namun kesejahteraan psikologis dan ketahanan akademik berada di bawah rata-rata.",
-        "recommendation": "Harmonisasi jadwal tugas antar prodi, mentoring akademik teman sebaya, dan workshop regulasi stres."
+        "name": "Vulnerable / Low Adaptation",
+        "short": "Profil 1: Performa Rendah & Butuh Perhatian",
+        "color": "#E11D48",
+        "scores_likert": {"wellbeing": 2.79, "academic": 2.77, "social": 3.41, "career": 2.93},
+        "description": "Kelompok dengan skor di bawah rata-rata pada dimensi wellbeing, akademik, dan karier.",
+        "recommendation": "Pendampingan akademik intensif, konseling psikologis, dan bimbingan karier."
     },
     {
         "profile_id": 2,
         "key": "p2",
-        "name": "Thriving & High Functioning",
-        "short": "Profil 2: Wellbeing & Akademik Positif",
-        "color": "#0D9488",
-        "count": 27,
-        "percentage": 22.69,
-        "pca_coordinates": {"x": 0.97, "y": -0.08},
-        "scores_likert": {"wellbeing": 4.06, "academic": 3.88, "social": 4.25, "career": 3.65},
-        "scores_100": {"wellbeing": 81, "academic": 78, "social": 85, "career": 73},
-        "description": "Performa seimbang dan tinggi di seluruh dimensi dengan strategi adaptasi belajar yang matang.",
-        "recommendation": "Pemberdayaan sebagai peer mentor dan fasilitasi program akselerasi magang industri."
+        "name": "Moderate / Average Adaptation",
+        "short": "Profil 2: Adaptasi Sedang (Mayoritas)",
+        "color": "#6366F1",
+        "scores_likert": {"wellbeing": 3.77, "academic": 3.73, "social": 4.16, "career": 3.58},
+        "description": "Kelompok mayoritas dengan performa adaptasi yang stabil dan seimbang.",
+        "recommendation": "Workshop manajemen stres dan pengembangan keterampilan penunjang."
     },
     {
         "profile_id": 3,
         "key": "p3",
-        "name": "Moderate / Average Adaptation",
-        "short": "Profil 3: Adaptasi Moderat (Mayoritas)",
-        "color": "#6366F1",
-        "count": 57,
-        "percentage": 47.90,
-        "pca_coordinates": {"x": -0.46, "y": 0.05},
-        "scores_likert": {"wellbeing": 3.13, "academic": 3.12, "social": 3.70, "career": 3.05},
-        "scores_100": {"wellbeing": 63, "academic": 62, "social": 74, "career": 61},
-        "description": "Kelompok mayoritas (47.9% mahasiswa) dengan performa adaptasi sedang yang rentan jika beban melonjak tiba-tiba.",
-        "recommendation": "Klinik perencanaan karier dan magang terpandu, panduan belajar terstruktur, serta bimbingan berkala."
-    },
-    {
-        "profile_id": 4,
-        "key": "p4",
-        "name": "High Risk / Vulnerable",
-        "short": "Profil 4: Sangat Rentan (Prioritas Intervensi)",
-        "color": "#E11D48",
-        "count": 8,
-        "percentage": 6.72,
-        "pca_coordinates": {"x": -2.65, "y": -0.10},
-        "scores_likert": {"wellbeing": 2.11, "academic": 2.31, "social": 2.41, "career": 1.77},
-        "scores_100": {"wellbeing": 42, "academic": 46, "social": 48, "career": 35},
-        "description": "Seluruh indikator berada di zona kritis (Likert < 2.5). Kesiapan karier sangat rendah dan risiko burnout tinggi.",
-        "recommendation": "Layanan konseling psikologis prioritas (jalur cepat), pendampingan dosen wali intensif, dan advokasi finansial."
-    },
-    {
-        "profile_id": 5,
-        "key": "p5",
-        "name": "Flourishing / Optimal Well-being",
-        "short": "Profil 5: Wellbeing Optimal & Unggul",
-        "color": "#D97706",
-        "count": 13,
-        "percentage": 10.92,
-        "pca_coordinates": {"x": 2.04, "y": -0.30},
-        "scores_likert": {"wellbeing": 4.48, "academic": 4.52, "social": 5.00, "career": 4.02},
-        "scores_100": {"wellbeing": 90, "academic": 90, "social": 100, "career": 80},
-        "description": "Profil teladan dengan kepuasan hidup dan resiliensi tertinggi. Dukungan sosial sempurna dan akademik prima.",
-        "recommendation": "Fasilitasi program hibah kompetisi nasional/internasional, kepemimpinan, dan inkubasi riset kampus."
+        "name": "Thriving & High Functioning",
+        "short": "Profil 3: Wellbeing & Performa Tinggi",
+        "color": "#0D9488",
+        "scores_likert": {"wellbeing": 4.59, "academic": 4.59, "social": 5.00, "career": 4.24},
+        "description": "Kelompok dengan performa unggul di seluruh dimensi dan dukungan sosial yang sangat kuat.",
+        "recommendation": "Pemberdayaan sebagai peer mentor dan fasilitasi program kepemimpinan/magang."
     }
 ]
-
-
-class PredictStudentProfileRequest(BaseModel):
-    wellbeing: float = Field(..., description="Wellbeing score (skala 1-5 atau 0-100)")
-    academic: float = Field(..., description="Academic score (skala 1-5 atau 0-100)")
-    social: float = Field(..., description="Social score (skala 1-5 atau 0-100)")
-    career: float = Field(..., description="Career score (skala 1-5 atau 0-100)")
-
-
-@app.get("/api/v1/health")
-def health_check():
-    return {
-        "status": "online",
-        "service": "NadiKampus Intelligence API",
-        "version": "2.0.0",
-        "model_engine": "Latent Profile Analysis (Gaussian Mixture Model)",
-        "k_components": 5,
-        "campus_status": "Optimal",
-        "total_respondents": 119
-    }
-
-
-@app.get("/api/v1/kpi")
-def get_kpis():
-    return {
-        "wellbeing_index": {"score": 65, "status": "Baik", "trend": "+6 poin sejak Maret"},
-        "academic_readiness": {"score": 71, "status": "Tinggi", "trend": "-5 poin sejak Maret"},
-        "social_support": {"score": 64, "status": "Perlu perhatian", "trend": "+4 poin sejak Maret"},
-        "career_readiness": {"score": 60, "status": "Perlu perhatian", "trend": "+7 poin sejak Maret"}
-    }
-
-
-@app.get("/api/v1/profiles")
-@app.get("/api/v1/clusters")
-def get_profiles():
-    """Mengembalikan 5 profil laten LPA-GMM beserta evaluasi AIC/BIC."""
-    model_summary_path = os.path.join(OUTPUT_DIR, "model_summary.csv")
-    model_evaluation = []
-
-    if os.path.exists(model_summary_path):
-        try:
-            df_eval = pd.read_csv(model_summary_path)
-            model_evaluation = df_eval.to_dict(orient="records")
-        except Exception:
-            pass
-
-    return {
-        "method": "Latent Profile Analysis (LPA)",
-        "algorithm": "GaussianMixture (covariance_type=full)",
-        "k_selected": 5,
-        "best_metrics": {
-            "aic": 955.88,
-            "bic": 1161.53,
-            "log_likelihood": -3.39
-        },
-        "total_respondents": 119,
-        "profiles": PROFILE_METADATA,
-        "model_evaluation_table": model_evaluation
-    }
 
 
 @app.get("/api/v1/respondents")
@@ -262,44 +177,38 @@ def get_respondents():
 
     return {"total": 0, "data": []}
 
-
 @app.post("/api/v1/predict-profile")
 @app.post("/api/v1/predict-cluster")
 def predict_profile(req: PredictStudentProfileRequest):
     """
-    Memprediksi profil mahasiswa berdasarkan 4 dimensi skor.
-    Mendukung input skala Likert (1-5) maupun skala terstandarisasi (0-100).
+    Memprediksi profil mahasiswa menggunakan model GMM/LPA asli yang telah disimpan.
     """
-    # Normalisasi ke skala 1-5 jika input berupa 0-100
-    wb = req.wellbeing / 20.0 if req.wellbeing > 5.0 else req.wellbeing
-    acd = req.academic / 20.0 if req.academic > 5.0 else req.academic
-    soc = req.social / 20.0 if req.social > 5.0 else req.social
-    car = req.career / 20.0 if req.career > 5.0 else req.career
+    try:
+        # 1. Masukkan input ke dalam array fitur (urutan harus sama persis saat training: WB, ACD, SOC, CAR)
+        features = [[req.wellbeing, req.academic, req.social, req.career]]
+        
+        # 2. Transformasi pakai scaler
+        scaled_features = scaler.transform(features)
+        
+        # 3. Prediksi pakai GMM
+        raw_cluster = int(gmm_model.predict(scaled_features)[0])
+        
+        # 4. Petakan ke nomor profil (misal ditambah 1 agar jadi 1, 2, 3)
+        assigned_profile_id = raw_cluster + 1 
+        
+        # Cari data metadata profil yang sesuai untuk dikembalikan ke frontend
+        matched_profile = next((p for p in PROFILE_METADATA if p["profile_id"] == assigned_profile_id), PROFILE_METADATA[0])
 
-    best_p = None
-    min_dist = float("inf")
-
-    for p in PROFILE_METADATA:
-        m = p["scores_likert"]
-        dist = math.sqrt(
-            (wb - m["wellbeing"]) ** 2 +
-            (acd - m["academic"]) ** 2 +
-            (soc - m["social"]) ** 2 +
-            (car - m["career"]) ** 2
-        )
-        if dist < min_dist:
-            min_dist = dist
-            best_p = p
-
-    return {
-        "assigned_profile": best_p["profile_id"],
-        "name": best_p["name"],
-        "short_title": best_p["short"],
-        "color": best_p["color"],
-        "distance": round(min_dist, 3),
-        "profile_summary": best_p["description"],
-        "recommended_intervention": best_p["recommendation"]
-    }
+        return {
+            "assigned_profile": matched_profile["profile_id"],
+            "name": matched_profile["name"],
+            "short_title": matched_profile["short"],
+            "color": matched_profile["color"],
+            "profile_summary": matched_profile["description"],
+            "recommended_intervention": matched_profile["recommendation"]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal melakukan prediksi model: {str(e)}")
 
 
 ADMIN_DEFAULT_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123")

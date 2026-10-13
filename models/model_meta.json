@@ -1,0 +1,31 @@
+{
+  "n_respondents": 149,
+  "k": 3,
+  "covariance_type": "diag",
+  "random_state": 0,
+  "n_init": 50,
+  "features": [
+    "WB_Score",
+    "ACD_Score",
+    "SOC_Score",
+    "CAR_Score"
+  ],
+  "pipeline": [
+    "StandardScaler",
+    "GaussianMixture"
+  ],
+  "pca": false,
+  "profile_label_offset": 1,
+  "component_to_profile_rank": [
+    1,
+    0,
+    2
+  ],
+  "sklearn_version": "1.7.2",
+  "trained_at": "2026-10-13",
+  "profile_sizes": {
+    "1": 69,
+    "2": 61,
+    "3": 19
+  }
+}

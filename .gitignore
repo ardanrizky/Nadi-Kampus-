@@ -44,6 +44,6 @@ SURVEI KESMA.csv
 
 # Model terlatih berukuran besar
 models/*.pkl
-models/*.joblib
+# models/*.joblib
 
 backup_nadikampus/
