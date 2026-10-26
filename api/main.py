@@ -164,6 +164,16 @@ for _p in PROFILE_METADATA:
     _p["scores_likert"] = {_SCORE_KEY[k]: v for k, v in _CENTROIDS[str(_pid)].items()}
 
 
+@app.get("/api/v1/profiles")
+def get_profiles():
+    """Mengembalikan metadata 3 Profil LPA-GMM terkunci."""
+    return {
+        "model_version": MODEL_VERSION,
+        "total_profiles": len(PROFILE_METADATA),
+        "profiles": PROFILE_METADATA
+    }
+
+
 class PredictStudentProfileRequest(BaseModel):
     wellbeing: float = Field(..., ge=0, le=100)
     academic: float = Field(..., ge=0, le=100)
