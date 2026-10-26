@@ -816,6 +816,156 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove('is-on'), 2400);
   }
+  window.nkToast = toast;
+
+  /* ---------------------------------------------------------
+     Laporan Rekomendasi Eksekutif Kampus (A4 PDF & Cetak)
+     --------------------------------------------------------- */
+  function generateRecoReportHtml(selectedIds = null) {
+    const today = new Date();
+    const dateFormatted = today.toLocaleDateString('id-ID', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    });
+
+    const isSelection = Array.isArray(selectedIds) && selectedIds.length > 0;
+    const rankedList = rankRecos();
+    const filteredList = isSelection
+      ? rankedList.filter(x => selectedIds.includes(x.r.id))
+      : rankedList;
+
+    const highPrioCount = filteredList.filter(x => x.pr === 'Tinggi').length;
+    const prodiName = D.name || 'Seluruh Kampus Politeknik Elektronika Negeri Surabaya (PENS)';
+    const totalStudents = D.n || 149;
+
+    const rowsHtml = filteredList.map((item, idx) => {
+      const { r, m, t, pr } = item;
+      const targetProfiles = r.profiles.map(i => PROFILES[i] ? PROFILES[i].short : `Profil ${i + 1}`).join(', ');
+      const prioClass = pr === 'Tinggi' ? 'prio-tinggi' : pr === 'Sedang' ? 'prio-sedang' : 'prio-rendah';
+
+      return `
+        <tr>
+          <td style="text-align:center; font-weight:700;">${idx + 1}</td>
+          <td>
+            <span class="prio-badge ${prioClass}">Prioritas ${pr}</span>
+          </td>
+          <td>
+            <strong style="color:#0F172A; display:block; margin-bottom:4px; font-size:13.5px;">${r.title}</strong>
+            <span style="color:#475569; font-size:12.5px; line-height:1.4; display:block;">${r.desc}</span>
+          </td>
+          <td><span style="font-weight:600; color:#0F766E;">${targetProfiles}</span></td>
+          <td style="font-size:12px; color:#475569;">
+            ${m.short} <b>${D.scores[m.key]}</b><br/>
+            Topik: <em>${t.name}</em> (${t.sent[2]}% sentimen negatif)
+          </td>
+          <td>
+            <b>${r.owner}</b><br/>
+            <span style="color:#64748B; font-size:11.5px;">Durasi: ${r.duration} • Effort: ${r.effort}</span>
+          </td>
+          <td style="color:#04694A; font-weight:600; font-size:12px;">${r.kpi}</td>
+        </tr>
+      `;
+    }).join('');
+
+    return `
+      <!-- KOP DOKUMEN INSTITUSI -->
+      <div class="doc-header">
+        <div class="doc-header__left">
+          <img src="img/logo_mark.png" alt="Logo NadiKampus" class="doc-header__logo" />
+          <div class="doc-header__title">
+            <h2>NADIKAMPUS ANALYTICS • POLITEKNIK ELEKTRONIKA NEGERI SURABAYA</h2>
+            <p>LAPORAN RINGKASAN REKOMENDASI KEBIJAKAN & INTERVENSI MAHASISWA</p>
+          </div>
+        </div>
+        <div class="doc-header__meta">
+          <div>No. Dokumen: <b>NK-REC/2026/SMT-GENAP</b></div>
+          <div>Tanggal Terbit: <b>${dateFormatted}</b></div>
+          <div>Cakupan: <b>${prodiName}</b></div>
+        </div>
+      </div>
+
+      <!-- RINGKASAN EKSEKUTIF -->
+      <div class="doc-exec-grid">
+        <div class="doc-exec-card">
+          <div class="doc-exec-card__num">${filteredList.length} Program</div>
+          <div class="doc-exec-card__lbl">${isSelection ? 'Rencana Program Terpilih' : 'Total Intervensi Terpetakan'}</div>
+        </div>
+        <div class="doc-exec-card">
+          <div class="doc-exec-card__num" style="color:#B91C1C;">${highPrioCount} Program</div>
+          <div class="doc-exec-card__lbl">Prioritas Intervensi Segera</div>
+        </div>
+        <div class="doc-exec-card">
+          <div class="doc-exec-card__num">${totalStudents} Mahasiswa</div>
+          <div class="doc-exec-card__lbl">Basis Sampel Responden Survei</div>
+        </div>
+        <div class="doc-exec-card">
+          <div class="doc-exec-card__num" style="color:#4338CA;">LPA-GMM &amp; NLP</div>
+          <div class="doc-exec-card__lbl">Metodologi Pemodelan Analitik</div>
+        </div>
+      </div>
+
+      <!-- PENGANTAR RINGKAS -->
+      <p style="font-size:13px; color:#475569; margin-bottom:18px; line-height:1.5;">
+        Dokumen ini menyajikan ringkasan rekomendasi program intervensi berbasis data empiris psikososial, tekanan akademik, dan aspirasi kualitatif mahasiswa untuk semester genap 2025/2026. Ditujukan kepada dosen wali, koordinator program studi, dan pimpinan kemahasiswaan sebagai pedoman tindak lanjut preventif dan kuratif.
+      </p>
+
+      <!-- TABEL REKOMENDASI -->
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th style="width:4%; text-align:center;">No</th>
+            <th style="width:11%;">Tingkat</th>
+            <th style="width:25%;">Program Intervensi</th>
+            <th style="width:15%;">Sasaran Mahasiswa</th>
+            <th style="width:16%;">Dasar Analisis Data</th>
+            <th style="width:15%;">Unit PIC &amp; Durasi</th>
+            <th style="width:14%;">Indikator KPI</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+
+      <!-- LEMBAR PENGESAHAN DOKUMEN -->
+      <div class="doc-signatures">
+        <div class="doc-sign-box">
+          <p>Disusun oleh,</p>
+          <p style="font-weight:600;">Tim Analitika Mahasiswa NadiKampus</p>
+          <div class="doc-sign-line"></div>
+          <div class="doc-sign-name">Ardan Rizky &amp; Tim Analisis</div>
+        </div>
+        <div class="doc-sign-box">
+          <p>Surabaya, ${dateFormatted}</p>
+          <p style="font-weight:600;">Mengetahui Koordinator Kemahasiswaan,</p>
+          <div class="doc-sign-line"></div>
+          <div class="doc-sign-name">Pimpinan Bidang Kemahasiswaan PENS</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function openRecoReportModal(selectedIds = null) {
+    const modal = $('#recoReportModal');
+    const container = $('#recoReportPrintArea');
+    if (!modal || !container) {
+      window.print();
+      return;
+    }
+
+    container.innerHTML = generateRecoReportHtml(selectedIds);
+    modal.hidden = false;
+    modal.classList.add('is-open');
+    document.body.classList.add('drawer-locked');
+  }
+
+  function closeRecoReportModal() {
+    const modal = $('#recoReportModal');
+    if (modal) {
+      modal.hidden = true;
+      modal.classList.remove('is-open');
+      document.body.classList.remove('drawer-locked');
+    }
+  }
 
   /* ---------------------------------------------------------
      Navigasi View & Switcher
@@ -1024,8 +1174,38 @@
       }
     }
 
-    if (t.id === 'btnPrintReport') {
+    // Tombol Cetak / Unduh Dokumen Rekomendasi Resmi
+    if (t.id === 'btnPrintReport' || t.closest('#btnPrintReport') || t.id === 'btnDownloadRecoPdf' || t.closest('#btnDownloadRecoPdf')) {
+      e.preventDefault();
+      openRecoReportModal(null);
+    }
+
+    // Unduh Rencana Terpilih Saja (dari Tray)
+    if (t.id === 'trayDownloadPdf' || t.closest('#trayDownloadPdf')) {
+      e.preventDefault();
+      if (state.plan.size === 0) {
+        toast('Pilih minimal 1 program sebelum mengunduh rencana');
+      } else {
+        openRecoReportModal(Array.from(state.plan));
+      }
+    }
+
+    // Aksi di dalam Modal Pratinjau Dokumen
+    if (t.id === 'btnPrintModalContent' || t.closest('#btnPrintModalContent')) {
+      e.preventDefault();
       window.print();
+    }
+
+    if (t.id === 'btnCloseReportModal' || t.closest('#btnCloseReportModal') || t.id === 'recoReportModal') {
+      e.preventDefault();
+      closeRecoReportModal();
+    }
+  });
+
+  // Tutup modal dengan tombol Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeRecoReportModal();
     }
   });
 

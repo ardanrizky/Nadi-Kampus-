@@ -9,6 +9,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
+  <script>
+    (function() {
+      var t = localStorage.getItem('nk_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.style.colorScheme = t;
+    })();
+  </script>
   <link rel="stylesheet" href="css/style.css?v=20261012_mobile_fix_v8" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
@@ -487,14 +494,34 @@
             </div>
           </div>
 
-          <!-- Quick Actions di Header Mobile (Data Survei) -->
-          <a href="data.html" class="mobile-quick-data-btn" title="Kelola Data Survei (Admin)">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <span>Data 🔒</span>
-          </a>
+          <!-- Group Tombol Aksi Header Mobile (Theme Toggle + Data) -->
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="theme-toggle-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
+              <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg class="theme-icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+
+            <!-- Quick Actions di Header Mobile (Data Survei) -->
+            <a href="data.html" class="mobile-quick-data-btn" title="Kelola Data Survei (Admin)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Data 🔒</span>
+            </a>
+          </div>
         </div>
 
         <!-- Filter & Aksi Tambahan (Desktop & Mobile) -->
@@ -510,6 +537,24 @@
           </label>
 
           <div class="app-topbar__btn-group">
+            <!-- Tombol Toggle Tema Desktop -->
+            <button class="theme-toggle-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
+              <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg class="theme-icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+
             <a href="data.html" class="btn btn--outline btn--sm desktop-only-btn" title="Kelola &amp; Ingest Data Survei Baru (Admin)">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -518,7 +563,7 @@
               <span>Data Survei 🔒</span>
             </a>
 
-            <button type="button" class="btn btn--outline btn--sm" id="btnPrintReport" title="Cetak atau unduh ringkasan">
+            <button type="button" class="btn btn--outline btn--sm" id="btnPrintReport" title="Cetak atau unduh ringkasan rekomendasi resmi">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
                 <path d="M6 9V2h12v7"></path>
                 <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
@@ -748,6 +793,33 @@
             <p>Rekomendasi program intervensi untuk mendukung kesejahteraan dan akademik mahasiswa.</p>
           </div>
 
+          <!-- Banner Ringkasan Eksekutif & Unduh Dokumen PDF Resmi -->
+          <div class="reco-banner">
+            <div class="reco-banner__left">
+              <div class="reco-banner__title">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--em-600)">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Ringkasan Rekomendasi Kebijakan Kampus</span>
+              </div>
+              <p class="reco-banner__desc">Format dokumen eksekutif resmi A4 siap baca untuk dosen pembina, koordinator prodi, dan pimpinan kemahasiswaan.</p>
+            </div>
+            <div class="reco-banner__actions">
+              <button type="button" class="btn btn--reco-pdf" id="btnDownloadRecoPdf" title="Unduh atau cetak laporan rekomendasi kampus ke PDF">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Unduh Ringkasan Rekomendasi (PDF)</span>
+              </button>
+            </div>
+          </div>
+
           <div class="seg seg--wrap" id="recoFilter" role="group" aria-label="Filter sasaran program"></div>
           <div class="recos" id="recos"></div>
         </section>
@@ -759,8 +831,41 @@
   <!-- Tray rencana program terpilih -->
   <div class="tray" id="tray" hidden>
     <span id="trayCount">0 program dipilih</span>
-    <button class="btn btn--em btn--sm" id="trayCopy" type="button">Salin ringkasan rencana</button>
+    <button class="btn btn--em btn--sm" id="trayDownloadPdf" type="button" title="Unduh rencana terpilih dalam format PDF">📄 Unduh PDF Rencana</button>
+    <button class="btn btn--outline btn--sm" id="trayCopy" type="button">Salin Teks</button>
     <button class="tray__clear" id="trayClear" type="button">Kosongkan</button>
+  </div>
+
+  <!-- ============ MODAL LAPORAN REKOMENDASI KAMPUS (A4 PRINT & PDF READY) ============ -->
+  <div class="reco-report-modal" id="recoReportModal" role="dialog" aria-modal="true" aria-labelledby="modalReportTitle" hidden>
+    <div class="reco-report-sheet">
+      <!-- Toolbar Modal -->
+      <div class="reco-report-toolbar">
+        <div class="reco-report-toolbar__title" id="modalReportTitle">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0D9488">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <span>Pratinjau Dokumen Rekomendasi Kampus (A4 PDF)</span>
+        </div>
+        <div class="reco-report-toolbar__btns">
+          <button type="button" class="btn btn--em btn--sm" id="btnPrintModalContent" title="Cetak atau simpan ke PDF">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
+              <path d="M6 9V2h12v7"></path>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <span>Simpan PDF / Cetak</span>
+          </button>
+          <button type="button" class="btn btn--outline btn--sm" id="btnCloseReportModal">Tutup</button>
+        </div>
+      </div>
+
+      <!-- Isi Dokumen Formal A4 -->
+      <div class="reco-report-content" id="recoReportPrintArea">
+        <!-- Konten di-generate secara dinamis oleh JS -->
+      </div>
+    </div>
   </div>
 
   <!-- Toast Notifikasi -->
@@ -770,6 +875,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Scripts -->
+  <script src="js/theme.js"></script>
   <script src="js/data.js?v=21"></script>
   <script src="js/charts.js?v=21"></script>
   <script src="js/app.js?v=21"></script>
