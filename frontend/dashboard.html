@@ -353,6 +353,42 @@
       .recos {
         grid-template-columns: 1fr !important;
       }
+
+      /* DARK MODE MOBILE OVERRIDES (100% Selaras & Anti-Bocor) */
+      [data-theme="dark"] body.page-app {
+        background: #070B14 !important;
+      }
+      [data-theme="dark"] .app-sidebar {
+        background: #0B1120 !important;
+        border-right: 1px solid #1E293B !important;
+      }
+      [data-theme="dark"] .sidebar-close-btn {
+        background: #151F32 !important;
+        border-color: #1E293B !important;
+        color: #CBD5E1 !important;
+      }
+      [data-theme="dark"] .app-topbar {
+        background: rgba(11, 17, 32, 0.94) !important;
+        border-bottom: 1px solid #1E293B !important;
+      }
+      [data-theme="dark"] .mobile-menu-btn {
+        background: #151F32 !important;
+        border-color: #1E293B !important;
+        color: #2DD4BF !important;
+      }
+      [data-theme="dark"] .mobile-quick-data-btn {
+        background: #042F2E !important;
+        border-color: #0D9488 !important;
+        color: #2DD4BF !important;
+      }
+      [data-theme="dark"] .kpi {
+        background: #0F172A !important;
+        border-color: #1E293B !important;
+      }
+      [data-theme="dark"] .card {
+        background: #0F172A !important;
+        border-color: #1E293B !important;
+      }
     }
   </style>
 </head>
@@ -494,34 +530,14 @@
             </div>
           </div>
 
-          <!-- Group Tombol Aksi Header Mobile (Theme Toggle + Data) -->
-          <div style="display:flex;align-items:center;gap:8px;">
-            <button class="theme-toggle-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
-              <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-              <svg class="theme-icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-              </svg>
-            </button>
-
-            <!-- Quick Actions di Header Mobile (Data Survei) -->
-            <a href="data.html" class="mobile-quick-data-btn" title="Kelola Data Survei (Admin)">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-              <span>Data 🔒</span>
-            </a>
-          </div>
+          <!-- Quick Actions di Header Mobile (Data Survei) -->
+          <a href="data.html" class="mobile-quick-data-btn" title="Kelola Data Survei (Admin)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>Data 🔒</span>
+          </a>
         </div>
 
         <!-- Filter & Aksi Tambahan (Desktop & Mobile) -->

@@ -2856,27 +2856,93 @@ body.drawer-locked {
 [data-theme="dark"] .app-sidebar {
   background: #0B1120 !important;
   border-right: 1px solid #1E293B !important;
-  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.45) !important;
 }
 
+[data-theme="dark"] .sidebar-brand-row {
+  border-bottom: 1px solid #1E293B !important;
+}
+
+[data-theme="dark"] .sidebar-collapse-btn {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .sidebar-collapse-btn:hover {
+  background: #1E293B !important;
+  border-color: #0D9488 !important;
+  color: #2DD4BF !important;
+}
+
+[data-theme="dark"] .app-sidebar__bottom {
+  border-top-color: #1E293B !important;
+}
+
+/* Navigasi Sidebar Harmonis */
+[data-theme="dark"] .app-nav__item {
+  color: #94A3B8 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+[data-theme="dark"] .app-nav__item:hover {
+  background: #151F32 !important;
+  color: #F8FAFC !important;
+  border-color: #1E293B !important;
+}
+[data-theme="dark"] .nav-icon {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .app-nav__item:hover .nav-icon {
+  background: #042F2E !important;
+  border-color: #0D9488 !important;
+  color: #2DD4BF !important;
+}
+[data-theme="dark"] .nav-title {
+  color: #CBD5E1 !important;
+}
+[data-theme="dark"] .app-nav__item:hover .nav-title {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .nav-sub {
+  color: #64748B !important;
+}
+
+[data-theme="dark"] .app-nav__item.is-active {
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.22) 0%, rgba(20, 184, 166, 0.1) 100%) !important;
+  border-color: rgba(20, 184, 166, 0.35) !important;
+  border-left: 4px solid #14B8A6 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .app-nav__item.is-active .nav-icon {
+  background: #0D9488 !important;
+  border-color: #0D9488 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 10px rgba(13, 148, 136, 0.4) !important;
+}
+[data-theme="dark"] .app-nav__item.is-active .nav-title {
+  color: #FFFFFF !important;
+}
+
+/* Tombol Kembali ke Beranda */
+[data-theme="dark"] .app-back-btn {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+  color: #CBD5E1 !important;
+}
+[data-theme="dark"] .app-back-btn:hover {
+  background: #1E293B !important;
+  border-color: #0D9488 !important;
+  color: #2DD4BF !important;
+}
+
+/* Topbar */
 [data-theme="dark"] .app-topbar {
   background: rgba(11, 17, 32, 0.94) !important;
   border-bottom: 1px solid #1E293B !important;
 }
-
-[data-theme="dark"] .app-nav__item {
-  color: #94A3B8 !important;
-}
-[data-theme="dark"] .app-nav__item:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: #F8FAFC !important;
-}
-[data-theme="dark"] .app-nav__item.is-active {
-  background: #0D9488 !important;
-  color: #FFFFFF !important;
-  box-shadow: 0 8px 20px -8px rgba(13, 148, 136, 0.6) !important;
-}
-
 [data-theme="dark"] .crumb-lead,
 [data-theme="dark"] .crumb-slash {
   color: #64748B !important;
@@ -2885,7 +2951,7 @@ body.drawer-locked {
   color: #F8FAFC !important;
 }
 
-/* Cards & Surfaces */
+/* Cards & Surfaces Harmonis */
 [data-theme="dark"] .card,
 [data-theme="dark"] .kpi,
 [data-theme="dark"] .auth-gate,
@@ -2895,7 +2961,7 @@ body.drawer-locked {
   background: #0F172A !important;
   border-color: #1E293B !important;
   color: #F1F5F9 !important;
-  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4) !important;
 }
 
 [data-theme="dark"] .kpi.is-selected {
@@ -2920,6 +2986,44 @@ body.drawer-locked {
   color: #94A3B8 !important;
 }
 
+/* Ring Gauge Background Circle Track di Dark Mode */
+[data-theme="dark"] .ring circle:first-child {
+  stroke: #1E293B !important;
+}
+
+/* Action hint di KPI */
+[data-theme="dark"] .kpi__action-hint {
+  background: rgba(20, 184, 166, 0.15) !important;
+  color: #2DD4BF !important;
+}
+[data-theme="dark"] .kpi:hover .kpi__action-hint {
+  background: var(--c) !important;
+  color: #FFFFFF !important;
+}
+
+/* Pills Status Metrik (Harmonis Transparan, Bebas Stark White) */
+[data-theme="dark"] .pill--good {
+  background: rgba(16, 185, 129, 0.16) !important;
+  color: #34D399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+[data-theme="dark"] .pill--warn {
+  background: rgba(245, 158, 11, 0.16) !important;
+  color: #FBBF24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+[data-theme="dark"] .pill--bad {
+  background: rgba(244, 63, 94, 0.16) !important;
+  color: #FB7185 !important;
+  border: 1px solid rgba(244, 63, 94, 0.3) !important;
+}
+[data-theme="dark"] .delta--good {
+  color: #34D399 !important;
+}
+[data-theme="dark"] .delta--bad {
+  color: #FB7185 !important;
+}
+
 [data-theme="dark"] .kpi__chip {
   background: #1E293B !important;
   border-color: #334155 !important;
@@ -2930,6 +3034,179 @@ body.drawer-locked {
 [data-theme="dark"] .kpi__chip.is-curr {
   background: #042F2E !important;
   border-color: #14B8A6 !important;
+}
+
+/* Trend Controls & Summary */
+[data-theme="dark"] #trendToggles {
+  background: #151F32 !important;
+  border: 1px solid #1E293B !important;
+}
+[data-theme="dark"] #trendToggles .seg__btn {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] #trendToggles .seg__btn:hover {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] #trendToggles .seg__btn[aria-pressed="true"] {
+  background: #1E293B !important;
+  color: #F8FAFC !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .trend-stats-strip .trend-stat-card {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+}
+[data-theme="dark"] .trend-stat-card__lbl,
+[data-theme="dark"] .trend-stat-card__sub {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .trend-summary-note {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+  color: #94A3B8 !important;
+}
+
+/* INSIGHT UTAMA (Sangat Selaras, Hilangkan White Patch) */
+[data-theme="dark"] .ins-card {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+  color: #F1F5F9 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+}
+[data-theme="dark"] .ins-card:hover {
+  background: #1A2844 !important;
+  border-color: #2E405E !important;
+  transform: translateY(-2px) !important;
+}
+[data-theme="dark"] .ins-card__title {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .ins-card__text {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .ins-card__action {
+  color: #2DD4BF !important;
+}
+[data-theme="dark"] .ins-card__action:hover {
+  color: #5EEAD4 !important;
+}
+[data-theme="dark"] .ins-badge--urgent {
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #F87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+[data-theme="dark"] .ins-badge--info {
+  background: rgba(59, 130, 246, 0.16) !important;
+  color: #60A5FA !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+[data-theme="dark"] .ins-badge--warn {
+  background: rgba(245, 158, 11, 0.16) !important;
+  color: #FBBF24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+
+/* Perbandingan Program Studi & Topik */
+[data-theme="dark"] .fbar {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+}
+[data-theme="dark"] .fbar:hover {
+  background: #1A2844 !important;
+}
+[data-theme="dark"] .fbar.is-sel {
+  background: #1E293B !important;
+  border-color: var(--c) !important;
+  box-shadow: 0 0 0 2px var(--c) !important;
+}
+[data-theme="dark"] .fbar__name {
+  color: #E2E8F0 !important;
+}
+[data-theme="dark"] .fbar__val {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .fbar__track {
+  background: #1E293B !important;
+}
+[data-theme="dark"] .fbars__legend {
+  color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .topic {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+}
+[data-theme="dark"] .topic.is-sel {
+  background: #1E293B !important;
+  border-color: #0D9488 !important;
+}
+[data-theme="dark"] .topic__name {
+  color: #E2E8F0 !important;
+}
+[data-theme="dark"] .topic__track {
+  background: #1E293B !important;
+}
+[data-theme="dark"] .topics__legend {
+  color: #94A3B8 !important;
+}
+
+/* Profiling Klaster */
+[data-theme="dark"] .profile {
+  background: #0F172A !important;
+  border-color: #1E293B !important;
+  color: #F1F5F9 !important;
+}
+[data-theme="dark"] .profile.is-selected {
+  background: #151F32 !important;
+  border-color: var(--c) !important;
+}
+[data-theme="dark"] .profile h4 {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .profile__need {
+  background: #090E1A !important;
+  border-color: #1E293B !important;
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .profile__stats li {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+}
+[data-theme="dark"] .profile__stats b {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .lpa-note {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .card__badge {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+  color: #2DD4BF !important;
+}
+
+/* Student Voice */
+[data-theme="dark"] .voice-stat {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+}
+[data-theme="dark"] .voice-stat__val {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .voice-stat__lbl {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .voice-chat__quick .quick-chip {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+  color: #CBD5E1 !important;
+}
+[data-theme="dark"] .voice-chat__quick .quick-chip:hover {
+  background: #1E293B !important;
+  border-color: #0D9488 !important;
+  color: #2DD4BF !important;
 }
 
 /* Select, Segments, Badges & Buttons */
@@ -3081,6 +3358,58 @@ body.drawer-locked {
   background: #151F32 !important;
   border-color: #1E293B !important;
   color: #2DD4BF !important;
+}
+
+/* Modal Dokumen Laporan Rekomendasi in Dark Mode */
+[data-theme="dark"] .reco-report-sheet {
+  background: #0F172A !important;
+  color: #F1F5F9 !important;
+  border: 1px solid #1E293B !important;
+}
+[data-theme="dark"] .reco-report-toolbar {
+  background: #0B1120 !important;
+  border-color: #1E293B !important;
+}
+[data-theme="dark"] .reco-report-toolbar__title {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .reco-report-content {
+  background: #0F172A !important;
+  color: #F1F5F9 !important;
+}
+[data-theme="dark"] .doc-header__title h2 {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .doc-header__meta {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .doc-header__meta b {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .doc-exec-card {
+  background: #151F32 !important;
+  border-color: #1E293B !important;
+}
+[data-theme="dark"] .doc-exec-card__lbl {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .doc-table th {
+  background: #0F766E !important;
+  color: #FFFFFF !important;
+}
+[data-theme="dark"] .doc-table td {
+  border-color: #1E293B !important;
+  color: #CBD5E1 !important;
+}
+[data-theme="dark"] .doc-table tr:nth-child(even) td {
+  background: #131E32 !important;
+}
+[data-theme="dark"] .doc-sign-box {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .doc-sign-name {
+  color: #F8FAFC !important;
+  border-color: #334155 !important;
 }
 
 /* Landing Page Hero in Dark Mode */
