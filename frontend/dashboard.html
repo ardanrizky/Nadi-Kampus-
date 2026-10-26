@@ -16,7 +16,7 @@
       document.documentElement.style.colorScheme = t;
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20261026_fixed_desktop_v4" />
+  <link rel="stylesheet" href="css/style.css?v=20261026_topbar_compact_v5" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -1043,6 +1043,109 @@
         background: #151F32 !important;
         border-color: #1E293B !important;
         color: #CBD5E1 !important;
+      }
+
+      /* 4. Topbar Header Desktop: Rapi, Pas di Layar, Anti-Overflow */
+      .topbar-right-group,
+      .mobile-theme-btn,
+      .mobile-menu-btn,
+      .mobile-brand-link,
+      .mobile-quick-data-btn {
+        display: none !important;
+      }
+      .app-topbar {
+        padding: 10px 24px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+      }
+      .app-topbar__nav-row {
+        width: auto !important;
+        flex: 0 1 auto !important;
+        min-width: 0 !important;
+      }
+      .topbar-left-group {
+        min-width: 0 !important;
+      }
+      .app-topbar__crumb {
+        display: flex !important;
+        min-width: 0 !important;
+      }
+      .crumb-title {
+        font-size: 16px !important;
+        white-space: nowrap !important;
+      }
+      .app-topbar__actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important;
+        flex-wrap: nowrap !important;
+        min-width: 0 !important;
+      }
+      .app-badge {
+        padding: 5px 12px !important;
+        font-size: 12px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+      }
+      .app-topbar__actions .select--app {
+        padding: 3px 8px 3px 12px !important;
+        flex-shrink: 1 !important;
+      }
+      .app-topbar__actions .select--app span {
+        font-size: 12.5px !important;
+      }
+      .app-topbar__actions .select--app select {
+        font-size: 12.5px !important;
+        padding: 6px 28px 6px 8px !important;
+        max-width: 180px !important;
+        text-overflow: ellipsis !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+      }
+      .app-topbar__btn-group {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        flex-shrink: 0 !important;
+      }
+      .app-topbar__btn-group .btn {
+        padding: 7px 14px !important;
+        font-size: 12.5px !important;
+        white-space: nowrap !important;
+        border-radius: 999px !important;
+        flex-shrink: 0 !important;
+      }
+      .theme-toggle-btn.desktop-theme-btn {
+        display: inline-flex !important;
+        width: 34px !important;
+        height: 34px !important;
+        flex-shrink: 0 !important;
+      }
+      #btnPrintReport {
+        margin-right: 0 !important;
+        flex-shrink: 0 !important;
+      }
+    }
+
+    /* Penyesuaian Responsif Layar Laptop Standar (993px - 1280px) */
+    @media (min-width: 993px) and (max-width: 1280px) {
+      .app-topbar {
+        padding: 10px 16px !important;
+        gap: 10px !important;
+      }
+      .app-badge {
+        display: none !important;
+      }
+      .app-topbar__actions .select--app select {
+        max-width: 145px !important;
       }
     }
   </style>

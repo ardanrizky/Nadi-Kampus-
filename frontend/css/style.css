@@ -2068,6 +2068,21 @@ svg { display: block; }
     position: sticky !important;
     top: 0 !important;
     z-index: 35 !important;
+    padding: 10px 24px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+  .app-topbar__nav-row {
+    width: auto !important;
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
   }
 }
 
@@ -2079,6 +2094,8 @@ svg { display: block; }
 .mobile-menu-btn,
 .mobile-brand-link,
 .mobile-quick-data-btn,
+.topbar-right-group,
+.mobile-theme-btn,
 .sidebar-close-btn,
 .sidebar-backdrop {
   display: none !important;
@@ -2088,13 +2105,6 @@ svg { display: block; }
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.app-topbar__nav-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
 }
 
 /* Ketiadaan scroll saat drawer terbuka */
