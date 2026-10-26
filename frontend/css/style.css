@@ -806,31 +806,21 @@ svg { display: block; }
 .app-sidebar {
   width: 276px;
   flex: 0 0 276px;
-  min-height: 100vh;
-  align-self: stretch;
+  height: 100vh;
+  position: sticky;
+  top: 0;
   background: #FFFFFF;
   color: var(--ink);
   display: flex;
   flex-direction: column;
-  padding: 0;
+  justify-content: space-between;
+  padding: 20px 16px;
+  box-sizing: border-box;
   border-right: 1px solid var(--line);
   box-shadow: 2px 0 20px rgba(15, 31, 61, .03);
   z-index: 40;
-  position: relative;
-  transition: width .3s var(--ease);
-}
-
-.app-sidebar__sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  max-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 16px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
+  transition: width .3s var(--ease), padding .3s;
 }
 
 .app-sidebar__top {
@@ -1859,48 +1849,42 @@ svg { display: block; }
    DESKTOP ONLY (>= 993px): 100vh Fixed Layout dengan Independent Scroll
    ========================================================= */
 @media (min-width: 993px) {
-  /* Pastikan page-app dan app-layout membentang penuh 100vh hanya di desktop */
+  /* Pastikan window dashboard desktop terkunci 100vh, hanya area konten kanan yang scroll */
+  html:has(body.page-app), body.page-app {
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
   .page-app {
     height: 100vh !important;
     overflow: hidden !important;
   }
 
   .app-layout {
-    min-height: 100vh !important;
+    height: 100vh !important;
     width: 100% !important;
+    overflow: hidden !important;
     display: flex !important;
-    align-items: stretch !important;
   }
 
-  /* Sidebar kiri memanjang penuh mengikuti tinggi halaman tanpa bolong */
+  /* Sidebar kiri selalu 100vh utuh, border-right rapi dari atas ke bawah tanpa bolong */
   .app-sidebar {
-    width: 276px;
-    flex: 0 0 276px;
-    height: auto !important;
-    min-height: 100vh !important;
-    max-height: none !important;
-    border-right: 1px solid var(--line) !important;
-    background: #FFFFFF !important;
-    align-self: stretch !important;
-    position: relative !important;
-    box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03) !important;
-    z-index: 40 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-    transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), flex .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  }
-
-  .app-sidebar__sticky {
-    position: sticky !important;
-    top: 0 !important;
+    width: 276px !important;
+    flex: 0 0 276px !important;
     height: 100vh !important;
     max-height: 100vh !important;
+    border-right: 1px solid var(--line) !important;
+    background: #FFFFFF !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
     padding: 20px 16px !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03) !important;
+    z-index: 40 !important;
+    overflow: hidden !important;
+    transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), flex .3s cubic-bezier(0.16, 1, 0.3, 1), padding .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
   /* Tombol Toggle Collapse: Tampil normal di header samping logo */
@@ -1930,12 +1914,8 @@ svg { display: block; }
   .app-sidebar.is-collapsed {
     width: 76px !important;
     flex: 0 0 76px !important;
-    padding: 0 !important;
-    margin-left: 0 !important;
-  }
-
-  .app-sidebar.is-collapsed .app-sidebar__sticky {
     padding: 18px 8px !important;
+    margin-left: 0 !important;
   }
 
   .app-sidebar.is-collapsed .brand__text,
