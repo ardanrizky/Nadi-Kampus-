@@ -402,7 +402,7 @@ svg { display: block; }
 /* Profil */
 .lpa-note { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .lpa-note span { background: var(--mint); color: var(--em-800); border-radius: 999px; padding: 6px 14px; font-size: 13px; }
-.profiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
+.profiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 20px; }
 .pcard {
   --c: var(--em-600);
   position: relative; text-align: left; background: #fff; border: 1.5px solid var(--line); border-radius: var(--r-card);
@@ -1093,6 +1093,96 @@ svg { display: block; }
   background: #FEF2F2;
   color: #B91C1C;
   border: 1px solid #FECACA;
+}
+
+/* Sidebar Cluster Summary (Mengisi ruang tengah sidebar agar selaras & informatif) */
+.sidebar-cluster-summary {
+  margin-top: 14px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background .2s, border-color .2s;
+}
+.sidebar-cluster-summary:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+}
+.sc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sc-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sc-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #E0F2FE;
+  color: #0369A1;
+}
+.sc-items {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.sc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+}
+.sc-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 7px;
+  flex-shrink: 0;
+}
+.sc-name {
+  color: #334155;
+  font-weight: 500;
+  flex: 1;
+}
+.sc-val {
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.sc-footer {
+  padding-top: 6px;
+  border-top: 1px dashed #E2E8F0;
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .sidebar-cluster-summary {
+  background: #0B1120 !important;
+  border-color: #1E293B !important;
+}
+[data-theme="dark"] .sc-title {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .sc-tag {
+  background: #1E293B !important;
+  color: #38BDF8 !important;
+}
+[data-theme="dark"] .sc-name {
+  color: #E2E8F0 !important;
+}
+[data-theme="dark"] .sc-footer {
+  border-top-color: #1E293B !important;
+  color: #94A3B8 !important;
 }
 
 /* Sidebar Bottom: Widget Monitor Denyut Kampus */
@@ -1874,7 +1964,7 @@ svg { display: block; }
     background: #FFFFFF !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    position: relative !important;
+    position: sticky !important;
     top: 0 !important;
     bottom: 0 !important;
     box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03) !important;
@@ -1921,6 +2011,7 @@ svg { display: block; }
   .app-sidebar.is-collapsed .cluster-mini-pips,
   .app-sidebar.is-collapsed .nlp-soundwave,
   .app-sidebar.is-collapsed .prio-counter,
+  .app-sidebar.is-collapsed .sidebar-cluster-summary,
   .app-sidebar.is-collapsed .campus-ekg-card,
   .app-sidebar.is-collapsed .app-back-btn__text {
     display: none !important;
@@ -3914,7 +4005,8 @@ body.drawer-locked {
 .doc-header__logo {
   height: 48px;
   width: auto;
-  filter: grayscale(100%) contrast(120%);
+  filter: none !important;
+  object-fit: contain;
 }
 .doc-header__title h2 {
   font-size: 16px;
@@ -4006,30 +4098,6 @@ body.drawer-locked {
 }
 .doc-table tr:nth-child(even) td {
   background: #F8FAFC;
-}
-.doc-table .prio-badge {
-  display: inline-block;
-  padding: 2px 7px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-.doc-table .prio-tinggi {
-  background: #000000 !important;
-  color: #FFFFFF !important;
-  border: 1px solid #000000 !important;
-}
-.doc-table .prio-sedang {
-  background: #FFFFFF !important;
-  color: #000000 !important;
-  border: 1.5px solid #000000 !important;
-}
-.doc-table .prio-rendah {
-  background: #F1F5F9 !important;
-  color: #334155 !important;
-  border: 1px solid #94A3B8 !important;
 }
 
 /* Kolom Tanda Tangan Resmi Pengesahan */
