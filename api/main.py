@@ -165,10 +165,10 @@ for _p in PROFILE_METADATA:
 
 
 class PredictStudentProfileRequest(BaseModel):
-    wellbeing: float = Field(..., ge=1, le=5)
-    academic: float = Field(..., ge=1, le=5)
-    social: float = Field(..., ge=1, le=5)
-    career: float = Field(..., ge=1, le=5)
+    wellbeing: float = Field(..., ge=0, le=100)
+    academic: float = Field(..., ge=0, le=100)
+    social: float = Field(..., ge=0, le=100)
+    career: float = Field(..., ge=0, le=100)
 
 
 @app.get("/api/v1/respondents")
@@ -236,10 +236,14 @@ def get_respondents():
 def predict_profile(req: PredictStudentProfileRequest):
     """
     Memprediksi profil mahasiswa menggunakan model GMM/LPA terkunci (v1).
-    Input: skor rata-rata WB, ACD, SOC, CAR pada skala 1-5.
+    Input: skor rata-rata WB, ACD, SOC, CAR pada skala 1-5 atau 0-100.
     """
     try:
-        assigned_profile_id = label_profile(req.wellbeing, req.academic, req.social, req.career)
+        wb = req.wellbeing / 20.0 if req.wellbeing > 5.0 else req.wellbeing
+        acd = req.academic / 20.0 if req.academic > 5.0 else req.academic
+        soc = req.social / 20.0 if req.social > 5.0 else req.social
+        car = req.career / 20.0 if req.career > 5.0 else req.career
+        assigned_profile_id = label_profile(wb, acd, soc, car)
         matched_profile = next(p for p in PROFILE_METADATA if p["profile_id"] == assigned_profile_id)
 
         return {

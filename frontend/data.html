@@ -496,8 +496,8 @@
         </div>
         <div class="portal-kpi-card">
           <div class="lbl">Model Klastering</div>
-          <div class="val" style="font-size: 18px; margin-top: 8px;">LPA — GMM (k=5)</div>
-          <div class="sub">Covariance: Full</div>
+          <div class="val" style="font-size: 18px; margin-top: 8px;">LPA — GMM (k=3)</div>
+          <div class="sub">Covariance: Diag</div>
         </div>
         <div class="portal-kpi-card">
           <div class="lbl">Program Studi Terpetakan</div>
@@ -570,7 +570,7 @@
         </div>
 
         <h4 style="font-size: 15px; font-weight: 700; color: #0F1F3D; margin-bottom: 12px;">
-          Distribusi 5 Profil LPA-GMM Data Baru:
+          Distribusi 3 Profil LPA-GMM Data Baru:
         </h4>
         <div class="profile-breakdown-grid" id="profileBreakdownGrid">
           <!-- Diisi dinamis via JS -->
@@ -645,11 +645,9 @@
       let selectedFile = null;
 
       const PROFILES_META = {
-        1: { name: 'Sosial Kuat, Akademik Tertekan', color: '#0284C7', bg: '#E0F2FE' },
-        2: { name: 'Wellbeing & Akademik Positif (Thriving)', color: '#0D9488', bg: '#CCFBF1' },
-        3: { name: 'Adaptasi Moderat (Mayoritas)', color: '#6366F1', bg: '#EEF2FF' },
-        4: { name: 'Sangat Rentan (High Risk)', color: '#E11D48', bg: '#FFE4E6' },
-        5: { name: 'Wellbeing Optimal & Unggul', color: '#D97706', bg: '#FEF3C7' }
+        1: { name: 'Performa Rendah & Butuh Perhatian (Vulnerable)', color: '#E11D48', bg: '#FFE4E6' },
+        2: { name: 'Adaptasi Sedang (Kelompok Stabil)', color: '#6366F1', bg: '#EEF2FF' },
+        3: { name: 'Wellbeing & Performa Tinggi (Thriving)', color: '#0D9488', bg: '#CCFBF1' }
       };
 
       // 1. Cek Sesi Auth
@@ -789,7 +787,7 @@
 
         // Render profile distribution
         profileBreakdownGrid.innerHTML = '';
-        for (let pId = 1; pId <= 5; pId++) {
+        for (let pId = 1; pId <= 3; pId++) {
           const cnt = data.profile_distribution[pId] || 0;
           const meta = PROFILES_META[pId];
           const div = document.createElement('div');

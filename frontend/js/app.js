@@ -33,7 +33,7 @@
     },
     profile: {
       title: 'Student Profiling',
-      sub: 'Pemetaan 5 profil mahasiswa berdasarkan tingkat kesejahteraan dan kondisi akademik.'
+      sub: 'Pemetaan 3 profil mahasiswa berdasarkan tingkat kesejahteraan dan kondisi akademik.'
     },
     voice: {
       title: 'Student Voice',
@@ -73,7 +73,7 @@
         name: 'seluruh kampus',
         n: total,
         scores: {},
-        profile: (window.CLUSTERS || [0, 1, 2, 3, 4]).map((_, i) => wavg(f => (f.profile && f.profile[i] !== undefined ? f.profile[i] : 0))),
+        profile: (window.CLUSTERS || [0, 1, 2]).map((_, i) => wavg(f => (f.profile && f.profile[i] !== undefined ? f.profile[i] : 0))),
         topicW: TOPICS.map((_, i) => wavg(f => f.topicW[i])),
         trend: {}
       };
@@ -414,7 +414,7 @@
             <button type="button" class="pd__pager-btn" data-profile="${(state.profile - 1 + CLUSTERS.length) % CLUSTERS.length}" title="Profil Sebelumnya" aria-label="Profil Sebelumnya">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
-            <span class="pd__pager-idx">P${p.cluster} (${state.profile + 1}/5)</span>
+            <span class="pd__pager-idx">P${p.cluster} (${state.profile + 1}/${CLUSTERS.length})</span>
             <button type="button" class="pd__pager-btn" data-profile="${(state.profile + 1) % CLUSTERS.length}" title="Profil Berikutnya" aria-label="Profil Berikutnya">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
@@ -1341,8 +1341,8 @@
       const res = await fetch('/api/v1/profiles');
       if (!res.ok) return;
       const data = await res.json();
-      if (data && data.profiles && data.profiles.length === 5) {
-        console.log('[NadiKampus Live API] Terhubung ke FastAPI Backend: 5 Profil LPA-GMM aktif.');
+      if (data && data.profiles && data.profiles.length === 3) {
+        console.log('[NadiKampus Live API] Terhubung ke FastAPI Backend: 3 Profil LPA-GMM aktif.');
       }
     } catch (e) {
       // Offline / Static File mode: data.js bekerja sebagai fallback provider tanpa error

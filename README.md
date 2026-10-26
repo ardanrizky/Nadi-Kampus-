@@ -1,24 +1,23 @@
 # NadiKampus
 
-Aplikasi web analitik untuk memetakan kondisi psikososial, tekanan akademik, dan aspirasi mahasiswa berbasis data survei. Sistem ini menggabungkan algoritma K-Means Clustering untuk segmentasi kelompok mahasiswa dan Natural Language Processing (NLP) untuk menganalisis sentimen serta topik dari komentar mahasiswa.
+Aplikasi web analitik untuk memetakan kondisi psikososial, tekanan akademik, dan aspirasi mahasiswa berbasis data survei. Sistem ini menggabungkan algoritma Latent Profile Analysis (LPA via Gaussian Mixture Model) untuk segmentasi kelompok mahasiswa dan Natural Language Processing (NLP) untuk menganalisis sentimen serta topik dari komentar mahasiswa.
 
 ## Fitur
 
-- Segmentasi Mahasiswa (K-Means Clustering): Mengelompokkan data responden ke dalam 4 klaster profil risiko dan potensi mahasiswa dengan visualisasi sebaran PCA 2D.
+- Segmentasi Mahasiswa (LPA via GMM, $k=3$): Mengelompokkan data responden ke dalam 3 profil risiko dan potensi mahasiswa dengan visualisasi sebaran PCA 2D.
 - Analisis Sentimen & Topik (NLP): Mengolah feedback dan keluhan terbuka mahasiswa untuk mengetahui sentimen umum (positif, netral, negatif).
-- Dashboard Interaktif: Menampilkan visualisasi data, sebaran klaster mahasiswa per fakultas, grafik proporsi, dan rekomendasi tindakan.
-- Backend API (FastAPI): Layanan API lokal untuk melayani kebutuhan data frontend dan inferensi klaster baru.
+- Dashboard Interaktif: Menampilkan visualisasi data, sebaran profil mahasiswa per program studi, grafik proporsi, dan rekomendasi program intervensi.
+- Backend API (FastAPI): Layanan API lokal untuk melayani kebutuhan data frontend dan inferensi profil baru.
 
-## Pembagian Klaster Mahasiswa
+## Pembagian Profil Mahasiswa
 
-Berdasarkan hasil pemodelan K-Means ($k=4$), profil mahasiswa dikelompokkan menjadi 4 kategori:
+Berdasarkan hasil pemodelan LPA-GMM ($k=3$), profil mahasiswa dikelompokkan menjadi 3 kategori:
 
-| Klaster | Nama Klaster | Persentase | Karakteristik Utama |
+| Profil | Nama Profil | Persentase | Karakteristik Utama |
 |---|---|---|---|
-| Klaster 1 | Academic Pressure | 27% | Mengalami beban tugas tinggi dan tekanan perkuliahan |
-| Klaster 2 | Career Concern | 24% | Khawatir akan prospek karir dan kesiapan kerja |
-| Klaster 3 | Social Adaptation | 18% | Kesulitan dalam adaptasi lingkungan dan relasi pertemanan |
-| Klaster 4 | Balanced Wellbeing | 31% | Memiliki keseimbangan akademik dan adaptasi yang baik |
+| Profil 1 | Vulnerable / Low Adaptation | 46.3% | Skor relatif terendah pada wellbeing, akademik, dan kesiapan karier; membutuhkan pendampingan prioritas |
+| Profil 2 | Moderate / Average Adaptation | 40.9% | Kelompok stabil dengan adaptasi dan performa seimbang di seluruh dimensi |
+| Profil 3 | Thriving & High Functioning | 12.8% | Skor relatif tertinggi dengan dukungan sosial optimal dan performa akademik prima |
 
 ## Teknologi yang Digunakan
 
