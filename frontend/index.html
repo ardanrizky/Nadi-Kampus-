@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
   <script>
     (function() {
-      var t = localStorage.getItem('nk_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var t = localStorage.getItem('nk_theme') || 'light';
       document.documentElement.setAttribute('data-theme', t);
       document.documentElement.style.colorScheme = t;
     })();
@@ -201,7 +201,7 @@
       </a>
       <nav class="nav__links" aria-label="Navigasi utama">
         <a href="index.html" class="is-current">Beranda</a>
-        <a href="dashboard.html">Explore Dashboard</a>
+        <a href="dashboard.html">Dashboard</a>
         <a href="data.html" title="Kelola & Ingest Data Survei (Admin Only)">Data <span style="font-size: 12px; opacity: 0.8;">🔒</span></a>
       </nav>
       <button class="theme-toggle-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
@@ -220,7 +220,7 @@
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       </button>
-      <a class="btn btn--navy btn--sm" href="dashboard.html">Explore Dashboard</a>
+      <a class="btn btn--navy btn--sm" href="dashboard.html">Explore Dashboard &rarr;</a>
     </div>
   </header>
 
@@ -237,12 +237,12 @@
           </h1>
           <p class="hero__sub">Analitik wellbeing dan permasalahan mahasiswa untuk mendukung keputusan kampus berbasis data.</p>
           <div class="hero__cta">
-            <a class="btn btn--navy" href="dashboard.html">Explore Dashboard</a>
+            <a class="btn btn--navy" href="dashboard.html">Explore Dashboard &rarr;</a>
           </div>
           <ul class="hero__facts" aria-label="Ringkasan cakupan">
             <li><strong>119</strong><span>responden survei</span></li>
             <li><strong>18</strong><span>program studi</span></li>
-            <li><strong>5</strong><span>klaster mahasiswa</span></li>
+            <li><strong>3</strong><span>profil mahasiswa</span></li>
           </ul>
         </div>
 
