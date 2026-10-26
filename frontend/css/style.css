@@ -1849,28 +1849,20 @@ svg { display: block; }
    DESKTOP ONLY (>= 993px): 100vh Fixed Layout dengan Independent Scroll
    ========================================================= */
 @media (min-width: 993px) {
-  /* Pastikan window dashboard desktop terkunci 100vh, hanya area konten kanan yang scroll */
-  html:has(body.page-app), body.page-app {
-    height: 100% !important;
-    overflow: hidden !important;
-  }
-
-  .page-app {
-    height: 100vh !important;
-    overflow: hidden !important;
-  }
-
   .app-layout {
-    height: 100vh !important;
+    display: block !important;
     width: 100% !important;
-    overflow: hidden !important;
-    display: flex !important;
+    position: relative !important;
+    min-height: 100vh !important;
   }
 
-  /* Sidebar kiri selalu 100vh utuh, border-right rapi dari atas ke bawah tanpa bolong */
+  /* Sidebar kiri fixed permanen setinggi viewport, tidak bisa bergerak atau bolong saat discroll */
   .app-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
     width: 276px !important;
-    flex: 0 0 276px !important;
     height: 100vh !important;
     max-height: 100vh !important;
     border-right: 1px solid var(--line) !important;
@@ -1880,11 +1872,22 @@ svg { display: block; }
     justify-content: space-between !important;
     padding: 20px 16px !important;
     box-sizing: border-box !important;
-    position: relative !important;
     box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03) !important;
-    z-index: 40 !important;
-    overflow: hidden !important;
-    transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), flex .3s cubic-bezier(0.16, 1, 0.3, 1), padding .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    z-index: 100 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    transform: none !important;
+    transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), padding .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Area konten kanan bergeser presisi di samping sidebar */
+  .app-main {
+    margin-left: 276px !important;
+    width: calc(100% - 276px) !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transition: margin-left .3s cubic-bezier(0.16, 1, 0.3, 1), width .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
   /* Tombol Toggle Collapse: Tampil normal di header samping logo */
@@ -1916,6 +1919,11 @@ svg { display: block; }
     flex: 0 0 76px !important;
     padding: 18px 8px !important;
     margin-left: 0 !important;
+  }
+
+  .app-sidebar.is-collapsed ~ .app-main {
+    margin-left: 76px !important;
+    width: calc(100% - 76px) !important;
   }
 
   .app-sidebar.is-collapsed .brand__text,

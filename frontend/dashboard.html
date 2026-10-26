@@ -16,7 +16,7 @@
       document.documentElement.style.colorScheme = t;
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20261026_monochrome_doc_v3" />
+  <link rel="stylesheet" href="css/style.css?v=20261026_fixed_desktop_v4" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -872,6 +872,62 @@
       background: rgba(16, 185, 129, 0.16) !important;
       color: #34D399 !important;
       border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    }
+
+    /* =========================================================
+       DESKTOP (>= 993px): SIDEBAR FIXED PERMANEN - ANTI-KOSONG
+       Sidebar kiri terkunci absolut di viewport kiri (top:0, left:0, bottom:0)
+       Logo & menu di atas, monitor di bawah, tidak akan pernah bergeser saat discroll
+       ========================================================= */
+    @media (min-width: 993px) {
+      .app-layout {
+        display: block !important;
+        width: 100% !important;
+        position: relative !important;
+        min-height: 100vh !important;
+      }
+      .app-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: 276px !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        background: #FFFFFF !important;
+        border-right: 1px solid #E2E8F0 !important;
+        box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03) !important;
+        z-index: 100 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        padding: 20px 16px !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        transform: none !important;
+        transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), padding .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      .app-main {
+        margin-left: 276px !important;
+        width: calc(100% - 276px) !important;
+        min-height: 100vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        transition: margin-left .3s cubic-bezier(0.16, 1, 0.3, 1), width .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      .app-sidebar.is-collapsed {
+        width: 76px !important;
+        padding: 18px 8px !important;
+      }
+      .app-sidebar.is-collapsed ~ .app-main {
+        margin-left: 76px !important;
+        width: calc(100% - 76px) !important;
+      }
+      [data-theme="dark"] .app-sidebar {
+        background: #0B1120 !important;
+        border-right: 1px solid #1E293B !important;
+      }
     }
   </style>
 </head>
