@@ -16,7 +16,7 @@
       document.documentElement.style.colorScheme = t;
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20261012_mobile_fix_v8" />
+  <link rel="stylesheet" href="css/style.css?v=20261026_dark_harmonized_v2" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -385,10 +385,219 @@
         background: #0F172A !important;
         border-color: #1E293B !important;
       }
-      [data-theme="dark"] .card {
+      [data-theme="dark"] .card,
+      [data-theme="dark"] .pcard {
         background: #0F172A !important;
         border-color: #1E293B !important;
       }
+    }
+
+    /* GLOBAL DARK MODE HARMONY (Desktop & Mobile) */
+    [data-theme="dark"] body.page-app {
+      background: #070B14 !important;
+      color: #F1F5F9 !important;
+    }
+    [data-theme="dark"] .app-sidebar {
+      background: #0B1120 !important;
+      border-right: 1px solid #1E293B !important;
+    }
+    [data-theme="dark"] .app-topbar {
+      background: rgba(11, 17, 32, 0.94) !important;
+      border-bottom: 1px solid #1E293B !important;
+    }
+    [data-theme="dark"] .card,
+    [data-theme="dark"] .kpi {
+      background: #0F172A !important;
+      border-color: #1E293B !important;
+      color: #F1F5F9 !important;
+    }
+    /* 5 Kartu Profil Mahasiswa (Student Profiling) */
+    [data-theme="dark"] .pcard {
+      background: #0F172A !important;
+      border: 1.5px solid #1E293B !important;
+      color: #F1F5F9 !important;
+      box-shadow: 0 4px 18px -4px rgba(0, 0, 0, 0.4) !important;
+    }
+    [data-theme="dark"] .pcard:hover {
+      background: #151F32 !important;
+      border-color: var(--c) !important;
+      box-shadow: 0 16px 32px -16px var(--c) !important;
+    }
+    [data-theme="dark"] .pcard.is-sel {
+      background: #151F32 !important;
+      border-color: var(--c) !important;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 30%, transparent) !important;
+    }
+    [data-theme="dark"] .pcard h4 {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pcard__badge {
+      background: #1E293B !important;
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] .pcard__n {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pcard__bar {
+      background: #1E293B !important;
+    }
+    [data-theme="dark"] .lpa-note span {
+      background: rgba(45, 212, 191, 0.12) !important;
+      color: #5EEAD4 !important;
+      border: 1px solid rgba(45, 212, 191, 0.25) !important;
+    }
+    /* Student Voice (Sentimen & Highlight) */
+    [data-theme="dark"] .sent-overview {
+      border-top-color: #1E293B !important;
+    }
+    [data-theme="dark"] .sent-kpi {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+    }
+    [data-theme="dark"] .sent-kpi__lbl {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .sent-kpi__val {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .sent-kpi__sub {
+      color: #64748B !important;
+    }
+    [data-theme="dark"] .sent-highlight {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+    }
+    [data-theme="dark"] .sent-highlight__icon {
+      color: #2DD4BF !important;
+    }
+    [data-theme="dark"] .sent-highlight__text {
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .sent-highlight__text strong {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .lg {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .lg:hover {
+      background: #1E293B !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .lg.is-on {
+      background: #1E293B !important;
+      border-color: #0D9488 !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .quote {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .quote p {
+      color: #F1F5F9 !important;
+    }
+    [data-theme="dark"] .quote__meta {
+      border-top-color: #1E293B !important;
+    }
+    [data-theme="dark"] .quote__topic {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .quote__sent--pos {
+      background: rgba(16, 185, 129, 0.16) !important;
+      color: #34D399 !important;
+    }
+    [data-theme="dark"] .quote__sent--neu {
+      background: rgba(148, 163, 184, 0.16) !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .quote__sent--neg {
+      background: rgba(244, 63, 94, 0.16) !important;
+      color: #FB7185 !important;
+    }
+    /* Detail Profil Mahasiswa (Tabs P1-P5) */
+    [data-theme="dark"] .pd__nav-bar {
+      border-bottom-color: #1E293B !important;
+    }
+    [data-theme="dark"] .pd__tab {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pd__tab:hover {
+      background: #1E293B !important;
+      border-color: #334155 !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__tab.is-active {
+      background: #1E293B !important;
+      border-color: var(--tc, #2DD4BF) !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__tab-label {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__tab-name {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pd__tab.is-active .pd__tab-name {
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] .pd__tab-pct {
+      background: #0B1120 !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .pd__tab.is-active .pd__tab-pct {
+      background: rgba(45, 212, 191, 0.16) !important;
+      color: #5EEAD4 !important;
+    }
+    [data-theme="dark"] .pd__nav-pager {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+    }
+    [data-theme="dark"] .pd__pager-btn {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pd__pager-btn:hover {
+      background: #1E293B !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__pager-idx {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__traits li {
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] .pd__means {
+      border-top-color: #1E293B !important;
+      border-bottom-color: #1E293B !important;
+    }
+    [data-theme="dark"] .mean b {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .mean__track {
+      background: #1E293B !important;
+    }
+    [data-theme="dark"] .reco__why {
+      background: #151F32 !important;
+      border: 1px solid #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .prio--tinggi {
+      background: rgba(244, 63, 94, 0.16) !important;
+      color: #FB7185 !important;
+      border: 1px solid rgba(244, 63, 94, 0.3) !important;
+    }
+    [data-theme="dark"] .prio--sedang {
+      background: rgba(245, 158, 11, 0.16) !important;
+      color: #FBBF24 !important;
+      border: 1px solid rgba(245, 158, 11, 0.3) !important;
+    }
+    [data-theme="dark"] .prio--rendah {
+      background: rgba(16, 185, 129, 0.16) !important;
+      color: #34D399 !important;
+      border: 1px solid rgba(16, 185, 129, 0.3) !important;
     }
   </style>
 </head>

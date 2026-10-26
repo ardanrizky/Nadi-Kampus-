@@ -1340,6 +1340,13 @@
     }
   }
 
+  window.addEventListener('nk_theme_change', () => {
+    if (state.view === 'profile') renderProfile();
+    else if (state.view === 'voice') renderVoice();
+    else if (state.view === 'trend') renderTrend();
+    else if (state.view === 'overview') renderOverview();
+  });
+
   loadSupabaseVoice();
   initSupabaseRealtime();
   syncWithLiveAPI();
