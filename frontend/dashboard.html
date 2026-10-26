@@ -148,20 +148,127 @@
         gap: 10px !important;
         box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03) !important;
       }
+      .topbar-left-group {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+      }
       .mobile-menu-btn {
         display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 10px !important;
+        border: 1px solid #E2E8F0 !important;
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        flex-shrink: 0 !important;
+      }
+      .mobile-menu-btn svg {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        min-height: 22px !important;
+        display: block !important;
+        stroke: currentColor !important;
       }
       .mobile-brand-link {
         display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        text-decoration: none !important;
+      }
+      .topbar-right-group {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+      .mobile-theme-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 50% !important;
+        border: 1px solid #E2E8F0 !important;
+        background: #FFFFFF !important;
+        color: #64748B !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        flex-shrink: 0 !important;
+      }
+      .mobile-theme-btn svg {
+        width: 18px !important;
+        height: 18px !important;
+        min-width: 18px !important;
+        min-height: 18px !important;
+        display: block !important;
+        stroke: currentColor !important;
+      }
+      .desktop-theme-btn {
+        display: none !important;
       }
       .mobile-quick-data-btn {
         display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        padding: 7px 12px !important;
+        border-radius: 999px !important;
+        background: #F0FDFA !important;
+        border: 1px solid #CCFBF1 !important;
+        color: #0D9488 !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
       }
       .app-topbar__crumb {
         display: none !important;
       }
       .desktop-only-btn {
         display: none !important;
+      }
+      .app-topbar__actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+      }
+      .app-topbar__actions .app-badge {
+        display: none !important;
+      }
+      .app-topbar__actions .select--app {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        padding: 2px 8px 2px 10px !important;
+      }
+      .app-topbar__actions .select--app select {
+        width: 100% !important;
+        font-size: 13px !important;
+        padding: 6px 28px 6px 6px !important;
+      }
+      .app-topbar__btn-group {
+        display: inline-flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+      }
+      #btnPrintReport {
+        padding: 8px 14px !important;
+        font-size: 12.5px !important;
+        white-space: nowrap !important;
+        border-radius: 999px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+      }
+      #btnPrintReport svg {
+        width: 15px !important;
+        height: 15px !important;
+        min-width: 15px !important;
+        min-height: 15px !important;
+        display: block !important;
       }
 
       /* KPI Cards Grid 2x2 */
@@ -350,8 +457,175 @@
       .profiles {
         grid-template-columns: 1fr !important;
       }
+
+      /* REKOMENDASI MOBILE POLISHED */
+      .reco-banner {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 16px 14px !important;
+        gap: 14px !important;
+      }
+      .reco-banner__left {
+        width: 100% !important;
+      }
+      .reco-banner__title {
+        font-size: 16px !important;
+        line-height: 1.35 !important;
+      }
+      .reco-banner__desc {
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+      }
+      .reco-banner__actions {
+        width: 100% !important;
+      }
+      .btn--reco-pdf {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 11px 16px !important;
+        font-size: 13.5px !important;
+        box-sizing: border-box !important;
+      }
+      #recoFilter, .seg--wrap {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 4px 2px 8px !important;
+        gap: 8px !important;
+        scrollbar-width: none !important;
+        margin-bottom: 16px !important;
+      }
+      #recoFilter::-webkit-scrollbar, .seg--wrap::-webkit-scrollbar {
+        display: none !important;
+      }
+      #recoFilter .seg__btn, .seg--wrap .seg__btn {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+        font-size: 12px !important;
+        padding: 6px 14px !important;
+      }
       .recos {
         grid-template-columns: 1fr !important;
+        gap: 14px !important;
+      }
+      .reco {
+        padding: 16px 16px 16px 20px !important;
+      }
+      .reco h4 {
+        font-size: 17px !important;
+      }
+      .reco__meta {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px 12px !important;
+      }
+
+      /* MODAL LAPORAN A4 PDF DI HP */
+      .reco-report-modal {
+        padding: 8px 6px !important;
+        align-items: center !important;
+      }
+      .reco-report-sheet {
+        max-height: 94vh !important;
+        width: 100% !important;
+        border-radius: 14px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+      }
+      .reco-report-toolbar {
+        padding: 10px 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        align-items: stretch !important;
+      }
+      .reco-report-toolbar__title {
+        font-size: 13px !important;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+      }
+      .reco-report-toolbar__btns {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+      }
+      .reco-report-toolbar__btns .btn {
+        flex: 1 !important;
+        padding: 9px 12px !important;
+        font-size: 12.5px !important;
+        justify-content: center !important;
+      }
+      .reco-report-content {
+        padding: 18px 14px !important;
+        max-height: calc(94vh - 105px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .doc-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+      .doc-header__left {
+        gap: 10px !important;
+      }
+      .doc-header__logo {
+        height: 40px !important;
+      }
+      .doc-header__title h2 {
+        font-size: 14px !important;
+      }
+      .doc-header__title h3 {
+        font-size: 12px !important;
+      }
+      .doc-header__meta {
+        text-align: left !important;
+        font-size: 11px !important;
+      }
+      .doc-exec-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+      }
+      .doc-exec-card {
+        padding: 8px 10px !important;
+      }
+      .doc-exec-card__num {
+        font-size: 16px !important;
+      }
+      .doc-exec-card__lbl {
+        font-size: 9.5px !important;
+      }
+      .doc-signatures {
+        flex-direction: column !important;
+        gap: 22px !important;
+        align-items: center !important;
+      }
+      .doc-sign-box {
+        width: 100% !important;
+        max-width: 260px !important;
+      }
+      .doc-table-scroll-hint {
+        display: flex !important;
+        align-items: center !important;
+        font-size: 11.5px !important;
+        font-weight: 600 !important;
+        color: #475569 !important;
+        background: #F1F5F9 !important;
+        border: 1px dashed #CBD5E1 !important;
+        padding: 6px 10px !important;
+        border-radius: 6px !important;
+        margin-bottom: 8px !important;
+      }
+      .doc-table-wrapper {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        margin-bottom: 22px !important;
+      }
+      .doc-table {
+        min-width: 660px !important;
       }
 
       /* DARK MODE MOBILE OVERRIDES (100% Selaras & Anti-Bocor) */
@@ -715,18 +989,16 @@
       <header class="app-topbar">
         <div class="app-topbar__nav-row">
           <div class="topbar-left-group">
-            <!-- Tombol Hamburger Mobile (Seperti ETHOL PENS) -->
+            <!-- Tombol Hamburger Mobile (Dengan SVG path anti-collapse) -->
             <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Buka menu navigasi" title="Buka Menu">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
+                <path d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
             </button>
 
             <!-- Brand Logo Ringkas di Mobile Header -->
             <a class="mobile-brand-link" href="index.html" title="Kembali ke Beranda">
-              <img src="img/logo_mark.png" alt="Logo Nadi Kampus" class="mobile-brand-logo" />
+              <img src="img/logo_mark.png" alt="Logo Nadi Kampus" class="brand__logo-img mobile-brand-logo" />
               <span class="mobile-brand-title">Nadi<b>Kampus</b></span>
             </a>
 
@@ -738,14 +1010,32 @@
             </div>
           </div>
 
-          <!-- Quick Actions di Header Mobile (Data Survei) -->
-          <a href="data.html" class="mobile-quick-data-btn" title="Kelola Data Survei (Admin)">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <span>Data 🔒</span>
-          </a>
+          <!-- Quick Actions di Header Mobile (Theme Switcher + Data Survei) -->
+          <div class="topbar-right-group">
+            <button class="theme-toggle-btn mobile-theme-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
+              <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg class="theme-icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+            <a href="data.html" class="mobile-quick-data-btn" title="Kelola Data Survei (Admin)">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Data 🔒</span>
+            </a>
+          </div>
         </div>
 
         <!-- Filter & Aksi Tambahan (Desktop & Mobile) -->
@@ -762,7 +1052,7 @@
 
           <div class="app-topbar__btn-group">
             <!-- Tombol Toggle Tema Desktop -->
-            <button class="theme-toggle-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
+            <button class="theme-toggle-btn desktop-theme-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
               <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="5"></circle>
                 <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -1063,14 +1353,21 @@
   <!-- ============ MODAL LAPORAN REKOMENDASI KAMPUS (A4 PRINT & PDF READY) ============ -->
   <div class="reco-report-modal" id="recoReportModal" role="dialog" aria-modal="true" aria-labelledby="modalReportTitle" hidden>
     <div class="reco-report-sheet">
-      <!-- Toolbar Modal -->
+      <!-- Toolbar Modal Adaptif & Ramah Sentuhan HP -->
       <div class="reco-report-toolbar">
         <div class="reco-report-toolbar__title" id="modalReportTitle">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0D9488">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-          </svg>
-          <span>Pratinjau Dokumen Rekomendasi Kampus (A4 PDF)</span>
+          <div class="modal-title-left">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0D9488; flex-shrink:0;">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <span>Pratinjau Dokumen Rekomendasi (A4 PDF)</span>
+          </div>
+          <button type="button" class="modal-close-icon-btn" id="btnCloseReportModalTop" aria-label="Tutup pratinjau" title="Tutup">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6L6 18M6 6l12 12"></path>
+            </svg>
+          </button>
         </div>
         <div class="reco-report-toolbar__btns">
           <button type="button" class="btn btn--em btn--sm" id="btnPrintModalContent" title="Cetak atau simpan ke PDF">

@@ -910,23 +910,34 @@
         Dokumen ini memuat ringkasan rekomendasi program intervensi berbasis hasil pemodelan analitika data kondisi psikososial, ketahanan akademik, dan aspirasi kualitatif mahasiswa untuk semester genap 2025/2026. Disusun sebagai rujukan resmi bagi dosen wali, koordinator program studi, dan pimpinan kemahasiswaan dalam merumuskan langkah preventif dan kuratif.
       </p>
 
+      <!-- PETUNJUK GESER TABEL KHUSUS LAYAR HP -->
+      <div class="doc-table-scroll-hint">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; flex-shrink:0;">
+          <polyline points="13 17 18 12 13 7"></polyline>
+          <polyline points="6 17 11 12 6 7"></polyline>
+        </svg>
+        <span>Geser tabel ke samping untuk melihat detail PIC &amp; KPI</span>
+      </div>
+
       <!-- TABEL REKOMENDASI STANDAR RESMI AKADEMIK -->
-      <table class="doc-table">
-        <thead>
-          <tr>
-            <th style="width:4%; text-align:center;">No</th>
-            <th style="width:13%;">Prioritas</th>
-            <th style="width:25%;">Program Intervensi</th>
-            <th style="width:15%;">Sasaran Mahasiswa</th>
-            <th style="width:16%;">Dasar Analisis Data</th>
-            <th style="width:14%;">Unit PIC &amp; Durasi</th>
-            <th style="width:13%;">Indikator KPI</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rowsHtml}
-        </tbody>
-      </table>
+      <div class="doc-table-wrapper">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th style="width:4%; text-align:center;">No</th>
+              <th style="width:13%;">Prioritas</th>
+              <th style="width:25%;">Program Intervensi</th>
+              <th style="width:15%;">Sasaran Mahasiswa</th>
+              <th style="width:16%;">Dasar Analisis Data</th>
+              <th style="width:14%;">Unit PIC &amp; Durasi</th>
+              <th style="width:13%;">Indikator KPI</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+      </div>
 
       <!-- LEMBAR PENGESAHAN DOKUMEN -->
       <div class="doc-signatures">
@@ -1205,7 +1216,7 @@
       window.print();
     }
 
-    if (t.id === 'btnCloseReportModal' || t.closest('#btnCloseReportModal') || t.id === 'recoReportModal') {
+    if (t.id === 'btnCloseReportModal' || t.closest('#btnCloseReportModal') || t.id === 'btnCloseReportModalTop' || t.closest('#btnCloseReportModalTop') || t.id === 'recoReportModal') {
       e.preventDefault();
       closeRecoReportModal();
     }

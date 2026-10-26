@@ -3886,7 +3886,33 @@ body.drawer-locked {
   color: #0F172A;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
+}
+.modal-title-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.modal-close-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #64748B;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: all .2s;
+}
+.modal-close-icon-btn:hover {
+  background: #E2E8F0;
+  color: #0F172A;
 }
 .reco-report-toolbar__btns {
   display: flex;
@@ -3899,6 +3925,15 @@ body.drawer-locked {
   font-family: var(--sans);
   background: #FFFFFF;
   color: #0F172A;
+}
+.doc-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 24px;
+}
+.doc-table-scroll-hint {
+  display: none;
 }
 
 /* Kop Resmi Laporan (Hitam Putih Standar Dinas / Akademik PENS) */
