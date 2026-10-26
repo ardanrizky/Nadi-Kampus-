@@ -247,7 +247,7 @@ const Charts = (() => {
       svgEl('path', { d, fill: 'none', stroke: p.color, 'stroke-width': on ? 4 : 2.5, 'stroke-linecap': 'round',
         'stroke-linejoin': 'round', pathLength: 1, class: 'lc__path' }, g);
       dims.forEach((dm, i) => {
-        svgEl('circle', { cx: x(i), cy: y(p.means[dm.key]), r: on ? 5.5 : 3.5, fill: '#fff', stroke: p.color, 'stroke-width': 2.5 }, g);
+        svgEl('circle', { cx: x(i), cy: y(p.means[dm.key]), r: on ? 5.5 : 3.5, fill: '#fff', stroke: p.color, 'stroke-width': 2.5, class: 'pl__dot' }, g);
         if (on) {
           const t = svgEl('text', { x: x(i), y: y(p.means[dm.key]) - 12, class: 'pl__val', 'text-anchor': 'middle', fill: p.color }, g);
           t.textContent = p.means[dm.key];
@@ -304,20 +304,23 @@ const Charts = (() => {
       ...clusters.map((c, idx) => ({ id: idx, label: `P${c.cluster} (${c.count})`, color: c.color }))
     ];
     let fOffset = pad.l;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     filterPills.forEach(fp => {
       const isAct = fp.id === activeCluster || (fp.id === null && activeCluster === null);
       const pillW = fp.id === null ? 76 : 64;
       const g = svgEl('g', { style: 'cursor: pointer;' }, filterG);
       svgEl('rect', {
         x: fOffset, y: pad.t - 32, width: pillW, height: 20, rx: 10,
-        fill: isAct ? fp.color : '#F1F5F9',
-        stroke: isAct ? fp.color : '#CBD5E1',
+        class: 'sc__filter-pill' + (isAct ? ' is-act' : ''),
+        fill: isAct ? fp.color : (isDark ? '#1E293B' : '#F1F5F9'),
+        stroke: isAct ? fp.color : (isDark ? '#334155' : '#CBD5E1'),
         'stroke-width': 1
       }, g);
       const txt = svgEl('text', {
         x: fOffset + pillW / 2, y: pad.t - 18,
+        class: 'sc__filter-txt' + (isAct ? ' is-act' : ''),
         'text-anchor': 'middle', 'font-size': '10px', 'font-weight': '700',
-        fill: isAct ? '#FFFFFF' : '#475569'
+        fill: isAct ? '#FFFFFF' : (isDark ? '#CBD5E1' : '#475569')
       }, g);
       txt.textContent = fp.label;
       g.addEventListener('click', () => onPick(fp.id));

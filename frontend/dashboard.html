@@ -9,7 +9,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261012_mobile_fix_v8" />
+  <script>
+    (function() {
+      var t = localStorage.getItem('nk_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.style.colorScheme = t;
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css?v=20261026_monochrome_doc_v3" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -346,6 +353,251 @@
       .recos {
         grid-template-columns: 1fr !important;
       }
+
+      /* DARK MODE MOBILE OVERRIDES (100% Selaras & Anti-Bocor) */
+      [data-theme="dark"] body.page-app {
+        background: #070B14 !important;
+      }
+      [data-theme="dark"] .app-sidebar {
+        background: #0B1120 !important;
+        border-right: 1px solid #1E293B !important;
+      }
+      [data-theme="dark"] .sidebar-close-btn {
+        background: #151F32 !important;
+        border-color: #1E293B !important;
+        color: #CBD5E1 !important;
+      }
+      [data-theme="dark"] .app-topbar {
+        background: rgba(11, 17, 32, 0.94) !important;
+        border-bottom: 1px solid #1E293B !important;
+      }
+      [data-theme="dark"] .mobile-menu-btn {
+        background: #151F32 !important;
+        border-color: #1E293B !important;
+        color: #2DD4BF !important;
+      }
+      [data-theme="dark"] .mobile-quick-data-btn {
+        background: #042F2E !important;
+        border-color: #0D9488 !important;
+        color: #2DD4BF !important;
+      }
+      [data-theme="dark"] .kpi {
+        background: #0F172A !important;
+        border-color: #1E293B !important;
+      }
+      [data-theme="dark"] .card,
+      [data-theme="dark"] .pcard {
+        background: #0F172A !important;
+        border-color: #1E293B !important;
+      }
+    }
+
+    /* GLOBAL DARK MODE HARMONY (Desktop & Mobile) */
+    [data-theme="dark"] body.page-app {
+      background: #070B14 !important;
+      color: #F1F5F9 !important;
+    }
+    [data-theme="dark"] .app-sidebar {
+      background: #0B1120 !important;
+      border-right: 1px solid #1E293B !important;
+    }
+    [data-theme="dark"] .app-topbar {
+      background: rgba(11, 17, 32, 0.94) !important;
+      border-bottom: 1px solid #1E293B !important;
+    }
+    [data-theme="dark"] .card,
+    [data-theme="dark"] .kpi {
+      background: #0F172A !important;
+      border-color: #1E293B !important;
+      color: #F1F5F9 !important;
+    }
+    /* 5 Kartu Profil Mahasiswa (Student Profiling) */
+    [data-theme="dark"] .pcard {
+      background: #0F172A !important;
+      border: 1.5px solid #1E293B !important;
+      color: #F1F5F9 !important;
+      box-shadow: 0 4px 18px -4px rgba(0, 0, 0, 0.4) !important;
+    }
+    [data-theme="dark"] .pcard:hover {
+      background: #151F32 !important;
+      border-color: var(--c) !important;
+      box-shadow: 0 16px 32px -16px var(--c) !important;
+    }
+    [data-theme="dark"] .pcard.is-sel {
+      background: #151F32 !important;
+      border-color: var(--c) !important;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 30%, transparent) !important;
+    }
+    [data-theme="dark"] .pcard h4 {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pcard__badge {
+      background: #1E293B !important;
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] .pcard__n {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pcard__bar {
+      background: #1E293B !important;
+    }
+    [data-theme="dark"] .lpa-note span {
+      background: rgba(45, 212, 191, 0.12) !important;
+      color: #5EEAD4 !important;
+      border: 1px solid rgba(45, 212, 191, 0.25) !important;
+    }
+    /* Student Voice (Sentimen & Highlight) */
+    [data-theme="dark"] .sent-overview {
+      border-top-color: #1E293B !important;
+    }
+    [data-theme="dark"] .sent-kpi {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+    }
+    [data-theme="dark"] .sent-kpi__lbl {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .sent-kpi__val {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .sent-kpi__sub {
+      color: #64748B !important;
+    }
+    [data-theme="dark"] .sent-highlight {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+    }
+    [data-theme="dark"] .sent-highlight__icon {
+      color: #2DD4BF !important;
+    }
+    [data-theme="dark"] .sent-highlight__text {
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .sent-highlight__text strong {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .lg {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .lg:hover {
+      background: #1E293B !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .lg.is-on {
+      background: #1E293B !important;
+      border-color: #0D9488 !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .quote {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .quote p {
+      color: #F1F5F9 !important;
+    }
+    [data-theme="dark"] .quote__meta {
+      border-top-color: #1E293B !important;
+    }
+    [data-theme="dark"] .quote__topic {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .quote__sent--pos {
+      background: rgba(16, 185, 129, 0.16) !important;
+      color: #34D399 !important;
+    }
+    [data-theme="dark"] .quote__sent--neu {
+      background: rgba(148, 163, 184, 0.16) !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .quote__sent--neg {
+      background: rgba(244, 63, 94, 0.16) !important;
+      color: #FB7185 !important;
+    }
+    /* Detail Profil Mahasiswa (Tabs P1-P5) */
+    [data-theme="dark"] .pd__nav-bar {
+      border-bottom-color: #1E293B !important;
+    }
+    [data-theme="dark"] .pd__tab {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pd__tab:hover {
+      background: #1E293B !important;
+      border-color: #334155 !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__tab.is-active {
+      background: #1E293B !important;
+      border-color: var(--tc, #2DD4BF) !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__tab-label {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__tab-name {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pd__tab.is-active .pd__tab-name {
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] .pd__tab-pct {
+      background: #0B1120 !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .pd__tab.is-active .pd__tab-pct {
+      background: rgba(45, 212, 191, 0.16) !important;
+      color: #5EEAD4 !important;
+    }
+    [data-theme="dark"] .pd__nav-pager {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+    }
+    [data-theme="dark"] .pd__pager-btn {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pd__pager-btn:hover {
+      background: #1E293B !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__pager-idx {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__traits li {
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] .pd__means {
+      border-top-color: #1E293B !important;
+      border-bottom-color: #1E293B !important;
+    }
+    [data-theme="dark"] .mean b {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .mean__track {
+      background: #1E293B !important;
+    }
+    [data-theme="dark"] .reco__why {
+      background: #151F32 !important;
+      border: 1px solid #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .prio--tinggi {
+      background: rgba(244, 63, 94, 0.16) !important;
+      color: #FB7185 !important;
+      border: 1px solid rgba(244, 63, 94, 0.3) !important;
+    }
+    [data-theme="dark"] .prio--sedang {
+      background: rgba(245, 158, 11, 0.16) !important;
+      color: #FBBF24 !important;
+      border: 1px solid rgba(245, 158, 11, 0.3) !important;
+    }
+    [data-theme="dark"] .prio--rendah {
+      background: rgba(16, 185, 129, 0.16) !important;
+      color: #34D399 !important;
+      border: 1px solid rgba(16, 185, 129, 0.3) !important;
     }
   </style>
 </head>
@@ -510,6 +762,24 @@
           </label>
 
           <div class="app-topbar__btn-group">
+            <!-- Tombol Toggle Tema Desktop -->
+            <button class="theme-toggle-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
+              <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg class="theme-icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+
             <a href="data.html" class="btn btn--outline btn--sm desktop-only-btn" title="Kelola &amp; Ingest Data Survei Baru (Admin)">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -518,7 +788,7 @@
               <span>Data Survei 🔒</span>
             </a>
 
-            <button type="button" class="btn btn--outline btn--sm" id="btnPrintReport" title="Cetak atau unduh ringkasan">
+            <button type="button" class="btn btn--outline btn--sm" id="btnPrintReport" title="Cetak atau unduh ringkasan rekomendasi resmi">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
                 <path d="M6 9V2h12v7"></path>
                 <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
@@ -748,6 +1018,33 @@
             <p>Rekomendasi program intervensi untuk mendukung kesejahteraan dan akademik mahasiswa.</p>
           </div>
 
+          <!-- Banner Ringkasan Eksekutif & Unduh Dokumen PDF Resmi -->
+          <div class="reco-banner">
+            <div class="reco-banner__left">
+              <div class="reco-banner__title">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--em-600)">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Ringkasan Rekomendasi Kebijakan Kampus</span>
+              </div>
+              <p class="reco-banner__desc">Format dokumen eksekutif resmi A4 siap baca untuk dosen pembina, koordinator prodi, dan pimpinan kemahasiswaan.</p>
+            </div>
+            <div class="reco-banner__actions">
+              <button type="button" class="btn btn--reco-pdf" id="btnDownloadRecoPdf" title="Unduh atau cetak laporan rekomendasi kampus ke PDF">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Unduh Ringkasan Rekomendasi (PDF)</span>
+              </button>
+            </div>
+          </div>
+
           <div class="seg seg--wrap" id="recoFilter" role="group" aria-label="Filter sasaran program"></div>
           <div class="recos" id="recos"></div>
         </section>
@@ -759,8 +1056,41 @@
   <!-- Tray rencana program terpilih -->
   <div class="tray" id="tray" hidden>
     <span id="trayCount">0 program dipilih</span>
-    <button class="btn btn--em btn--sm" id="trayCopy" type="button">Salin ringkasan rencana</button>
+    <button class="btn btn--em btn--sm" id="trayDownloadPdf" type="button" title="Unduh rencana terpilih dalam format PDF">📄 Unduh PDF Rencana</button>
+    <button class="btn btn--outline btn--sm" id="trayCopy" type="button">Salin Teks</button>
     <button class="tray__clear" id="trayClear" type="button">Kosongkan</button>
+  </div>
+
+  <!-- ============ MODAL LAPORAN REKOMENDASI KAMPUS (A4 PRINT & PDF READY) ============ -->
+  <div class="reco-report-modal" id="recoReportModal" role="dialog" aria-modal="true" aria-labelledby="modalReportTitle" hidden>
+    <div class="reco-report-sheet">
+      <!-- Toolbar Modal -->
+      <div class="reco-report-toolbar">
+        <div class="reco-report-toolbar__title" id="modalReportTitle">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0D9488">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <span>Pratinjau Dokumen Rekomendasi Kampus (A4 PDF)</span>
+        </div>
+        <div class="reco-report-toolbar__btns">
+          <button type="button" class="btn btn--em btn--sm" id="btnPrintModalContent" title="Cetak atau simpan ke PDF">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
+              <path d="M6 9V2h12v7"></path>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <span>Simpan PDF / Cetak</span>
+          </button>
+          <button type="button" class="btn btn--outline btn--sm" id="btnCloseReportModal">Tutup</button>
+        </div>
+      </div>
+
+      <!-- Isi Dokumen Formal A4 -->
+      <div class="reco-report-content" id="recoReportPrintArea">
+        <!-- Konten di-generate secara dinamis oleh JS -->
+      </div>
+    </div>
   </div>
 
   <!-- Toast Notifikasi -->
@@ -770,9 +1100,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Scripts -->
-  <script src="js/data.js?v=21"></script>
-  <script src="js/charts.js?v=21"></script>
-  <script src="js/app.js?v=21"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/data.js?v=20261026_v22"></script>
+  <script src="js/charts.js?v=20261026_v22"></script>
+  <script src="js/app.js?v=20261026_v22"></script>
 
   <!-- Mobile Drawer Controller (seperti ETHOL PENS) -->
   <script>
