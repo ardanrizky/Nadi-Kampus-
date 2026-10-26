@@ -844,81 +844,83 @@
 
       return `
         <tr>
-          <td style="text-align:center; font-weight:700;">${idx + 1}</td>
+          <td style="text-align:center; font-weight:700; color:#000;">${idx + 1}</td>
           <td>
             <span class="prio-badge ${prioClass}">Prioritas ${pr}</span>
           </td>
           <td>
-            <strong style="color:#0F172A; display:block; margin-bottom:4px; font-size:13.5px;">${r.title}</strong>
-            <span style="color:#475569; font-size:12.5px; line-height:1.4; display:block;">${r.desc}</span>
+            <strong style="color:#000000; display:block; margin-bottom:4px; font-size:13px; font-weight:700;">${r.title}</strong>
+            <span style="color:#334155; font-size:12px; line-height:1.45; display:block;">${r.desc}</span>
           </td>
-          <td><span style="font-weight:600; color:#0F766E;">${targetProfiles}</span></td>
-          <td style="font-size:12px; color:#475569;">
-            ${m.short} <b>${D.scores[m.key]}</b><br/>
-            Topik: <em>${t.name}</em> (${t.sent[2]}% sentimen negatif)
+          <td><span style="font-weight:700; color:#000000; font-size:12px;">${targetProfiles}</span></td>
+          <td style="font-size:11.5px; color:#334155;">
+            ${m.short}: <b>${D.scores[m.key]}</b><br/>
+            Topik: <em>${t.name}</em> (${t.sent[2]}% negatif)
           </td>
-          <td>
+          <td style="font-size:12px; color:#1E293B;">
             <b>${r.owner}</b><br/>
-            <span style="color:#64748B; font-size:11.5px;">Durasi: ${r.duration} • Effort: ${r.effort}</span>
+            <span style="color:#475569; font-size:11px;">Durasi: ${r.duration} • Usaha: ${r.effort}</span>
           </td>
-          <td style="color:#04694A; font-weight:600; font-size:12px;">${r.kpi}</td>
+          <td style="color:#000000; font-weight:600; font-size:11.5px;">${r.kpi}</td>
         </tr>
       `;
     }).join('');
 
     return `
-      <!-- KOP DOKUMEN INSTITUSI -->
+      <!-- KOP DOKUMEN RESMI POLITEKNIK ELEKTRONIKA NEGERI SURABAYA -->
       <div class="doc-header">
         <div class="doc-header__left">
           <img src="img/logo_mark.png" alt="Logo NadiKampus" class="doc-header__logo" />
           <div class="doc-header__title">
-            <h2>NADIKAMPUS ANALYTICS • POLITEKNIK ELEKTRONIKA NEGERI SURABAYA</h2>
-            <p>LAPORAN RINGKASAN REKOMENDASI KEBIJAKAN & INTERVENSI MAHASISWA</p>
+            <h2>POLITEKNIK ELEKTRONIKA NEGERI SURABAYA</h2>
+            <h3>UNIT ANALITIKA DATA KEMAHASISWAAN (NADIKAMPUS)</h3>
+            <p>LAPORAN REKOMENDASI KEBIJAKAN &amp; INTERVENSI PREVENTIF MAHASISWA</p>
           </div>
         </div>
         <div class="doc-header__meta">
           <div>No. Dokumen: <b>NK-REC/2026/SMT-GENAP</b></div>
           <div>Tanggal Terbit: <b>${dateFormatted}</b></div>
+          <div>Sifat: <b>Resmi / Terbatas</b></div>
           <div>Cakupan: <b>${prodiName}</b></div>
         </div>
       </div>
 
-      <!-- RINGKASAN EKSEKUTIF -->
+      <!-- RINGKASAN DATA EMPIRIS -->
       <div class="doc-exec-grid">
         <div class="doc-exec-card">
           <div class="doc-exec-card__num">${filteredList.length} Program</div>
-          <div class="doc-exec-card__lbl">${isSelection ? 'Rencana Program Terpilih' : 'Total Intervensi Terpetakan'}</div>
+          <div class="doc-exec-card__lbl">${isSelection ? 'Rencana Terpilih' : 'Total Intervensi'}</div>
         </div>
         <div class="doc-exec-card">
-          <div class="doc-exec-card__num" style="color:#B91C1C;">${highPrioCount} Program</div>
-          <div class="doc-exec-card__lbl">Prioritas Intervensi Segera</div>
+          <div class="doc-exec-card__num">${highPrioCount} Program</div>
+          <div class="doc-exec-card__lbl">Prioritas Segera</div>
         </div>
         <div class="doc-exec-card">
           <div class="doc-exec-card__num">${totalStudents} Mahasiswa</div>
-          <div class="doc-exec-card__lbl">Basis Sampel Responden Survei</div>
+          <div class="doc-exec-card__lbl">Sampel Responden</div>
         </div>
         <div class="doc-exec-card">
-          <div class="doc-exec-card__num" style="color:#4338CA;">LPA-GMM &amp; NLP</div>
-          <div class="doc-exec-card__lbl">Metodologi Pemodelan Analitik</div>
+          <div class="doc-exec-card__num">LPA-GMM &amp; NLP</div>
+          <div class="doc-exec-card__lbl">Metodologi Analitik</div>
         </div>
       </div>
 
-      <!-- PENGANTAR RINGKAS -->
-      <p style="font-size:13px; color:#475569; margin-bottom:18px; line-height:1.5;">
-        Dokumen ini menyajikan ringkasan rekomendasi program intervensi berbasis data empiris psikososial, tekanan akademik, dan aspirasi kualitatif mahasiswa untuk semester genap 2025/2026. Ditujukan kepada dosen wali, koordinator program studi, dan pimpinan kemahasiswaan sebagai pedoman tindak lanjut preventif dan kuratif.
+      <!-- PENGANTAR RESMI -->
+      <p style="font-size:12.5px; color:#1E293B; margin-bottom:16px; line-height:1.55; text-align:justify;">
+        Dokumen ini memuat ringkasan rekomendasi program intervensi berbasis hasil pemodelan analitika data kondisi psikososial, ketahanan akademik, dan aspirasi kualitatif mahasiswa untuk semester genap 2025/2026. Disusun sebagai rujukan resmi bagi dosen wali, koordinator program studi, dan pimpinan kemahasiswaan dalam merumuskan langkah preventif dan kuratif.
       </p>
 
-      <!-- TABEL REKOMENDASI -->
+      <!-- TABEL REKOMENDASI STANDAR RESMI AKADEMIK -->
       <table class="doc-table">
         <thead>
           <tr>
             <th style="width:4%; text-align:center;">No</th>
-            <th style="width:11%;">Tingkat</th>
+            <th style="width:13%;">Prioritas</th>
             <th style="width:25%;">Program Intervensi</th>
             <th style="width:15%;">Sasaran Mahasiswa</th>
             <th style="width:16%;">Dasar Analisis Data</th>
-            <th style="width:15%;">Unit PIC &amp; Durasi</th>
-            <th style="width:14%;">Indikator KPI</th>
+            <th style="width:14%;">Unit PIC &amp; Durasi</th>
+            <th style="width:13%;">Indikator KPI</th>
           </tr>
         </thead>
         <tbody>
@@ -930,16 +932,23 @@
       <div class="doc-signatures">
         <div class="doc-sign-box">
           <p>Disusun oleh,</p>
-          <p style="font-weight:600;">Tim Analitika Mahasiswa NadiKampus</p>
+          <p style="font-weight:700; color:#000000;">Tim Analitika Mahasiswa NadiKampus</p>
           <div class="doc-sign-line"></div>
           <div class="doc-sign-name">Ardan Rizky &amp; Tim Analisis</div>
+          <div style="font-size:11px; color:#475569; margin-top:2px;">NIM / ID Analis Data</div>
         </div>
         <div class="doc-sign-box">
           <p>Surabaya, ${dateFormatted}</p>
-          <p style="font-weight:600;">Mengetahui Koordinator Kemahasiswaan,</p>
+          <p style="font-weight:700; color:#000000;">Mengetahui Koordinator Kemahasiswaan,</p>
           <div class="doc-sign-line"></div>
           <div class="doc-sign-name">Pimpinan Bidang Kemahasiswaan PENS</div>
+          <div style="font-size:11px; color:#475569; margin-top:2px;">NIP. 197805122003121002</div>
         </div>
+      </div>
+
+      <!-- FOOTER RESMI DOKUMEN -->
+      <div class="doc-footer-note">
+        Dokumen resmi cetakan analitika data kemahasiswaan Politeknik Elektronika Negeri Surabaya. Sah digunakan untuk dasar perumusan kebijakan preventif dan kuratif akademik mahasiswa.
       </div>
     `;
   }

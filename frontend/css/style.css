@@ -3629,10 +3629,10 @@ body.drawer-locked {
   color: #2DD4BF !important;
 }
 
-/* Modal Dokumen Laporan Rekomendasi in Dark Mode */
+/* Modal Dokumen Laporan Rekomendasi in Dark Mode (Tetap Lembar Putih Resmi seperti Kertas PDF) */
 [data-theme="dark"] .reco-report-sheet {
-  background: #0F172A !important;
-  color: #F1F5F9 !important;
+  background: #0B1120 !important;
+  color: #0F172A !important;
   border: 1px solid #1E293B !important;
 }
 [data-theme="dark"] .reco-report-toolbar {
@@ -3643,35 +3643,71 @@ body.drawer-locked {
   color: #F8FAFC !important;
 }
 [data-theme="dark"] .reco-report-content {
-  background: #0F172A !important;
-  color: #F1F5F9 !important;
+  background: #FFFFFF !important;
+  color: #000000 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] .doc-header {
+  border-bottom-color: #000000 !important;
 }
 [data-theme="dark"] .doc-header__title h2 {
-  color: #F8FAFC !important;
+  color: #000000 !important;
+}
+[data-theme="dark"] .doc-header__title h3 {
+  color: #334155 !important;
+}
+[data-theme="dark"] .doc-header__title p {
+  color: #000000 !important;
 }
 [data-theme="dark"] .doc-header__meta {
-  color: #94A3B8 !important;
+  color: #334155 !important;
 }
 [data-theme="dark"] .doc-header__meta b {
-  color: #F8FAFC !important;
+  color: #000000 !important;
 }
 [data-theme="dark"] .doc-exec-card {
-  background: #151F32 !important;
-  border-color: #1E293B !important;
+  background: #FAFAFA !important;
+  border: 1px solid #CBD5E1 !important;
+}
+[data-theme="dark"] .doc-exec-card__num {
+  color: #000000 !important;
 }
 [data-theme="dark"] .doc-exec-card__lbl {
-  color: #94A3B8 !important;
+  color: #475569 !important;
 }
 [data-theme="dark"] .doc-table th {
-  background: #0F766E !important;
+  background: #000000 !important;
   color: #FFFFFF !important;
 }
 [data-theme="dark"] .doc-table td {
-  border-color: #1E293B !important;
-  color: #CBD5E1 !important;
+  border-color: #CBD5E1 !important;
+  color: #000000 !important;
+  background: #FFFFFF !important;
 }
 [data-theme="dark"] .doc-table tr:nth-child(even) td {
-  background: #131E32 !important;
+  background: #F8FAFC !important;
+}
+[data-theme="dark"] .doc-table .prio-tinggi {
+  background: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #000000 !important;
+}
+[data-theme="dark"] .doc-table .prio-sedang {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+  border: 1.5px solid #000000 !important;
+}
+[data-theme="dark"] .doc-table .prio-rendah {
+  background: #F1F5F9 !important;
+  color: #334155 !important;
+  border: 1px solid #94A3B8 !important;
+}
+[data-theme="dark"] .doc-sign-box {
+  color: #334155 !important;
+}
+[data-theme="dark"] .doc-sign-name {
+  color: #000000 !important;
+  border-color: #000000 !important;
 }
 [data-theme="dark"] .doc-sign-box {
   color: #94A3B8 !important;
@@ -3844,11 +3880,11 @@ body.drawer-locked {
   color: #0F172A;
 }
 
-/* Kop Resmi Laporan */
+/* Kop Resmi Laporan (Hitam Putih Standar Dinas / Akademik PENS) */
 .doc-header {
-  border-bottom: 2.5px solid #0F766E;
-  padding-bottom: 18px;
-  margin-bottom: 24px;
+  border-bottom: 3px double #000000;
+  padding-bottom: 14px;
+  margin-bottom: 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -3861,121 +3897,162 @@ body.drawer-locked {
 .doc-header__logo {
   height: 48px;
   width: auto;
+  filter: grayscale(100%) contrast(120%);
 }
 .doc-header__title h2 {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 800;
-  color: #0F1F3D;
+  color: #000000;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.doc-header__title h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin: 3px 0 0;
+  letter-spacing: 0.03em;
 }
 .doc-header__title p {
-  font-size: 13px;
-  color: #0F766E;
-  font-weight: 600;
-  margin: 3px 0 0;
+  font-size: 12px;
+  color: #000000;
+  font-weight: 700;
+  margin: 4px 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 .doc-header__meta {
   text-align: right;
-  font-size: 12px;
-  color: #64748B;
-  line-height: 1.4;
+  font-size: 11.5px;
+  color: #334155;
+  line-height: 1.45;
 }
 .doc-header__meta b {
-  color: #0F172A;
+  color: #000000;
 }
 
-/* Matriks Eksekutif */
+/* Matriks Eksekutif (Hitam Putih Formal) */
 .doc-exec-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 .doc-exec-card {
-  padding: 12px 14px;
-  border-radius: 8px;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: #FAFAFA;
+  border: 1px solid #CBD5E1;
   text-align: center;
 }
 .doc-exec-card__num {
   font-size: 20px;
   font-weight: 800;
-  color: #0D9488;
+  color: #000000 !important;
 }
 .doc-exec-card__lbl {
-  font-size: 11.5px;
-  color: #64748B;
-  font-weight: 600;
+  font-size: 10.5px;
+  color: #475569;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   margin-top: 2px;
 }
 
-/* Tabel Rekomendasi Resmi */
+/* Tabel Rekomendasi Resmi (Standar Publikasi Ilmiah & Dinas) */
 .doc-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.45;
-  margin-bottom: 30px;
+  margin-bottom: 26px;
+  border: 1.5px solid #000000;
 }
 .doc-table th {
-  background: #0F766E;
-  color: #FFFFFF;
+  background: #000000 !important;
+  color: #FFFFFF !important;
   text-align: left;
-  padding: 10px 12px;
+  padding: 8px 10px;
   font-weight: 700;
-  font-size: 12.5px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: 1px solid #000000;
 }
 .doc-table td {
-  padding: 12px 12px;
-  border-bottom: 1px solid #E2E8F0;
+  padding: 10px 10px;
+  border: 1px solid #CBD5E1;
   vertical-align: top;
-  color: #334155;
+  color: #000000;
+  background: #FFFFFF;
 }
 .doc-table tr:nth-child(even) td {
   background: #F8FAFC;
 }
 .doc-table .prio-badge {
   display: inline-block;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10px;
   font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
-.doc-table .prio-tinggi { background: #FEE2E2; color: #B91C1C; }
-.doc-table .prio-sedang { background: #FEF3C7; color: #B45309; }
-.doc-table .prio-rendah { background: #E0E7FF; color: #4338CA; }
+.doc-table .prio-tinggi {
+  background: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #000000 !important;
+}
+.doc-table .prio-sedang {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+  border: 1.5px solid #000000 !important;
+}
+.doc-table .prio-rendah {
+  background: #F1F5F9 !important;
+  color: #334155 !important;
+  border: 1px solid #94A3B8 !important;
+}
 
 /* Kolom Tanda Tangan Resmi Pengesahan */
 .doc-signatures {
   display: flex;
   justify-content: space-between;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px dashed #CBD5E1;
+  margin-top: 34px;
+  padding-top: 18px;
+  border-top: 1px dashed #94A3B8;
 }
 .doc-sign-box {
   width: 250px;
   text-align: center;
-  font-size: 13px;
-  color: #475569;
+  font-size: 12px;
+  color: #334155;
 }
 .doc-sign-line {
-  height: 60px;
+  height: 58px;
 }
 .doc-sign-name {
   font-weight: 700;
-  color: #0F172A;
-  border-top: 1px solid #475569;
+  color: #000000;
+  border-top: 1.5px solid #000000;
   padding-top: 4px;
 }
+.doc-footer-note {
+  margin-top: 24px;
+  padding-top: 10px;
+  border-top: 1px solid #E2E8F0;
+  font-size: 10px;
+  color: #64748B;
+  text-align: center;
+  font-style: italic;
+}
 
-/* PRINT MEDIA: Khusus Cetak A4 PDF Murni */
+/* PRINT MEDIA: Khusus Cetak A4 PDF Murni (100% Hitam Putih Resmi) */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 14mm 12mm;
+    margin: 12mm 10mm;
   }
   body * {
     visibility: hidden;
@@ -3990,7 +4067,7 @@ body.drawer-locked {
     top: 0 !important;
     width: 100% !important;
     height: auto !important;
-    background: transparent !important;
+    background: #FFFFFF !important;
     padding: 0 !important;
     display: block !important;
     overflow: visible !important;
@@ -4001,6 +4078,8 @@ body.drawer-locked {
     border-radius: 0 !important;
     max-height: none !important;
     overflow: visible !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
   }
   .reco-report-toolbar {
     display: none !important;
@@ -4008,6 +4087,8 @@ body.drawer-locked {
   .reco-report-content {
     padding: 0 !important;
     overflow: visible !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
   }
   .doc-table {
     page-break-inside: auto;
@@ -4018,6 +4099,10 @@ body.drawer-locked {
   }
   .doc-signatures {
     page-break-inside: avoid;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }
 
