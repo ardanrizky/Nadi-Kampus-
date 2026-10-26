@@ -916,17 +916,133 @@
         flex-direction: column !important;
         transition: margin-left .3s cubic-bezier(0.16, 1, 0.3, 1), width .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
       }
+      /* Mode Ciutkan: Sidebar menyusut rapi ke 72px icon bar */
       .app-sidebar.is-collapsed {
-        width: 76px !important;
-        padding: 18px 8px !important;
+        width: 72px !important;
+        padding: 16px 8px !important;
+        align-items: center !important;
       }
       .app-sidebar.is-collapsed ~ .app-main {
-        margin-left: 76px !important;
-        width: calc(100% - 76px) !important;
+        margin-left: 72px !important;
+        width: calc(100% - 72px) !important;
       }
+
+      /* 1. Header saat Ciut */
+      .app-sidebar.is-collapsed .sidebar-brand-row {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        padding: 0 0 14px !important;
+        width: 100% !important;
+      }
+      .app-sidebar.is-collapsed .brand--app {
+        padding: 0 !important;
+        margin: 0 !important;
+        justify-content: center !important;
+      }
+      .app-sidebar.is-collapsed .brand__text {
+        display: none !important;
+      }
+      .app-sidebar.is-collapsed .brand__logo-img {
+        height: 32px !important;
+        width: auto !important;
+        margin: 0 auto !important;
+      }
+      .app-sidebar.is-collapsed .sidebar-collapse-btn {
+        width: 28px !important;
+        height: 28px !important;
+        margin: 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .app-sidebar.is-collapsed .sidebar-collapse-btn svg {
+        transform: rotate(180deg) !important;
+      }
+
+      /* 2. Menu Navigasi saat Ciut */
+      .app-sidebar.is-collapsed .app-nav {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+      .app-sidebar.is-collapsed .app-nav__item {
+        width: 48px !important;
+        height: 48px !important;
+        padding: 0 !important;
+        margin: 0 auto !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 12px !important;
+        gap: 0 !important;
+      }
+      .app-sidebar.is-collapsed .nav-text,
+      .app-sidebar.is-collapsed .nav-badge,
+      .app-sidebar.is-collapsed .pulse-chip,
+      .app-sidebar.is-collapsed .cluster-mini-pips,
+      .app-sidebar.is-collapsed .nlp-soundwave,
+      .app-sidebar.is-collapsed .prio-counter {
+        display: none !important;
+      }
+      .app-sidebar.is-collapsed .nav-icon {
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .app-sidebar.is-collapsed .nav-icon svg {
+        width: 20px !important;
+        height: 20px !important;
+      }
+
+      /* 3. Bottom Widget saat Ciut */
+      .app-sidebar.is-collapsed .app-sidebar__bottom {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 12px !important;
+        padding-top: 14px !important;
+      }
+      .app-sidebar.is-collapsed .campus-ekg-card {
+        display: none !important;
+      }
+      .app-sidebar.is-collapsed .app-back-btn {
+        width: 44px !important;
+        height: 44px !important;
+        padding: 0 !important;
+        margin: 0 auto !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 50% !important;
+        background: #F8FAFC !important;
+        border: 1px solid #E2E8F0 !important;
+      }
+      .app-sidebar.is-collapsed .app-back-btn:hover {
+        background: #F1F5F9 !important;
+        color: var(--em-700) !important;
+      }
+      .app-sidebar.is-collapsed .app-back-btn__text {
+        display: none !important;
+      }
+      .app-sidebar.is-collapsed .app-back-btn__icon {
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
       [data-theme="dark"] .app-sidebar {
         background: #0B1120 !important;
         border-right: 1px solid #1E293B !important;
+      }
+      [data-theme="dark"] .app-sidebar.is-collapsed .app-back-btn {
+        background: #151F32 !important;
+        border-color: #1E293B !important;
+        color: #CBD5E1 !important;
       }
     }
   </style>
