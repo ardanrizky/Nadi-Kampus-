@@ -806,23 +806,31 @@ svg { display: block; }
 .app-sidebar {
   width: 276px;
   flex: 0 0 276px;
-  height: 100vh;
+  min-height: 100vh;
+  align-self: stretch;
+  background: #FFFFFF;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border-right: 1px solid var(--line);
+  box-shadow: 2px 0 20px rgba(15, 31, 61, .03);
+  z-index: 40;
+  position: relative;
+  transition: width .3s var(--ease);
+}
+
+.app-sidebar__sticky {
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.90);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  color: var(--ink);
+  height: 100vh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 20px 16px;
-  border-right: 1px solid rgba(226, 232, 240, 0.85);
-  box-shadow: 2px 0 20px rgba(15, 31, 61, .03);
-  z-index: 40;
   overflow-y: auto;
   overflow-x: hidden;
-  transition: width .3s var(--ease), padding .3s;
 }
 
 .app-sidebar__top {
@@ -1093,96 +1101,6 @@ svg { display: block; }
   background: #FEF2F2;
   color: #B91C1C;
   border: 1px solid #FECACA;
-}
-
-/* Sidebar Cluster Summary (Mengisi ruang tengah sidebar agar selaras & informatif) */
-.sidebar-cluster-summary {
-  margin-top: 14px;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: background .2s, border-color .2s;
-}
-.sidebar-cluster-summary:hover {
-  background: #F1F5F9;
-  border-color: #CBD5E1;
-}
-.sc-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.sc-title {
-  font-size: 11px;
-  font-weight: 700;
-  color: #64748B;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.sc-tag {
-  font-size: 10.5px;
-  font-weight: 700;
-  padding: 1px 7px;
-  border-radius: 999px;
-  background: #E0F2FE;
-  color: #0369A1;
-}
-.sc-items {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-.sc-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12.5px;
-}
-.sc-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  margin-right: 7px;
-  flex-shrink: 0;
-}
-.sc-name {
-  color: #334155;
-  font-weight: 500;
-  flex: 1;
-}
-.sc-val {
-  font-weight: 700;
-  font-size: 12.5px;
-}
-.sc-footer {
-  padding-top: 6px;
-  border-top: 1px dashed #E2E8F0;
-  font-size: 11px;
-  color: #64748B;
-  font-weight: 600;
-}
-
-[data-theme="dark"] .sidebar-cluster-summary {
-  background: #0B1120 !important;
-  border-color: #1E293B !important;
-}
-[data-theme="dark"] .sc-title {
-  color: #94A3B8 !important;
-}
-[data-theme="dark"] .sc-tag {
-  background: #1E293B !important;
-  color: #38BDF8 !important;
-}
-[data-theme="dark"] .sc-name {
-  color: #E2E8F0 !important;
-}
-[data-theme="dark"] .sc-footer {
-  border-top-color: #1E293B !important;
-  color: #94A3B8 !important;
 }
 
 /* Sidebar Bottom: Widget Monitor Denyut Kampus */
@@ -1948,29 +1866,41 @@ svg { display: block; }
   }
 
   .app-layout {
-    height: 100vh !important;
+    min-height: 100vh !important;
     width: 100% !important;
-    overflow: hidden !important;
     display: flex !important;
+    align-items: stretch !important;
   }
 
-  /* Sidebar kiri selalu 100vh, border-right utuh dari atas ke bawah */
+  /* Sidebar kiri memanjang penuh mengikuti tinggi halaman tanpa bolong */
   .app-sidebar {
     width: 276px;
     flex: 0 0 276px;
-    height: 100vh !important;
-    max-height: 100vh !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    max-height: none !important;
     border-right: 1px solid var(--line) !important;
     background: #FFFFFF !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    position: sticky !important;
-    top: 0 !important;
-    bottom: 0 !important;
+    align-self: stretch !important;
+    position: relative !important;
     box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03) !important;
     z-index: 40 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), flex .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .app-sidebar__sticky {
+    position: sticky !important;
+    top: 0 !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
     padding: 20px 16px !important;
-    transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), flex .3s cubic-bezier(0.16, 1, 0.3, 1), padding .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
   }
 
   /* Tombol Toggle Collapse: Tampil normal di header samping logo */
@@ -2000,8 +1930,12 @@ svg { display: block; }
   .app-sidebar.is-collapsed {
     width: 76px !important;
     flex: 0 0 76px !important;
-    padding: 18px 8px !important;
+    padding: 0 !important;
     margin-left: 0 !important;
+  }
+
+  .app-sidebar.is-collapsed .app-sidebar__sticky {
+    padding: 18px 8px !important;
   }
 
   .app-sidebar.is-collapsed .brand__text,
@@ -2011,7 +1945,6 @@ svg { display: block; }
   .app-sidebar.is-collapsed .cluster-mini-pips,
   .app-sidebar.is-collapsed .nlp-soundwave,
   .app-sidebar.is-collapsed .prio-counter,
-  .app-sidebar.is-collapsed .sidebar-cluster-summary,
   .app-sidebar.is-collapsed .campus-ekg-card,
   .app-sidebar.is-collapsed .app-back-btn__text {
     display: none !important;

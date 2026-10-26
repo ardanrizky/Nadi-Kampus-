@@ -388,31 +388,6 @@
         </button>`;
     }).join('');
 
-    const sideSummary = $('#sidebarClusterSummary');
-    if (sideSummary) {
-      sideSummary.innerHTML = `
-        <div class="sc-header">
-          <span class="sc-title">Distribusi Profil</span>
-          <span class="sc-tag">K=3 LPA</span>
-        </div>
-        <div class="sc-items">
-          ${CLUSTERS.map((cl, idx) => {
-            const pct = Math.round(D.profile[idx] !== undefined ? D.profile[idx] : cl.pct);
-            return `
-              <div class="sc-item" title="${cl.name} (${pct}%)">
-                <span class="sc-dot" style="background:${cl.color};"></span>
-                <span class="sc-name">P${cl.cluster}: ${cl.short}</span>
-                <strong class="sc-val" style="color:${cl.color};">${pct}%</strong>
-              </div>
-            `;
-          }).join('')}
-        </div>
-        <div class="sc-footer">
-          <span>${D.n || 119} Responden • ${state.prodi ? D.name : '18 Prodi PENS'}</span>
-        </div>
-      `;
-    }
-
     const p = CLUSTERS[state.profile] || CLUSTERS[0];
     const detail = $('#profileDetail');
     if (detail) {
