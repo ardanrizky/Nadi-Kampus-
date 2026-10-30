@@ -1,0 +1,37 @@
+[
+  {
+    "topic":0,
+    "topic_label":"0_info_kampus_tanya_tempat",
+    "n":3584,
+    "persen":69.1,
+    "kata_kunci":"info, kampus, tanya, tempat, tahu, teman, kos, maba"
+  },
+  {
+    "topic":1,
+    "topic_label":"1_iki_wes_yo_punya",
+    "n":770,
+    "persen":14.9,
+    "kata_kunci":"iki, wes, yo, punya, anak, opo, sek, ta"
+  },
+  {
+    "topic":2,
+    "topic_label":"2_orang_teman_tidur_salah",
+    "n":524,
+    "persen":10.1,
+    "kata_kunci":"orang, teman, tidur, salah, lgbt, merasa, cowok, jangan"
+  },
+  {
+    "topic":3,
+    "topic_label":"3_teman_orangtua_kuliah_keluarga",
+    "n":218,
+    "persen":4.2,
+    "kata_kunci":"teman, orangtua, kuliah, keluarga, teman teman, orang, baik, masa depan"
+  },
+  {
+    "topic":4,
+    "topic_label":"4_lampu_ac_panas_d4",
+    "n":89,
+    "persen":1.7,
+    "kata_kunci":"lampu, ac, panas, d4, d3, nrp, gedung, listrik"
+  }
+]
