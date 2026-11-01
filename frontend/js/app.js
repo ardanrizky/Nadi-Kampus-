@@ -1354,7 +1354,10 @@
       if (!res.ok) return;
       const json = await res.json();
       if (json && json.data && json.data.length > 0) {
-        console.log(`[NadiKampus Live API] Terhubung ke Backend: ${json.data.length} responden aktif (${json.source}).`);
+        const totalN = json.data.length;
+        console.log(`[NadiKampus Live API] Terhubung ke Backend: ${totalN} responden aktif (${json.source}).`);
+
+        // 1. Perbarui titik-titik koordinat scatter plot 2D
         window.CLUSTER_POINTS = json.data.map(r => ({
           id: r.id,
           cluster: (r.profile || 1) - 1,
@@ -1367,6 +1370,23 @@
           car: Math.round((r.scores?.career || 0) * 20)
         }));
 
+        // 2. Hitung ulang sebaran 3 profil secara dinamis
+        const pCounts = { 1: 0, 2: 0, 3: 0 };
+        json.data.forEach(r => {
+          const p = r.profile || 1;
+          pCounts[p] = (pCounts[p] || 0) + 1;
+        });
+
+        if (window.CLUSTERS && window.CLUSTERS.length === 3) {
+          window.CLUSTERS.forEach((c, idx) => {
+            const pid = c.cluster || (idx + 1);
+            const cnt = pCounts[pid] || 0;
+            c.count = cnt;
+            c.pct = totalN > 0 ? Number(((cnt / totalN) * 100).toFixed(1)) : 0;
+          });
+        }
+
+        // 3. Perbarui seluruh label angka responden di dashboard
         const liveIndicator = $('.ekg-state');
         if (liveIndicator) {
           const srcLbl = json.source === 'google_sheet_appscript' ? 'GSheets Live' : 'Database Live';
@@ -1374,9 +1394,27 @@
         }
         const liveCount = $('.ekg-n');
         if (liveCount) {
-          liveCount.textContent = `${json.data.length} Responden`;
+          liveCount.textContent = `${totalN} Responden`;
         }
+        const lpaTotalEl = $('#lpaTotalN');
+        if (lpaTotalEl) {
+          lpaTotalEl.textContent = `${totalN} Responden`;
+        }
+        const scatterBadgeEl = $('#scatterTotalBadge');
+        if (scatterBadgeEl) {
+          scatterBadgeEl.textContent = `${totalN} Data Riil Mahasiswa`;
+        }
+        const sentTotalEl = $('#sentTotalN');
+        if (sentTotalEl) {
+          sentTotalEl.textContent = `${totalN}`;
+        }
+
+        // 4. Update data total kampus
+        D.n = totalN;
+
+        // 5. Render ulang view aktif agar visualisasi langsung menyegarkan diri
         if (state.view === 'profile') renderProfile();
+        else if (state.view === 'executive') renderKPIs();
       }
     } catch (e) {
       // Offline / Static File mode: data.js bekerja sebagai fallback provider tanpa error
@@ -1393,4 +1431,7 @@
   loadSupabaseVoice();
   initSupabaseRealtime();
   syncWithLiveAPI();
+
+  // Sinkronisasi otomatis setiap 60 detik jika halaman terbuka
+  setInterval(syncWithLiveAPI, 60000);
 })();
