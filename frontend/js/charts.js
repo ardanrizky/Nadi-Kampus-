@@ -300,7 +300,7 @@ const Charts = (() => {
     // 2. Legend Filter Interaktif di Bagian Atas
     const filterG = svgEl('g', { class: 'sc__filters' }, svg);
     const filterPills = [
-      { id: null, label: 'Semua (119)', color: '#334155' },
+      { id: null, label: `Semua (${points.length || 149})`, color: '#334155' },
       ...clusters.map((c, idx) => ({ id: idx, label: `P${c.cluster} (${c.count})`, color: c.color }))
     ];
     let fOffset = pad.l;
@@ -327,7 +327,7 @@ const Charts = (() => {
       fOffset += pillW + 6;
     });
 
-    // 3. Titik-titik Responden (119 Mahasiswa)
+    // 3. Titik-titik Responden (149 Mahasiswa Riil)
     const ptsGroup = svgEl('g', { class: 'sc__pts' }, svg);
     points.forEach(pt => {
       const c = clusters[pt.cluster];

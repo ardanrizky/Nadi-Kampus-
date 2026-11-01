@@ -490,8 +490,8 @@
       <!-- Kartu Status Database -->
       <div class="portal-kpis">
         <div class="portal-kpi-card">
-          <div class="lbl">Total Responden di Supabase</div>
-          <div class="val" id="kpiTotalResp">122</div>
+          <div class="lbl">Total Responden di Database</div>
+          <div class="val" id="kpiTotalResp">149</div>
           <div class="sub">Tabel: student_surveys</div>
         </div>
         <div class="portal-kpi-card">
@@ -564,8 +564,8 @@
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
           <div>
-            <h3 id="resBannerTitle">Data Berhasil Diproses &amp; Masuk ke Supabase!</h3>
-            <p id="resBannerSub">Berhasil menambahkan <b>+3 responden baru</b>. Total responden sekarang: <b>125</b>.</p>
+            <h3 id="resBannerTitle">Data Berhasil Diproses &amp; Masuk ke Database!</h3>
+            <p id="resBannerSub">Berhasil menambahkan <b>+3 responden baru</b>. Total responden sekarang: <b>152</b>.</p>
           </div>
         </div>
 
@@ -693,7 +693,7 @@
           const res = await fetch('/api/v1/survey-stats');
           if (res.ok) {
             const data = await res.json();
-            document.getElementById('kpiTotalResp').textContent = data.total_respondents || 122;
+            document.getElementById('kpiTotalResp').textContent = data.total_respondents || 149;
             document.getElementById('kpiTotalProdi').textContent = (data.total_prodi || 18) + ' Prodi';
           }
         } catch (err) {

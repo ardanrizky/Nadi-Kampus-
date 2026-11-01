@@ -254,7 +254,7 @@
         </div>
         <div class="trend-summary-note">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          <span>Pola 6 bulan (${scopeName}): Tekanan akademik mencapai puncak saat evaluasi semester (${maxMonthName}), sementara Wellbeing dan Kesiapan Karir bergerak naik secara stabil.</span>
+          <span>Pola 6 bulan (${scopeName}): Ketahanan akademik dan kesiapan karir bergerak dinamis, sementara Wellbeing mahasiswa relatif stabil.</span>
         </div>`;
     }
   }
@@ -298,14 +298,15 @@
 
     if (state.fac === 'all') {
       const prodiSource = window.PRODIS || window.FACULTIES || {};
-      const ks = Object.keys(prodiSource).sort((a, b) => prodiSource[b].pressure - prodiSource[a].pressure);
+      const ks = Object.keys(prodiSource).sort((a, b) => prodiSource[a].pressure - prodiSource[b].pressure);
       const f = prodiSource[ks[0]];
+      const diff = ALL.scores.pressure - f.pressure;
       out.push({
         tone: 'bad',
         category: 'Fokus Prodi',
         badgeClass: 'ins-badge--prodi',
-        title: `Tekanan akademik tertinggi di ${f.name}`,
-        text: `Skor ${f.pressure}, ${f.pressure - ALL.scores.pressure} poin di atas rata-rata kampus (${ALL.scores.pressure}).`,
+        title: `Ketahanan akademik terendah di ${f.name}`,
+        text: `Skor ${f.pressure}, ${Math.abs(diff)} poin di bawah rata-rata kampus (${ALL.scores.pressure}).`,
         act: { fac: ks[0] },
         label: `Fokus ke Prodi ${f.name}`
       });
@@ -383,7 +384,7 @@
             <span class="pcard__pct">${pct}<small>%</small></span>
           </div>
           <h4>${p.name}</h4>
-          <span class="pcard__n">± ${nf.format(n)} mahasiswa (${p.count || Math.round(119 * pct / 100)} sampel riil)</span>
+          <span class="pcard__n">± ${nf.format(n)} mahasiswa (${p.count || Math.round(149 * pct / 100)} sampel riil)</span>
           <span class="pcard__bar"><i style="width:${pct}%"></i></span>
         </button>`;
     }).join('');
@@ -499,7 +500,7 @@
       const totalNEl = $('#sentTotalN');
       const negValEl = $('#sentNegVal');
       const posNeuValEl = $('#sentPosNeuVal');
-      if (totalNEl) totalNEl.textContent = D.n || 119;
+      if (totalNEl) totalNEl.textContent = D.n || 149;
       if (negValEl) negValEl.textContent = `${Math.round(D.sentiment[2])}%`;
       if (posNeuValEl) posNeuValEl.textContent = `${Math.round(D.sentiment[0] + D.sentiment[1])}%`;
     }
