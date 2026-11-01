@@ -53,4 +53,19 @@
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  /* Live sync stats on landing page */
+  (async function syncLandingStats() {
+    try {
+      const res = await fetch('/api/v1/survey-stats');
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data && data.total_respondents) {
+        const respEl = document.querySelector('.hero__facts li:nth-child(1) strong');
+        if (respEl) respEl.textContent = data.total_respondents;
+        const prodiEl = document.querySelector('.hero__facts li:nth-child(2) strong');
+        if (prodiEl && data.total_prodi) prodiEl.textContent = data.total_prodi;
+      }
+    } catch (e) {}
+  })();
 })();
