@@ -478,22 +478,22 @@
       if (state.profile === null) {
         clusterNoteEl.style.borderLeftColor = '#475569';
         clusterNoteEl.style.background = 'rgba(71, 85, 105, 0.05)';
-        clusterNoteEl.innerHTML = `💡 <b>Indikasi Keseluruhan (Semua Mahasiswa):</b> Menampilkan seluruh sebaran responden. Terbagi jelas dalam 3 zona: <b style="color:#E11D48">P1 Rentan</b> (kiri-bawah), <b style="color:#6366F1">P2 Moderat</b> (tengah), dan <b style="color:#0D9488">P3 Unggul</b> (kanan-atas).`;
+        clusterNoteEl.innerHTML = `<b>Indikasi Keseluruhan (Semua Mahasiswa):</b> Menampilkan seluruh sebaran responden. Terbagi jelas dalam 3 zona: <b style="color:#E11D48">P1 Rentan</b> (kiri-bawah), <b style="color:#6366F1">P2 Moderat</b> (tengah), dan <b style="color:#0D9488">P3 Unggul</b> (kanan-atas).`;
         if (badgeEl) badgeEl.textContent = `${D.n || 151} Data Riil Mahasiswa`;
       } else if (state.profile === 0) {
         clusterNoteEl.style.borderLeftColor = '#E11D48';
         clusterNoteEl.style.background = 'rgba(225, 29, 72, 0.05)';
-        clusterNoteEl.innerHTML = `💡 <b>Indikasi Klaster (P1 Rentan - 46%):</b> Titik terkonsentrasi di area skor rendah (&lt;60) pada sumbu Kesejahteraan &amp; Akademik &rarr; <b>Sasaran utama prioritas bantuan konseling psikologis &amp; harmonisasi jadwal tugas</b>.`;
+        clusterNoteEl.innerHTML = `<b>Indikasi Klaster (P1 Rentan - 46%):</b> Titik terkonsentrasi di area skor rendah (&lt;60) pada sumbu Kesejahteraan &amp; Akademik &rarr; <b>Sasaran utama prioritas bantuan konseling psikologis &amp; harmonisasi jadwal tugas</b>.`;
         if (badgeEl) badgeEl.textContent = `${CLUSTERS[0].count || 71} Mahasiswa (P1 Rentan)`;
       } else if (state.profile === 1) {
         clusterNoteEl.style.borderLeftColor = '#6366F1';
         clusterNoteEl.style.background = 'rgba(99, 102, 241, 0.05)';
-        clusterNoteEl.innerHTML = `💡 <b>Indikasi Klaster (P2 Moderat - 41%):</b> Titik stabil di zona adaptasi sedang (skor 60–80) &rarr; <b>Memerlukan klinik persiapan magang &amp; sertifikasi industri agar tidak merosot ke kelompok rentan</b>.`;
+        clusterNoteEl.innerHTML = `<b>Indikasi Klaster (P2 Moderat - 41%):</b> Titik stabil di zona adaptasi sedang (skor 60–80) &rarr; <b>Memerlukan klinik persiapan magang &amp; sertifikasi industri agar tidak merosot ke kelompok rentan</b>.`;
         if (badgeEl) badgeEl.textContent = `${CLUSTERS[1].count || 61} Mahasiswa (P2 Moderat)`;
       } else if (state.profile === 2) {
         clusterNoteEl.style.borderLeftColor = '#0D9488';
         clusterNoteEl.style.background = 'rgba(13, 148, 136, 0.05)';
-        clusterNoteEl.innerHTML = `💡 <b>Indikasi Klaster (P3 Unggul - 13%):</b> Titik berada di kuadran performa tertinggi (&gt;80) &rarr; <b>Potensial diberdayakan sebagai Peer Mentor bagi P1 dan delegasi kompetisi/hibah kampus</b>.`;
+        clusterNoteEl.innerHTML = `<b>Indikasi Klaster (P3 Unggul - 13%):</b> Titik berada di kuadran performa tertinggi (&gt;80) &rarr; <b>Potensial diberdayakan sebagai Peer Mentor bagi P1 dan delegasi kompetisi/hibah kampus</b>.`;
         if (badgeEl) badgeEl.textContent = `${CLUSTERS[2].count || 19} Mahasiswa (P3 Unggul)`;
       }
     }
