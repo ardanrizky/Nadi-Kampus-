@@ -921,16 +921,8 @@
           <div class="doc-exec-card__lbl">${isSelection ? 'Rencana Terpilih' : 'Total Intervensi'}</div>
         </div>
         <div class="doc-exec-card">
-          <div class="doc-exec-card__num">${highPrioCount} Program</div>
-          <div class="doc-exec-card__lbl">Prioritas Segera</div>
-        </div>
-        <div class="doc-exec-card">
           <div class="doc-exec-card__num">${totalStudents} Mahasiswa</div>
           <div class="doc-exec-card__lbl">Sampel Responden</div>
-        </div>
-        <div class="doc-exec-card">
-          <div class="doc-exec-card__num">LPA-GMM &amp; NLP</div>
-          <div class="doc-exec-card__lbl">Metodologi Analitik</div>
         </div>
       </div>
 
