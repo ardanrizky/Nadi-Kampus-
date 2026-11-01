@@ -1067,59 +1067,59 @@ var CLUSTERS = [
   {
     cluster: 1,
     key: 'p1',
-    name: 'Profil 1: Vulnerable / Low Adaptation',
-    short: 'Performa Rendah & Butuh Perhatian',
+    name: 'Profil 1: Rentan (Vulnerable)',
+    short: 'Rentan',
     color: '#E11D48',
     pca: { x: -1.12, y: 0.13 },
     rawMeans: { wellbeing: 2.80, pressure: 2.79, social: 3.46, career: 2.90 },
     means: { wellbeing: 56, pressure: 56, social: 69, career: 58 },
     count: 69,
     pct: 46.3,
-    desc: 'Centroid menunjukkan skor di bawah rata-rata pada dimensi kesejahteraan mental (2.80), ketahanan akademik (2.79), dan kesiapan karier (2.90). Memerlukan pendampingan dan penanganan prioritas.',
+    desc: 'Kelompok mahasiswa dengan beban psikososial paling berat dan rentan stres perkuliahan. Memerlukan perhatian dan pendampingan prioritas institusi.',
     traits: [
-      'Wellbeing psikologis rentan (56/100): kecemasan dan stres adaptasi perkuliahan',
-      'Ketahanan akademik tertekan (56/100): kesulitan mengatasi ritme penugasan dan beban kuliah',
-      'Kesiapan karier perlu bimbingan (58/100): membutuhkan arahan kompetensi dan bimbingan karier'
+      'Kesejahteraan Mental (56/100): Mengalami kecemasan dan rentan stres kuliah',
+      'Ketahanan Akademik (56/100): Kewalahan dengan ritme tugas dan jadwal ujian',
+      'Kesiapan Karier (58/100): Bingung arah karier dan belum siap magang'
     ],
-    need: 'Layanan konseling psikologis berkala, pendampingan dosen wali intensif, harmonisasi beban tugas, dan mentoring terpadu.'
+    need: 'Layanan konseling psikologis berkala, pendampingan dosen wali intensif, dan harmonisasi jadwal tugas.'
   },
   {
     cluster: 2,
     key: 'p2',
-    name: 'Profil 2: Moderate / Average Adaptation',
-    short: 'Adaptasi Sedang (Kelompok Stabil)',
+    name: 'Profil 2: Moderat (Moderate)',
+    short: 'Moderat',
     color: '#6366F1',
     pca: { x: 0.58, y: -0.08 },
     rawMeans: { wellbeing: 3.79, pressure: 3.76, social: 4.21, career: 3.58 },
     means: { wellbeing: 76, pressure: 75, social: 84, career: 72 },
     count: 61,
     pct: 40.9,
-    desc: 'Centroid berada pada tingkat adaptasi yang stabil dan seimbang di seluruh dimensi (40.9% populasi). Didukung relasi sosial yang solid dan ketahanan akademik yang memadai.',
+    desc: 'Kelompok mahasiswa dengan adaptasi seimbang dan stabil di seluruh dimensi. Mampu mengelola kuliah dengan baik namun tetap perlu penguatan karier.',
     traits: [
-      'Dukungan sosial solid (84/100): jejaring relasi teman sebaya dan komunikasi kampus terjalin baik',
-      'Performa akademik stabil (75/100): mampu mengelola beban kuliah dengan strategi adaptasi yang baik',
-      'Kesiapan karier berkembang (72/100): aktif mengeksplorasi sertifikasi dan persiapan magang'
+      'Dukungan Sosial (84/100): Relasi teman sebaya dan komunikasi kampus terjalin baik',
+      'Ketahanan Akademik (75/100): Mampu mengelola tugas kuliah dengan teratur',
+      'Kesiapan Karier (72/100): Mulai mempersiapkan portofolio dan rencana magang'
     ],
-    need: 'Workshop manajemen stres lanjutan, pengayaan keterampilan industri, klinik magang terpandu, dan penguatan jejaring kemahasiswaan.'
+    need: 'Klinik persiapan magang, sertifikasi industri, dan workshop manajemen waktu.'
   },
   {
     cluster: 3,
     key: 'p3',
-    name: 'Profil 3: Thriving & High Functioning',
-    short: 'Wellbeing & Performa Tinggi',
+    name: 'Profil 3: Unggul (Thriving)',
+    short: 'Unggul',
     color: '#0D9488',
     pca: { x: 2.13, y: -0.22 },
     rawMeans: { wellbeing: 4.60, pressure: 4.60, social: 5.00, career: 4.24 },
     means: { wellbeing: 92, pressure: 92, social: 100, career: 85 },
     count: 19,
     pct: 12.8,
-    desc: 'Centroid merepresentasikan kelompok mahasiswa unggul dengan tingkat kepuasan dan pencapaian tertinggi. Dukungan sosial mencapai skor optimal (100) serta performa akademik prima (92).',
+    desc: 'Kelompok mahasiswa unggul dengan ketahanan akademik dan mental terbaik. Sangat siap kerja dan memiliki solidaritas sosial optimal.',
     traits: [
-      'Dukungan sosial optimal (100/100): relasi kampus, dosen, dan lingkungan pertemanan sangat kuat',
-      'Akademik dan resiliensi prima (92/100 & 92/100): antusiasme belajar tinggi dan motivasi berprestasi',
-      'Kesiapan karier matang (85/100): visi karier terarah dan percaya diri memasuki dunia industri'
+      'Dukungan Sosial (100/100): Hubungan sangat erat dengan dosen dan lingkungan kampus',
+      'Ketahanan Akademik (92/100): Daya tahan tinggi dan motivasi berprestasi unggul',
+      'Kesiapan Karier (85/100): Portofolio matang dan sangat percaya diri memasuki industri'
     ],
-    need: 'Pemberdayaan sebagai duta kampus / peer mentor, fasilitasi program kepemimpinan, hibah kompetisi, dan program akselerasi karier.'
+    need: 'Pemberdayaan sebagai duta kampus / peer mentor, hibah kompetisi, dan akselerasi karier elit.'
   }
 ];
 
