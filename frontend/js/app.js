@@ -1202,19 +1202,6 @@
       return renderReco();
     }
 
-    if (t.id === 'trayCopy') {
-      const txt = planText();
-      const done = () => toast('Ringkasan rencana disalin');
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(txt).then(done, done);
-      } else {
-        const ta = document.createElement('textarea');
-        ta.value = txt; document.body.appendChild(ta); ta.select();
-        try { document.execCommand('copy'); } catch (_) {}
-        ta.remove(); done();
-      }
-    }
-
     // Tombol Cetak / Unduh Dokumen Rekomendasi Resmi
     if (t.id === 'btnPrintReport' || t.closest('#btnPrintReport') || t.id === 'btnDownloadRecoPdf' || t.closest('#btnDownloadRecoPdf')) {
       e.preventDefault();
