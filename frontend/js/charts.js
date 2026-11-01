@@ -15,13 +15,14 @@ const Charts = (() => {
   function ring(value, color, size = 92, stroke = 10, label = '') {
     const r = (size - stroke) / 2;
     const c = 2 * Math.PI * r;
+    const target = c * (1 - value / 100);
     return `
       <svg class="ring ring--interactive" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="${label ? label + ': ' : ''}${value} dari 100">
         <title>${label ? label + ': ' : ''}${value}/100 poin</title>
         <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="#E2E8F0" stroke-width="${stroke}"/>
         <circle class="ring__val" cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${color}"
-          stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}"
-          data-target="${c * (1 - value / 100)}" transform="rotate(-90 ${size / 2} ${size / 2})"/>
+          stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${target}"
+          data-target="${target}" transform="rotate(-90 ${size / 2} ${size / 2})"/>
       </svg>`;
   }
 

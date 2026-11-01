@@ -198,6 +198,7 @@
           ` : ''}
         </article>`;
     }).join('');
+    animateRings(kpisEl);
   }
 
   function renderTrend() {
