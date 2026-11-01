@@ -1350,11 +1350,33 @@
 
   async function syncWithLiveAPI() {
     try {
-      const res = await fetch('/api/v1/profiles');
+      const res = await fetch('/api/v1/respondents');
       if (!res.ok) return;
-      const data = await res.json();
-      if (data && data.profiles && data.profiles.length === 3) {
-        console.log('[NadiKampus Live API] Terhubung ke FastAPI Backend: 3 Profil LPA-GMM aktif.');
+      const json = await res.json();
+      if (json && json.data && json.data.length > 0) {
+        console.log(`[NadiKampus Live API] Terhubung ke Backend: ${json.data.length} responden aktif (${json.source}).`);
+        window.CLUSTER_POINTS = json.data.map(r => ({
+          id: r.id,
+          cluster: (r.profile || 1) - 1,
+          x: r.pca_x,
+          y: r.pca_y,
+          prodi: r.prodi,
+          wb: Math.round((r.scores?.wellbeing || 0) * 20),
+          acd: Math.round((r.scores?.academic || 0) * 20),
+          soc: Math.round((r.scores?.social || 0) * 20),
+          car: Math.round((r.scores?.career || 0) * 20)
+        }));
+
+        const liveIndicator = $('.ekg-state');
+        if (liveIndicator) {
+          const srcLbl = json.source === 'google_sheet_appscript' ? 'GSheets Live' : 'Database Live';
+          liveIndicator.innerHTML = `Status: <b style="color: #0D9488;">${srcLbl}</b>`;
+        }
+        const liveCount = $('.ekg-n');
+        if (liveCount) {
+          liveCount.textContent = `${json.data.length} Responden`;
+        }
+        if (state.view === 'profile') renderProfile();
       }
     } catch (e) {
       // Offline / Static File mode: data.js bekerja sebagai fallback provider tanpa error
