@@ -1,0 +1,17 @@
+{
+  "gform": {
+    "positive": 0.5787,
+    "negative": 0.2514,
+    "neutral": 0.17
+  },
+  "telegram": {
+    "neutral": 0.6026,
+    "negative": 0.3247,
+    "positive": 0.0726
+  },
+  "meta": {
+    "total_documents": 5433,
+    "valid_high_conf_documents": 5206,
+    "low_conf_count": 227
+  }
+}
