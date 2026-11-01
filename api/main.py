@@ -41,7 +41,7 @@ ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
 CORS_ORIGINS = [o.strip() for o in os.environ.get("CORS_ORIGINS", "*").split(",") if o.strip()]
 GOOGLE_SHEET_APPSCRIPT_URL = os.environ.get(
     "GOOGLE_SHEET_APPSCRIPT_URL",
-    "https://script.google.com/macros/s/AKfycbxuTDSncel8bFmQag0mJW7fpP44BxqRXEBqLDo2lCvjimbuCN_0Ld_TnL-g7ctgDCH_4g/exec?key=nadikampus-sheet-6uoeQVwELdQmugy5DSoYiMA9j5gvvgei"
+    "https://script.google.com/macros/s/AKfycbwbTQTj6HPzVarxjsEEMcAH4OxW18qdaw2fWHDxLKVSaE4XARedk2yvAatFcxiBb3mi/exec?key=nadikampus-sheet-6uoeQVwELdQmugy5DSoYiMA9j5gvvgei"
 )
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
