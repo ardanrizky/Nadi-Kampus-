@@ -46,12 +46,6 @@ prodi_map = {
 
 # Hitung data per Program Studi
 prodi_dict = {}
-offsets = {
-    "wellbeing": [-6, -4, -5, -3, -1, 0],
-    "pressure":  [-5, -3,  2, -1,  3, 0],
-    "social":    [-4, -3, -3, -2, -1, 0],
-    "career":    [-7, -5, -4, -3, -1, 0]
-}
 
 for name, key in prodi_map.items():
     sub = df[df["Program Studi"] == name]
@@ -68,12 +62,17 @@ for name, key in prodi_map.items():
     p2 = round((sub["Profile"] == 2).sum() / n * 100)
     p3 = 100 - p1 - p2
     
-    trend = {
-        "wellbeing": [max(0, min(100, wb + o)) for o in offsets["wellbeing"]],
-        "pressure":  [max(0, min(100, acd + o)) for o in offsets["pressure"]],
-        "social":    [max(0, min(100, soc + o)) for o in offsets["social"]],
-        "career":    [max(0, min(100, car + o)) for o in offsets["career"]]
-    }
+    # Dinamika skor riil per jenjang semester (Semester 1, 3, 5, 7)
+    trend = {}
+    for dim_name, dkey in [("WB_Score", "wellbeing"), ("ACD_Score", "pressure"), ("SOC_Score", "social"), ("CAR_Score", "career")]:
+        sem_vals = []
+        for s in ["Semester 1", "Semester 3", "Semester 5", "Semester 7"]:
+            sub_sem = sub[sub["Semester saat ini"] == s]
+            if len(sub_sem) > 0:
+                sem_vals.append(int(round(sub_sem[dim_name].mean() * 20)))
+            else:
+                sem_vals.append(int(round(sub[dim_name].mean() * 20)))
+        trend[dkey] = sem_vals
     
     prodi_dict[key] = {
         "name": name,
@@ -133,15 +132,9 @@ var DIMS = [
     about: 'Kejelasan arah karier, kepercayaan diri terhadap keterampilan, dan akses ke magang atau informasi kerja.' }}
 ];
 
-var MONTHS = ['Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu'];
-
-/* Selisih tiap bulan terhadap nilai terkini (bulan terakhir = 0) */
-var TREND_OFFSETS = {{
-  wellbeing: [-6, -4, -5, -3, -1, 0],
-  pressure:  [-5, -3,  2, -1,  3, 0],
-  social:    [-4, -3, -3, -2, -1, 0],
-  career:    [-7, -5, -4, -3, -1, 0]
-}};
+/* Jenjang semester mahasiswa riil (Tingkat Akademik S1, S3, S5, S7) */
+var SEMESTERS = ['Sem 1', 'Sem 3', 'Sem 5', 'Sem 7'];
+var MONTHS = SEMESTERS;
 
 /* Tujuh topik hasil NLP: bobot dasar dan pembagian sentimen [positif, netral, negatif] */
 var TOPICS = [

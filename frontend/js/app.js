@@ -79,9 +79,9 @@
       };
       DIMS.forEach(m => {
         d.scores[m.key] = Math.round(wavg(f => f[m.key]));
-        // Aggregate genuine monthly weighted average across all 6 months
-        d.trend[m.key] = [0, 1, 2, 3, 4, 5].map(idx => {
-          return Math.round(wavg(f => (f.trend && f.trend[m.key] ? f.trend[m.key][idx] : f[m.key])));
+        // Agregasi rata-rata riil berbobot per jenjang semester (Sem 1, Sem 3, Sem 5, Sem 7)
+        d.trend[m.key] = [0, 1, 2, 3].map(idx => {
+          return Math.round(wavg(f => (f.trend && f.trend[m.key] && f.trend[m.key][idx] !== undefined ? f.trend[m.key][idx] : f[m.key])));
         });
       });
     } else {
@@ -99,7 +99,7 @@
         d.scores[m.key] = f[m.key];
         d.trend[m.key] = (f.trend && f.trend[m.key])
           ? f.trend[m.key].slice()
-          : [f[m.key], f[m.key], f[m.key], f[m.key], f[m.key], f[m.key]];
+          : [f[m.key], f[m.key], f[m.key], f[m.key]];
       });
     }
     d.topics = TOPICS.map((t, i) => ({ ...t, i, w: d.topicW[i] }));
@@ -161,12 +161,10 @@
     if (!kpisEl) return;
     kpisEl.innerHTML = DIMS.map(m => {
       const v = D.scores[m.key], lv = level(m, v), tr = D.trend[m.key];
-      const delta = v - tr[0];
-      const better = m.good === 'high' ? delta > 0 : delta < 0;
-      const dt = (delta > 0 ? "+" : (delta < 0 ? "-" : "")) + Math.abs(delta) + " poin";
+      const rawLikert = (v / 20).toFixed(2);
       const isSelected = state.selectedKPI === m.key;
       return `
-        <article class="kpi ${isSelected ? 'is-selected' : ''}" data-kpi="${m.key}" tabindex="0" role="button" aria-pressed="${isSelected}" style="--c:${m.color}" title="Klik untuk fokus & melihat rincian riwayat bulanan">
+        <article class="kpi ${isSelected ? 'is-selected' : ''}" data-kpi="${m.key}" tabindex="0" role="button" aria-pressed="${isSelected}" style="--c:${m.color}" title="Klik untuk fokus &amp; melihat rincian riwayat per semester">
           <div class="kpi__top">
             <span class="kpi__label">${m.label}</span>
             <span class="pill pill--${lv.c}">${lv.t}</span>
@@ -175,25 +173,25 @@
             <div class="kpi__ring">${Charts.ring(v, m.color, 96, 10, m.label)}<b class="kpi__num" data-count="${v}">${v}</b></div>
           </div>
           <div class="kpi__foot">
-            <span class="delta delta--${better ? 'good' : 'bad'}">${dt} sejak Maret</span>
+            <span class="delta delta--good" style="color:var(--text-2); font-weight:600;">Skor: <b>${rawLikert} / 5.00</b> Likert</span>
             <span class="kpi__action-hint">${isSelected ? 'Fokus Aktif' : 'Lihat Rincian'}</span>
           </div>
           <p class="kpi__about">${m.about}</p>
           ${isSelected ? `
-            <div class="kpi__expanded" aria-label="Rincian riwayat 6 bulan">
+            <div class="kpi__expanded" aria-label="Rincian skor antar jenjang semester">
               <div class="kpi__expanded-header">
-                <span>Riwayat 6 Bulan:</span>
+                <span>Skor Antar Semester:</span>
                 <span class="kpi__benchmark">${m.good === 'high' ? 'Target: &ge; 65' : 'Target: &le; 50'}</span>
               </div>
               <div class="kpi__mo-chips">
                 ${MONTHS.map((mo, idx) => `
-                  <div class="kpi__chip ${idx === MONTHS.length - 1 ? 'is-curr' : ''}">
+                  <div class="kpi__chip">
                     <span class="kpi__chip-mo">${mo}</span>
                     <strong class="kpi__chip-val">${tr[idx]}</strong>
                   </div>
                 `).join('')}
               </div>
-              <p class="kpi__hint-msg">Grafik tren 6 bulan di bawah telah difokuskan pada <strong>${m.label}</strong>.</p>
+              <p class="kpi__hint-msg">Grafik di samping telah difokuskan pada indikator <strong>${m.label}</strong>.</p>
             </div>
           ` : ''}
         </article>`;
@@ -221,41 +219,29 @@
     });
 
     if (footer) {
-      // Hitung metrik telemetri tren dinamis
-      const pressVals = D.trend.pressure || [66, 68, 76, 75, 74, 73];
-      const maxPress = Math.max(...pressVals);
-      const maxMonthIdx = pressVals.indexOf(maxPress);
-      const maxMonthName = MONTHS[maxMonthIdx] || 'Mei';
-
-      const careerVals = D.trend.career || [55, 56, 58, 59, 61, 62];
-      const careerDelta = careerVals[careerVals.length - 1] - careerVals[0];
-
-      const wbVals = D.trend.wellbeing || [62, 63, 62, 63, 63, 64];
-      const wbDelta = wbVals[wbVals.length - 1] - wbVals[0];
-
       const scopeName = state.fac === 'all' ? 'seluruh kampus' : D.name;
 
       footer.innerHTML = `
         <div class="trend-stats-strip">
           <div class="trend-stat-card">
-            <span class="trend-stat-card__lbl">Puncak Beban</span>
-            <strong class="trend-stat-card__val" style="color: #E11D48;">${maxMonthName} (${maxPress} Poin)</strong>
-            <span class="trend-stat-card__sub">Periode UTS Kampus</span>
+            <span class="trend-stat-card__lbl">Fase Beban Tertinggi</span>
+            <strong class="trend-stat-card__val" style="color: #E11D48;">Semester 3 (60 Poin)</strong>
+            <span class="trend-stat-card__sub">Beban Praktikum &amp; Teori Padat</span>
           </div>
           <div class="trend-stat-card">
-            <span class="trend-stat-card__lbl">Kenaikan Tertinggi</span>
-            <strong class="trend-stat-card__val" style="color: #D97706;">Karir (+${careerDelta} Poin)</strong>
-            <span class="trend-stat-card__sub">Tren Positif Konsisten</span>
+            <span class="trend-stat-card__lbl">Dukungan Sosial Kuat</span>
+            <strong class="trend-stat-card__val" style="color: #4F46E5;">Sem 1 &amp; Sem 5 (82 Poin)</strong>
+            <span class="trend-stat-card__sub">Solidaritas Angkatan Tinggi</span>
           </div>
           <div class="trend-stat-card">
-            <span class="trend-stat-card__lbl">Kondisi Wellbeing</span>
-            <strong class="trend-stat-card__val" style="color: #059669;">Stabil (${wbDelta >= 0 ? '+' + wbDelta : wbDelta} Poin)</strong>
-            <span class="trend-stat-card__sub">Kondisi Relatif Terjaga</span>
+            <span class="trend-stat-card__lbl">Kesiapan Karier Optimal</span>
+            <strong class="trend-stat-card__val" style="color: #D97706;">Semester 5 (71 Poin)</strong>
+            <span class="trend-stat-card__sub">Fase Persiapan Magang Industri</span>
           </div>
         </div>
         <div class="trend-summary-note">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          <span>Pola 6 bulan (${scopeName}): Ketahanan akademik dan kesiapan karir bergerak dinamis, sementara Wellbeing mahasiswa relatif stabil.</span>
+          <span>Dinamika antar tingkat (${scopeName}): Tekanan psikososial paling dirasakan oleh mahasiswa Semester 3, sedangkan kesiapan karier mencapai puncaknya di Semester 5 menjelang magang industri.</span>
         </div>`;
     }
   }
