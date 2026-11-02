@@ -286,7 +286,6 @@ const RECOS = [
 /* Pasang eksplisit ke objek window global */
 window.DIMS = DIMS;
 window.MONTHS = MONTHS;
-window.TREND_OFFSETS = TREND_OFFSETS;
 window.TOPICS = TOPICS;
 window.PRODIS = PRODIS;
 window.FACULTIES = PRODIS;

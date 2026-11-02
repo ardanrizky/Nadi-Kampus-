@@ -442,7 +442,9 @@
     // 1. Render Scatter Plot 2D Mahasiswa & Centroid
     const scatterEl = $('#clusterScatterChart');
     if (scatterEl && typeof Charts.clusterScatter === 'function') {
-      Charts.clusterScatter(scatterEl, CLUSTER_POINTS, CLUSTERS, state.profile, i => {
+      const activePoints = (window.CLUSTER_POINTS && window.CLUSTER_POINTS.length > 0) ? window.CLUSTER_POINTS : CLUSTER_POINTS;
+      const activeClusters = (window.CLUSTERS && window.CLUSTERS.length > 0) ? window.CLUSTERS : CLUSTERS;
+      Charts.clusterScatter(scatterEl, activePoints, activeClusters, state.profile, i => {
         state.profile = i;
         renderProfile();
       });

@@ -330,13 +330,16 @@ const Charts = (() => {
 
     // 3. Titik-titik Responden (149 Mahasiswa Riil)
     const ptsGroup = svgEl('g', { class: 'sc__pts' }, svg);
-    points.forEach(pt => {
+    const safePoints = (points && points.length > 0) ? points : (window.CLUSTER_POINTS || []);
+    safePoints.forEach(pt => {
       const c = clusters[pt.cluster];
+      if (!c) return;
       const isSel = activeCluster === null || pt.cluster === activeCluster;
 
       // Sedikit deterministik micro-jitter agar titik berskor sama tetap terlihat
       let hash = 0;
-      for (let k = 0; k < pt.id.length; k++) hash = (hash * 31 + pt.id.charCodeAt(k)) & 0xff;
+      const idStr = String(pt.id || '');
+      for (let k = 0; k < idStr.length; k++) hash = (hash * 31 + idStr.charCodeAt(k)) & 0xff;
       const jx = ((hash % 11) - 5) * 0.45;
       const jy = (((hash >> 2) % 11) - 5) * 0.45;
 
