@@ -607,7 +607,7 @@
       ['magang', 'karier', 'cv', 'kerja', 'portofolio', 'interview', 'loker', 'alumni', 'industri', 'profesi', 'masa depan'], // 1
       ['ukt', 'biaya', 'uang', 'finansial', 'bayar', 'kos', 'makan', 'beasiswa', 'keringanan', 'mahal', 'spp', 'ekonomi'], // 2
       ['teman', 'sendirian', 'kesepian', 'sosial', 'rantau', 'asrama', 'isolasi', 'berteman', 'ngobrol', 'relasi', 'asing'], // 3
-      ['wifi', 'fasilitas', 'ruang', 'lab', 'gedung', 'perpustakaan', 'toilet', 'ac', 'parkir', 'layanan', 'antrean', 'server', 'lemot'], // 4
+      ['wifi', 'fasilitas', 'ruang', 'lab', 'gedung', 'perpustakaan', 'toilet', 'ac', 'parkir', 'layanan', 'antrean', 'server', 'lemot', 'parkiran', 'kantin'], // 4
       ['dosen', 'wali', 'bimbingan', 'skripsi', 'konsultasi', 'pengajar', 'revisi', 'feedback', 'jurusan', 'prodi', 'dosen wali'], // 5
       ['ukm', 'organisasi', 'kegiatan', 'bem', 'hima', 'lomba', 'acara', 'komunitas', 'ekskul', 'kepanitiaan'] // 6
     ];
@@ -633,7 +633,8 @@
       'sulit', 'berat', 'stres', 'stress', 'capek', 'lelah', 'kecewa', 'kurang', 'buruk', 'putus',
       'tidak', 'belum', 'lambat', 'bingung', 'panik', 'mahal', 'sendiri', 'kesepian',
       'terlambat', 'rusak', 'susah', 'takut', 'cemas', 'masalah', 'keluhan', 'keluh', 'parah',
-      'begadang', 'drop', 'menumpuk', 'tabrakan', 'bentrok', 'padat', 'pusing', 'down', 'overthinking'
+      'begadang', 'drop', 'menumpuk', 'tabrakan', 'bentrok', 'padat', 'pusing', 'down', 'overthinking',
+       'sempit', 'brobok', 'jelek'
     ];
     const posWords = [
       'bagus', 'senang', 'membantu', 'nyaman', 'terbantu', 'puas', 'mantap', 'baik', 'ramah',
@@ -781,7 +782,15 @@
     const fBox = $('#recoFilter'), rBox = $('#recos');
     if (!fBox || !rBox) return;
 
-    const opts = [['all', 'Semua profil'], ...PROFILES.map((p, i) => [String(i), p.short])];
+    // Safe fallback jika PROFILES / CLUSTERS belum terdefinisi
+    const profileList = window.PROFILES || window.CLUSTERS || [
+      { short: 'P1 Rentan' },
+      { short: 'P2 Moderat' },
+      { short: 'P3 Unggul' }
+    ];
+
+    const opts = [['all', 'Semua profil'], ...profileList.map((p, i) => [String(i), p.short || `Profil ${i+1}`])];
+    
     fBox.innerHTML = opts.map(([k, l]) => `
       <button type="button" class="seg__btn" aria-pressed="${state.recoProfile === k}" data-recofilter="${k}">
         ${l}
@@ -789,21 +798,30 @@
 
     const ranked = rankRecos().filter(x => {
       if (state.recoProfile === 'all') return true;
-      return x.r.profiles.includes(+state.recoProfile);
+      return x.r.profiles && x.r.profiles.includes(+state.recoProfile);
     });
+
+    if (!ranked || ranked.length === 0) {
+      rBox.innerHTML = `<div class="p-4 text-center text-slate-500">Tidak ada program rekomendasi untuk profil ini.</div>`;
+      return;
+    }
 
     rBox.innerHTML = ranked.map(x => {
       const { r, m, t } = x;
       const on = state.plan.has(r.id);
+      const targetProfiles = r.profiles 
+        ? r.profiles.map(i => (profileList[i] ? profileList[i].short : `P${i+1}`)).join(', ')
+        : 'Semua Profil';
+
       return `
         <article class="reco reco--${x.pr.toLowerCase()}">
           <div class="reco__top">
             <span class="prio prio--${x.pr.toLowerCase()}">Prioritas ${x.pr}</span>
-            <span class="reco__for">${r.profiles.map(i => PROFILES[i].short).join(', ')}</span>
+            <span class="reco__for">${targetProfiles}</span>
           </div>
           <h4>${r.title}</h4>
           <p>${r.desc}</p>
-          <p class="reco__why"><b>Dasar data:</b> ${m.short} ${D.scores[m.key]} · ${Math.round(t.w)}% komentar membahas ${t.name.toLowerCase()} (${t.sent[2]}% negatif)</p>
+          <p class="reco__why"><b>Dasar data:</b> ${m ? m.short : 'Indikator'} ${D.scores[m ? m.key : 'wellbeing']} · ${Math.round(t.w)}% komentar membahas ${t.name ? t.name.toLowerCase() : 'topik'} (${t.sent ? t.sent[2] : 0}% negatif)</p>
           <dl class="reco__meta">
             <div><dt>Penanggung jawab</dt><dd>${r.owner}</dd></div>
             <div><dt>Durasi</dt><dd>${r.duration}</dd></div>
