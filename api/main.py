@@ -29,11 +29,30 @@ MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
 try:
     scaler = joblib.load(MODELS_DIR / "scaler.joblib")
     # Sesuaikan dengan nama file model k=3 atau k=4 milikmu
-    gmm_model = joblib.load(MODELS_DIR / "gmm_k3.joblib") 
+    gmm_model = joblib.load(MODELS_DIR / "gmm_k3_diag.joblib") 
     print("Model GMM & Scaler berhasil dimuat!")
 except Exception as e:
     print(f"Peringatan: Gagal memuat model machine learning: {e}")
+# ===== LOAD MODEL LABEL VOICE =====
+VOICE_MODELS = None
+try:
+    VOICE_MODELS = joblib.load(MODELS_DIR / "label_voice.joblib")   # {"sentiment","category","sklearn"}[cite: 4]
+    import sklearn as _sk
+    if VOICE_MODELS.get("sklearn") != _sk.__version__:
+        print(f"Peringatan: model dilatih dengan scikit-learn {VOICE_MODELS.get('sklearn')}, server memakai {_sk.__version__}")[cite: 4]
+    print("Model label curhat berhasil dimuat!")
+except Exception as e:
+    print(f"Peringatan: model label curhat gagal dimuat: {e}")
 
+# Urutan HARUS sama dengan TOPICS baru di data.js (dibuat oleh build_gform_voice.py)
+VOICE_TOPICS = {
+    "academic": (0, "Akademik & beban studi"),
+    "career": (1, "Karier & magang"),
+    "economic": (2, "Biaya kuliah & ekonomi"),
+    "social": (3, "Sosial & pertemanan"),
+    "wellbeing": (4, "Kesejahteraan & dukungan")
+}
+VOICE_SENT = {"positive": "pos", "neutral": "neu", "negative": "neg"}
 # Enable CORS for frontend consumption
 app.add_middleware(
     CORSMiddleware,
@@ -176,7 +195,11 @@ def get_respondents():
             return {"error": str(e)}
 
     return {"total": 0, "data": []}
-
+class PredictStudentProfileRequest(BaseModel):
+    wellbeing: float
+    academic: float
+    social: float
+    career: float
 @app.post("/api/v1/predict-profile")
 @app.post("/api/v1/predict-cluster")
 def predict_profile(req: PredictStudentProfileRequest):
@@ -349,4 +372,26 @@ async def import_survey_endpoint(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Gagal memproses survei: {str(e)}")
+# ===== ENDPOINT CURHAT / STUDENT VOICE =====
+class VoiceIn(BaseModel):
+    text: str = Field(..., min_length=3, max_length=1000)
 
+
+@app.post("/api/v1/label-voice")
+def label_voice(req: VoiceIn):
+    """Label sentimen + kategori (topik dashboard) untuk satu curhat baru."""
+    if VOICE_MODELS is None:
+        raise HTTPException(status_code=503, detail="Model pelabelan belum tersedia di server.")
+    x = [req.text.strip().lower()]
+    sm, cm = VOICE_MODELS["sentiment"], VOICE_MODELS["category"]
+    ps, pc = sm.predict_proba(x)[0], cm.predict_proba(x)[0]
+    si, ci = int(ps.argmax()), int(pc.argmax())
+    idx, name = VOICE_TOPICS[cm.classes_[ci]]
+    return {
+        "sentiment": VOICE_SENT[sm.classes_[si]],      
+        "sentiment_confidence": round(float(ps[si]), 3),
+        "topic_index": idx,
+        "topic_name": name,
+        "topic_confidence": round(float(pc[ci]), 3),
+        "low_confidence": bool(ps[si] < 0.5 or pc[ci] < 0.5)
+    }

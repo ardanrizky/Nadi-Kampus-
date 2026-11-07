@@ -634,6 +634,13 @@
 
     return { topicIndex: bestTopic, sentiment };
   }
+  const OLD_TO_NEW_TOPIC = { 0: 0, 1: 1, 2: 2, 3: 3, 4: 0, 5: 0, 6: 3 };
+  function topicFromRow(d) {
+    const byName = TOPICS.findIndex(t => t.name === d.topic_name);
+    if (byName >= 0) return byName;
+    const m = OLD_TO_NEW_TOPIC[d.topic_index];
+    return m !== undefined ? m : 0;
+  }
 
   function initVoiceForm() {
     const form = $('#voiceForm');
@@ -664,6 +671,7 @@
       if (!text) return;
 
       const nlp = analyzeVoiceNLP(text);
+      nlp.topicIndex = OLD_TO_NEW_TOPIC[nlp.topicIndex] ?? 0;
       const prodiKey = prodiSel ? prodiSel.value : 'ti';
       const prodiSource = window.PRODIS || window.FACULTIES || {};
       const prodiName = prodiSource[prodiKey] ? prodiSource[prodiKey].name : 'Teknik Informatika';
