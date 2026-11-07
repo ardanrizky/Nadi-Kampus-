@@ -603,13 +603,11 @@
     
     // Klasifikasi topik berdasarkan frekuensi kata kunci
     const extraTopicLexicons = [
-      ['tugas', 'deadline', 'ujian', 'praktikum', 'tubes', 'kuliah', 'tidur', 'jadwal', 'kelas', 'materi', 'begadang', 'lelah', 'istirahat', 'capek'], // 0
-      ['magang', 'karier', 'cv', 'kerja', 'portofolio', 'interview', 'loker', 'alumni', 'industri', 'profesi', 'masa depan'], // 1
-      ['ukt', 'biaya', 'uang', 'finansial', 'bayar', 'kos', 'makan', 'beasiswa', 'keringanan', 'mahal', 'spp', 'ekonomi'], // 2
-      ['teman', 'sendirian', 'kesepian', 'sosial', 'rantau', 'asrama', 'isolasi', 'berteman', 'ngobrol', 'relasi', 'asing'], // 3
-      ['wifi', 'fasilitas', 'ruang', 'lab', 'gedung', 'perpustakaan', 'toilet', 'ac', 'parkir', 'layanan', 'antrean', 'server', 'lemot', 'parkiran', 'kantin'], // 4
-      ['dosen', 'wali', 'bimbingan', 'skripsi', 'konsultasi', 'pengajar', 'revisi', 'feedback', 'jurusan', 'prodi', 'dosen wali'], // 5
-      ['ukm', 'organisasi', 'kegiatan', 'bem', 'hima', 'lomba', 'acara', 'komunitas', 'ekskul', 'kepanitiaan'] // 6
+      ['tugas','deadline','ujian','praktikum','tubes','kuliah','jadwal','kelas','materi','begadang','dosen','wali','bimbingan','skripsi','revisi','feedback','wifi','fasilitas','ruang','lab','gedung','perpustakaan','toilet','parkir','parkiran','server','lemot','antrean','kantin','layanan'],
+      ['magang','karier','cv','kerja','portofolio','interview','loker','alumni','industri','profesi','masa depan'],
+      ['ukt','biaya','uang','finansial','bayar','kos','makan','beasiswa','keringanan','mahal','spp','ekonomi'],
+      ['teman','sendirian','kesepian','sosial','rantau','asrama','isolasi','berteman','ngobrol','relasi','asing','ukm','organisasi','kegiatan','bem','hima','lomba','acara','komunitas','kepanitiaan'],
+      ['stres','stress','cemas','tidur','istirahat','lelah','capek','overthinking','konseling','psikolog','dukungan','semangat','tenang','burnout']
     ];
 
     const topicScores = TOPICS.map((topic, i) => {
@@ -689,7 +687,6 @@
       if (!text) return;
 
       const nlp = analyzeVoiceNLP(text);
-      nlp.topicIndex = OLD_TO_NEW_TOPIC[nlp.topicIndex] ?? 0;
       const prodiKey = prodiSel ? prodiSel.value : 'ti';
       const prodiSource = window.PRODIS || window.FACULTIES || {};
       const prodiName = prodiSource[prodiKey] ? prodiSource[prodiKey].name : 'Teknik Informatika';
@@ -770,7 +767,8 @@
   function rankRecos() {
     return RECOS.map(r => {
       const m = dim(r.metric);
-      const t = (D.topics && D.topics[r.t]) ? D.topics[r.t] : { ...TOPICS[r.t], w: 15 };
+      const base = (D.topics && D.topics[r.t]) || TOPICS[r.t] || { name: '', sent: [0, 0, 0] };
+      const t = { ...base, sent: base.sent || [0, 0, 0], w: base.w ?? 15 };
       const tw = t.w || 15;
       const prioScore = need(m, D.scores[m.key]) * 0.6 + (t.sent[2] * tw / 100) * 0.4;
       const pr = prioScore >= 45 ? 'Tinggi' : prioScore >= 30 ? 'Sedang' : 'Rendah';
