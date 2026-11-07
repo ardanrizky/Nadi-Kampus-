@@ -1287,7 +1287,7 @@
   /* ---------------------------------------------------------
      Sinkronisasi Asinkron dengan Live FastAPI Backend & Supabase
      --------------------------------------------------------- */
-  async function loadSupabaseVoice() {
+ async function loadSupabaseVoice() {
     if (!supabaseClient) return;
     try {
       const { data, error } = await supabaseClient
@@ -1295,13 +1295,20 @@
         .select('*')
         .order('created_at', { ascending: false })
         .limit(100);
+
       if (error) {
-        console.warn('[Supabase] Gagal memuat suara mahasiswa:', error);
+        console.warn('[Supabase] Gagal memuat suara mahasiswa, menggunakan fallback data.js:', error);
         return;
       }
+
+      // HANYA GANTI DATA JIKA SUPABASE BENAR-BENAR MEMILIKI ISI (DATA > 0)
       if (data && data.length > 0) {
-        // Jadikan data cloud Supabase sebagai data utama
-        QUOTES.length = 0;
+        // Ambil komentar lokal yang bertanda isNew (yang dikirim user saat sesi berlangsung)
+        const localNewQuotes = QUOTES.filter(q => q.isNew);
+        
+        QUOTES.length = 0; // Kosongkan array lama
+        
+        // Masukkan data baru dari Supabase
         data.forEach(d => {
           QUOTES.push({
             t: d.topic_index,
@@ -1314,11 +1321,16 @@
           });
         });
 
+        // Gabungkan kembali komentar yang baru saja diketik user
+        QUOTES.unshift(...localNewQuotes);
+
         if (state.view === 'voice') renderVoice();
         console.log(`[Supabase] Berhasil memuat ${data.length} suara mahasiswa dari database cloud.`);
+      } else {
+        console.log('[Supabase] Tabel student_voice di cloud masih kosong. Menggunakan data fallback lokal dari data.js.');
       }
     } catch (err) {
-      console.warn('[Supabase] Error fetch:', err);
+      console.warn('[Supabase] Error fetch, menggunakan data lokal:', err);
     }
   }
 
