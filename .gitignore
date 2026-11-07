@@ -8,6 +8,7 @@ env/
 venv/
 ENV/
 .venv
+venv_web/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
@@ -33,7 +34,7 @@ desktop.ini
 .temp/
 dist/
 build/
-
+*.bak
 
 # Data survei (privasi responden)
 data/raw/
@@ -44,7 +45,6 @@ SURVEI KESMA.csv
 
 # Model terlatih berukuran besar
 models/*.pkl
-# models/*.joblib
 models/gmm_model.joblib
 models/gmm_scaler.joblib
 models/pca_transformer.joblib
