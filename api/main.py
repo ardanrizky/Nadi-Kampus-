@@ -1,71 +1,193 @@
 """
 NadiKampus Intelligence Console — API Backend
 Endpoints for Higher Education Student Wellbeing Monitoring,
-Latent Profile Analysis (LPA via GMM, k=5), and Student Analytics.
+Latent Profile Analysis (LPA via GMM, k=3, model terkunci v1), and Student Analytics.
 """
 
+import datetime
+import io
+import json
 import os
-import math
-import joblib
+import secrets
+import urllib.request
 from pathlib import Path
-from typing import Dict, List, Optional
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+
+import joblib
+import pandas as pd
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-import pandas as pd
+
+from api.preprocess import FEATURES
 
 app = FastAPI(
     title="NadiKampus Analytics API",
     description="RESTful API for higher-education student wellbeing monitoring and Latent Profile Analysis (GMM).",
-    version="2.0.0"
+    version="2.1.0"
 )
 
-# Path absolut ke folder models
-MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
+# ---------------------------------------------------------------------------
+# Konfigurasi dari environment variable (JANGAN taruh key/password di kode)
+#   SUPABASE_URL    contoh: https://xxxx.supabase.co
+#   SUPABASE_KEY    key khusus backend
+#   ADMIN_PASSWORD  wajib diisi; kalau kosong, upload selalu ditolak
+#   CORS_ORIGINS    opsional, daftar domain dipisah koma (default "*")
+# ---------------------------------------------------------------------------
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
+CORS_ORIGINS = [o.strip() for o in os.environ.get("CORS_ORIGINS", "*").split(",") if o.strip()]
+GOOGLE_SHEET_APPSCRIPT_URL = os.environ.get(
+    "GOOGLE_SHEET_APPSCRIPT_URL",
+    "https://script.google.com/macros/s/AKfycbwbTQTj6HPzVarxjsEEMcAH4OxW18qdaw2fWHDxLKVSaE4XARedk2yvAatFcxiBb3mi/exec?key=nadikampus-sheet-6uoeQVwELdQmugy5DSoYiMA9j5gvvgei"
+)
 
-# Load scaler dan model GMM yang sudah kita buat
-try:
-    scaler = joblib.load(MODELS_DIR / "scaler.joblib")
-    # Sesuaikan dengan nama file model k=3 atau k=4 milikmu
-    gmm_model = joblib.load(MODELS_DIR / "gmm_k3_diag.joblib") 
-    print("Model GMM & Scaler berhasil dimuat!")
-except Exception as e:
-    print(f"Peringatan: Gagal memuat model machine learning: {e}")
-# ===== LOAD MODEL LABEL VOICE =====
-VOICE_MODELS = None
-try:
-    VOICE_MODELS = joblib.load(MODELS_DIR / "label_voice.joblib")   # {"sentiment","category","sklearn"}[cite: 4]
-    import sklearn as _sk
-    if VOICE_MODELS.get("sklearn") != _sk.__version__:
-        print(f"Peringatan: model dilatih dengan scikit-learn {VOICE_MODELS.get('sklearn')}, server memakai {_sk.__version__}")[cite: 4]
-    print("Model label curhat berhasil dimuat!")
-except Exception as e:
-    print(f"Peringatan: model label curhat gagal dimuat: {e}")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODELS_DIR = Path(BASE_DIR) / "models"
+OUTPUT_DIR = os.path.join(BASE_DIR, "data", "output")
+PROCESSED_DIR = os.path.join(BASE_DIR, "data", "processed")
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+PCA_VIZ_PATH = MODELS_DIR / "pca_viz.joblib"
 
-# Urutan HARUS sama dengan TOPICS baru di data.js (dibuat oleh build_gform_voice.py)
-VOICE_TOPICS = {
-    "academic": (0, "Akademik & beban studi"),
-    "career": (1, "Karier & magang"),
-    "economic": (2, "Biaya kuliah & ekonomi"),
-    "social": (3, "Sosial & pertemanan"),
-    "wellbeing": (4, "Kesejahteraan & dukungan")
-}
-VOICE_SENT = {"positive": "pos", "neutral": "neu", "negative": "neg"}
+# ---------------------------------------------------------------------------
+# Model terkunci v1. Kalau gagal dimuat, server sengaja tidak jalan.
+# ---------------------------------------------------------------------------
+scaler = joblib.load(MODELS_DIR / "scaler.joblib")
+gmm_model = joblib.load(MODELS_DIR / "gmm_k3_diag.joblib")
+meta = json.loads((MODELS_DIR / "model_meta.json").read_text())
+
+# komponen mentah GMM -> nomor profile (1 = skor terendah, 3 = tertinggi)
+RAW_TO_PROFILE = {i: int(r) + 1 for i, r in enumerate(meta["component_to_profile_rank"])}
+MODEL_VERSION = "v1-diag-k3-n149"
+assert meta["features"] == FEATURES, "Urutan fitur di model_meta.json beda dengan preprocess.py"
+print(f"Model {MODEL_VERSION} dimuat")
+
+
+def _get_pca(fit_pca_model=None):
+    """PCA hanya untuk koordinat scatter dashboard (bukan bagian LPA)."""
+    if PCA_VIZ_PATH.exists():
+        return joblib.load(PCA_VIZ_PATH)
+    if fit_pca_model:
+        return fit_pca_model()
+    return None
+
+
+def label_profile(wb: float, acd: float, soc: float, car: float) -> int:
+    """Beri label profile dengan model terkunci (tanpa fit ulang)."""
+    X = pd.DataFrame([[wb, acd, soc, car]], columns=FEATURES)
+    raw = int(gmm_model.predict(scaler.transform(X))[0])
+    return RAW_TO_PROFILE[raw]
+
+
+_SHEET_CACHE = {"timestamp": 0, "data": None}
+
+
+def fetch_and_process_google_sheet(force_refresh: bool = False, timeout: int = 10):
+    """
+    Mengambil data live dari Google Sheets via Apps Script,
+    memvalidasi & menghitung skor serta profil LPA-GMM terkunci dan proyeksi PCA 2D.
+    """
+    import time
+    now = time.time()
+    # Cache selama 30 detik untuk efisiensi request
+    if not force_refresh and _SHEET_CACHE["data"] is not None and (now - _SHEET_CACHE["timestamp"]) < 30:
+        return _SHEET_CACHE["data"]
+
+    if not GOOGLE_SHEET_APPSCRIPT_URL:
+        raise RuntimeError("GOOGLE_SHEET_APPSCRIPT_URL belum diset")
+
+    req = urllib.request.Request(
+        GOOGLE_SHEET_APPSCRIPT_URL,
+        headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) NadiKampus/2.1"}
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        payload = json.loads(resp.read().decode("utf-8"))
+
+    raw_items = payload.get("data", [])
+    if not raw_items:
+        res = {"total": 0, "data": [], "profile_distribution": {}, "source": "google_sheet_appscript"}
+        _SHEET_CACHE["timestamp"] = now
+        _SHEET_CACHE["data"] = res
+        return res
+
+    from api.preprocess import norm, COLMAP, validate, compute_scores
+    raw_df = pd.DataFrame(raw_items)
+    renamed_df = raw_df.rename(columns={c: COLMAP[norm(c)] for c in raw_df.columns if norm(c) in COLMAP})
+    valid_df, issues = validate(renamed_df)
+    scored_df = compute_scores(valid_df)
+
+    pca_model = _get_pca()
+    if pca_model is None:
+        from sklearn.decomposition import PCA
+        pca_model = PCA(n_components=2, random_state=42).fit(scored_df[FEATURES])
+
+    coords = pca_model.transform(scored_df[FEATURES])
+
+    records = []
+    profiles_cnt = {1: 0, 2: 0, 3: 0}
+    for i, r in scored_df.iterrows():
+        wb = float(r["WB_Score"])
+        acd = float(r["ACD_Score"])
+        soc = float(r["SOC_Score"])
+        car = float(r["CAR_Score"])
+        p_id = label_profile(wb, acd, soc, car)
+        profiles_cnt[p_id] = profiles_cnt.get(p_id, 0) + 1
+
+        records.append({
+            "id": f"MHS-{p_id}-{i+1}",
+            "profile": p_id,
+            "prodi": str(r.get("Prodi", r.get("Program Studi", ""))),
+            "gender": str(r.get("Gender", r.get("Jenis Kelamin", ""))),
+            "semester": str(r.get("Semester", r.get("Semester saat ini", ""))),
+            "pca_x": round(float(coords[i, 0]), 2),
+            "pca_y": round(float(coords[i, 1]), 2),
+            "scores": {
+                "wellbeing": round(wb, 2),
+                "academic": round(acd, 2),
+                "social": round(soc, 2),
+                "career": round(car, 2)
+            }
+        })
+
+    result = {
+        "total": len(records),
+        "data": records,
+        "profile_distribution": profiles_cnt,
+        "source": "google_sheet_appscript"
+    }
+    _SHEET_CACHE["timestamp"] = now
+    _SHEET_CACHE["data"] = result
+    return result
+
+
+def supa_get(path: str, timeout: int = 5):
+    """GET ke Supabase REST API memakai key dari environment."""
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        raise RuntimeError("SUPABASE_URL / SUPABASE_KEY belum diset")
+    req = urllib.request.Request(
+        f"{SUPABASE_URL}/rest/v1/{path}",
+        headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
 # Enable CORS for frontend consumption
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=CORS_ORIGINS,
+    allow_credentials=False,   # tidak memakai cookie; credentials + "*" ditolak browser
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUTPUT_DIR = os.path.join(BASE_DIR, "data", "output")
-PROCESSED_DIR = os.path.join(BASE_DIR, "data", "processed")
-FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "model_version": MODEL_VERSION}
+
 
 # Sajikan Frontend secara langsung
 @app.get("/", include_in_schema=False)
@@ -93,57 +215,75 @@ if os.path.exists(os.path.join(FRONTEND_DIR, "css")):
 if os.path.exists(os.path.join(FRONTEND_DIR, "js")):
     app.mount("/js", StaticFiles(directory=os.path.join(FRONTEND_DIR, "js")), name="js")
 
-# Definisi metadata 5 Profil LPA-GMM hasil riset backend
+# Definisi metadata 3 Profil LPA-GMM (v1). Skor centroid dan label dibaca dari models/*.json
 PROFILE_METADATA = [
     {
         "profile_id": 1,
         "key": "p1",
-        "name": "Vulnerable / Low Adaptation",
-        "short": "Profil 1: Performa Rendah & Butuh Perhatian",
+        "name": "",
+        "short": "",
         "color": "#E11D48",
-        "scores_likert": {"wellbeing": 2.79, "academic": 2.77, "social": 3.41, "career": 2.93},
-        "description": "Kelompok dengan skor di bawah rata-rata pada dimensi wellbeing, akademik, dan karier.",
-        "recommendation": "Pendampingan akademik intensif, konseling psikologis, dan bimbingan karier."
+        "scores_likert": {},
+        "description": "Kelompok dengan skor relatif paling rendah pada dimensi wellbeing, akademik, dan karier.",
+        "recommendation": "Pendampingan akademik intensif, layanan konseling, dan bimbingan karier."
     },
     {
         "profile_id": 2,
         "key": "p2",
-        "name": "Moderate / Average Adaptation",
-        "short": "Profil 2: Adaptasi Sedang (Mayoritas)",
+        "name": "",
+        "short": "",
         "color": "#6366F1",
-        "scores_likert": {"wellbeing": 3.77, "academic": 3.73, "social": 4.16, "career": 3.58},
-        "description": "Kelompok mayoritas dengan performa adaptasi yang stabil dan seimbang.",
+        "scores_likert": {},
+        "description": "Kelompok dengan skor menengah pada seluruh dimensi.",
         "recommendation": "Workshop manajemen stres dan pengembangan keterampilan penunjang."
     },
     {
         "profile_id": 3,
         "key": "p3",
-        "name": "Thriving & High Functioning",
-        "short": "Profil 3: Wellbeing & Performa Tinggi",
+        "name": "",
+        "short": "",
         "color": "#0D9488",
-        "scores_likert": {"wellbeing": 4.59, "academic": 4.59, "social": 5.00, "career": 4.24},
-        "description": "Kelompok dengan performa unggul di seluruh dimensi dan dukungan sosial yang sangat kuat.",
+        "scores_likert": {},
+        "description": "Kelompok dengan skor relatif paling tinggi, termasuk dukungan sosial yang sangat kuat.",
         "recommendation": "Pemberdayaan sebagai peer mentor dan fasilitasi program kepemimpinan/magang."
     }
 ]
 
+_CENTROIDS = json.loads((MODELS_DIR / "centroids.json").read_text())["profiles"]
+_SCORE_KEY = {"WB_Score": "wellbeing", "ACD_Score": "academic", "SOC_Score": "social", "CAR_Score": "career"}
+_LABEL = {1: "Skor relatif terendah", 2: "Skor menengah", 3: "Skor relatif tertinggi"}
+for _p in PROFILE_METADATA:
+    _pid = _p["profile_id"]
+    _p["name"] = _LABEL[_pid]
+    _p["short"] = f"Profil {_pid}: {_LABEL[_pid]}"
+    _p["scores_likert"] = {_SCORE_KEY[k]: v for k, v in _CENTROIDS[str(_pid)].items()}
+
+
+@app.get("/api/v1/profiles")
+def get_profiles():
+    """Mengembalikan metadata 3 Profil LPA-GMM terkunci."""
+    return {
+        "model_version": MODEL_VERSION,
+        "total_profiles": len(PROFILE_METADATA),
+        "profiles": PROFILE_METADATA
+    }
+
+
+class PredictStudentProfileRequest(BaseModel):
+    wellbeing: float = Field(..., ge=0, le=100)
+    academic: float = Field(..., ge=0, le=100)
+    social: float = Field(..., ge=0, le=100)
+    career: float = Field(..., ge=0, le=100)
+
 
 @app.get("/api/v1/respondents")
 def get_respondents():
-    """Mengembalikan sebaran seluruh responden riil (dari Supabase / fallback local) dengan koordinat PCA dan prodi."""
-    # 1. Coba ambil data live dari Supabase
-    try:
-        import urllib.request
-        import json
-        supa_url = "https://xmabdgvmsljwzrffwvng.supabase.co/rest/v1/student_surveys?select=*&order=id.asc"
-        headers = {
-            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtYWJkZ3Ztc2xqd3pyZmZ3dm5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDAyMzEsImV4cCI6MjEwNzIxNjIzMX0.-9rWHxVm72u6IK7oQtULKuqphO8-VxbKfWnS7gOB5Ww",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtYWJkZ3Ztc2xqd3pyZmZ3dm5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDAyMzEsImV4cCI6MjEwNzIxNjIzMX0.-9rWHxVm72u6IK7oQtULKuqphO8-VxbKfWnS7gOB5Ww"
-        }
-        req = urllib.request.Request(supa_url, headers=headers)
-        with urllib.request.urlopen(req, timeout=3) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            if data and len(data) > 0:
+    """Mengembalikan sebaran seluruh responden riil (dari Google Sheets / Supabase / fallback local CSV)."""
+    # 1. Coba ambil data live dari Supabase (jika env diset)
+    if SUPABASE_URL and SUPABASE_KEY:
+        try:
+            data = supa_get("student_surveys?select=*&order=id.asc", timeout=3)
+            if data:
                 records = []
                 for r in data:
                     records.append({
@@ -162,19 +302,29 @@ def get_respondents():
                         }
                     })
                 return {"total": len(records), "data": records, "source": "supabase"}
+        except Exception:
+            pass
+
+    # 2. Coba ambil data live langsung dari Google Sheets via Apps Script
+    try:
+        sheet_result = fetch_and_process_google_sheet(timeout=6)
+        if sheet_result and sheet_result.get("total", 0) > 0:
+            return sheet_result
     except Exception:
         pass
 
-    # 2. Fallback ke CSV lokal jika offline
+    # 3. Fallback ke CSV lokal jika offline
     data_lpa_path = os.path.join(PROCESSED_DIR, "data_lpa.csv")
     if os.path.exists(data_lpa_path):
         try:
             df = pd.read_csv(data_lpa_path)
             from sklearn.decomposition import PCA
             cols = ["WB_Score", "ACD_Score", "SOC_Score", "CAR_Score"]
-            pca = PCA(n_components=2, random_state=42)
-            coords = pca.fit_transform(df[cols])
-            
+            pca_model = _get_pca(None)
+            if pca_model is None:
+                pca_model = PCA(n_components=2, random_state=42).fit(df[cols])
+            coords = pca_model.transform(df[cols])
+
             records = []
             for i, r in df.iterrows():
                 records.append({
@@ -195,32 +345,21 @@ def get_respondents():
             return {"error": str(e)}
 
     return {"total": 0, "data": []}
-class PredictStudentProfileRequest(BaseModel):
-    wellbeing: float
-    academic: float
-    social: float
-    career: float
+
 @app.post("/api/v1/predict-profile")
 @app.post("/api/v1/predict-cluster")
 def predict_profile(req: PredictStudentProfileRequest):
     """
-    Memprediksi profil mahasiswa menggunakan model GMM/LPA asli yang telah disimpan.
+    Memprediksi profil mahasiswa menggunakan model GMM/LPA terkunci (v1).
+    Input: skor rata-rata WB, ACD, SOC, CAR pada skala 1-5 atau 0-100.
     """
     try:
-        # 1. Masukkan input ke dalam array fitur (urutan harus sama persis saat training: WB, ACD, SOC, CAR)
-        features = [[req.wellbeing, req.academic, req.social, req.career]]
-        
-        # 2. Transformasi pakai scaler
-        scaled_features = scaler.transform(features)
-        
-        # 3. Prediksi pakai GMM
-        raw_cluster = int(gmm_model.predict(scaled_features)[0])
-        
-        # 4. Petakan ke nomor profil (misal ditambah 1 agar jadi 1, 2, 3)
-        assigned_profile_id = raw_cluster + 1 
-        
-        # Cari data metadata profil yang sesuai untuk dikembalikan ke frontend
-        matched_profile = next((p for p in PROFILE_METADATA if p["profile_id"] == assigned_profile_id), PROFILE_METADATA[0])
+        wb = req.wellbeing / 20.0 if req.wellbeing > 5.0 else req.wellbeing
+        acd = req.academic / 20.0 if req.academic > 5.0 else req.academic
+        soc = req.social / 20.0 if req.social > 5.0 else req.social
+        car = req.career / 20.0 if req.career > 5.0 else req.career
+        assigned_profile_id = label_profile(wb, acd, soc, car)
+        matched_profile = next(p for p in PROFILE_METADATA if p["profile_id"] == assigned_profile_id)
 
         return {
             "assigned_profile": matched_profile["profile_id"],
@@ -228,50 +367,83 @@ def predict_profile(req: PredictStudentProfileRequest):
             "short_title": matched_profile["short"],
             "color": matched_profile["color"],
             "profile_summary": matched_profile["description"],
-            "recommended_intervention": matched_profile["recommendation"]
+            "recommended_intervention": matched_profile["recommendation"],
+            "model_version": MODEL_VERSION
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Gagal melakukan prediksi model: {str(e)}")
 
 
-ADMIN_DEFAULT_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123")
+@app.get("/api/v1/sync-sheet")
+@app.post("/api/v1/sync-sheet")
+def sync_sheet_endpoint(force: bool = False):
+    """
+    Endpoint sinkronisasi data kuesioner live langsung dari Google Sheets via Apps Script.
+    Mengambil data baris baru, melakukan scoring 4 dimensi, prediksi model LPA-GMM, dan koordinat PCA.
+    """
+    try:
+        result = fetch_and_process_google_sheet(force_refresh=True, timeout=15)
+        prodis = set(r["prodi"] for r in result["data"] if r["prodi"])
+        return {
+            "success": True,
+            "message": f"Berhasil menarik {result['total']} data responden dari Google Sheets.",
+            "total_respondents": result["total"],
+            "total_prodi": len(prodis),
+            "profile_distribution": result["profile_distribution"],
+            "source": result["source"],
+            "preview": result["data"][:8]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal menyinkronkan Google Sheets: {str(e)}")
 
 
 @app.get("/api/v1/survey-stats")
 def get_survey_stats():
-    """Mengembalikan statistik data responden di Supabase."""
+    """Mengembalikan statistik data responden live (dari Google Sheets / Supabase / local)."""
+    # 1. Coba Google Sheets Live
     try:
-        import urllib.request
-        import json
-        supa_url = "https://xmabdgvmsljwzrffwvng.supabase.co/rest/v1/student_surveys?select=id,profile,prodi"
-        headers = {
-            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtYWJkZ3Ztc2xqd3pyZmZ3dm5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDAyMzEsImV4cCI6MjEwNzIxNjIzMX0.-9rWHxVm72u6IK7oQtULKuqphO8-VxbKfWnS7gOB5Ww",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtYWJkZ3Ztc2xqd3pyZmZ3dm5nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDAyMzEsImV4cCI6MjEwNzIxNjIzMX0.-9rWHxVm72u6IK7oQtULKuqphO8-VxbKfWnS7gOB5Ww"
-        }
-        req = urllib.request.Request(supa_url, headers=headers)
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            total = len(data)
-            profiles_cnt = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+        sheet_result = fetch_and_process_google_sheet(timeout=6)
+        if sheet_result and sheet_result.get("total", 0) > 0:
+            prodis = set(r["prodi"] for r in sheet_result["data"] if r["prodi"])
+            return {
+                "total_respondents": sheet_result["total"],
+                "total_prodi": len(prodis),
+                "profiles_distribution": sheet_result["profile_distribution"],
+                "status": "connected",
+                "source": "google_sheet_appscript"
+            }
+    except Exception:
+        pass
+
+    # 2. Coba Supabase jika dikonfigurasi
+    if SUPABASE_URL and SUPABASE_KEY:
+        try:
+            data = supa_get("student_surveys?select=id,profile,prodi")
+            profiles_cnt = {1: 0, 2: 0, 3: 0}
             prodi_set = set()
             for r in data:
-                p = int(r.get("profile", 3))
-                profiles_cnt[p] = profiles_cnt.get(p, 0) + 1
+                p = int(r.get("profile", 0))
+                if p in profiles_cnt:
+                    profiles_cnt[p] += 1
                 prodi_set.add(r.get("prodi", ""))
             return {
-                "total_respondents": total,
+                "total_respondents": len(data),
                 "total_prodi": len(prodi_set),
                 "profiles_distribution": profiles_cnt,
-                "status": "connected"
+                "status": "connected",
+                "source": "supabase"
             }
-    except Exception as e:
-        return {
-            "total_respondents": 122,
-            "total_prodi": 18,
-            "profiles_distribution": {1: 14, 2: 27, 3: 58, 4: 9, 5: 14},
-            "status": "cached",
-            "error": str(e)
-        }
+        except Exception:
+            pass
+
+    # 3. Fallback baseline 149
+    return {
+        "total_respondents": 149,
+        "total_prodi": 18,
+        "profiles_distribution": {1: 69, 2: 61, 3: 19},
+        "status": "cached",
+        "source": "local_cache"
+    }
 
 
 @app.post("/api/v1/import-survey")
@@ -281,9 +453,10 @@ async def import_survey_endpoint(
 ):
     """
     Endpoint aman untuk upload CSV kuesioner baru.
-    Hanya dapat diakses dengan kata sandi admin (default: admin123).
+    Hanya dapat diakses dengan kata sandi admin (environment variable ADMIN_PASSWORD).
+    Label profile dihitung dengan model terkunci, tanpa fit ulang.
     """
-    if password != ADMIN_DEFAULT_PASSWORD:
+    if not ADMIN_PASSWORD or not secrets.compare_digest(password.encode(), ADMIN_PASSWORD.encode()):
         raise HTTPException(status_code=401, detail="Kata sandi admin salah! Akses ditolak.")
 
     if not file.filename.lower().endswith(".csv"):
@@ -293,25 +466,22 @@ async def import_survey_endpoint(
     if len(content) == 0:
         raise HTTPException(status_code=400, detail="File CSV kosong.")
 
-    import io
     csv_buffer = io.BytesIO(content)
 
     try:
         from scripts.import_new_survey import (
             clean_and_parse_survey_csv,
-            load_lpa_metadata,
             fit_pca_model,
             get_current_max_respondent_id,
-            predict_lpa_profile,
             upload_to_supabase
         )
 
         df_clean = clean_and_parse_survey_csv(csv_buffer)
         if len(df_clean) == 0:
             raise HTTPException(status_code=400, detail="Tidak ada baris data valid yang terbaca dalam CSV.")
+        df_clean = df_clean.reset_index(drop=True)
 
-        profiles = load_lpa_metadata()
-        pca = fit_pca_model()
+        pca = _get_pca(fit_pca_model)
         last_id_num = get_current_max_respondent_id()
 
         score_cols = ["wb_score", "acd_score", "soc_score", "car_score"]
@@ -325,7 +495,7 @@ async def import_survey_endpoint(
             acd = row["acd_score"]
             soc = row["soc_score"]
             car = row["car_score"]
-            p_id = predict_lpa_profile(wb, acd, soc, car, profiles)
+            p_id = label_profile(wb, acd, soc, car)
 
             records.append({
                 "respondent_id": f"MHS-{p_id}-{next_num}",
@@ -346,14 +516,15 @@ async def import_survey_endpoint(
         # Unggah batch ke Supabase
         uploaded_count = upload_to_supabase(records)
 
-        # Arsipkan salinan file ke folder processed
-        import datetime
-        ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        processed_dir = os.path.join(BASE_DIR, "data", "incoming", "processed")
-        os.makedirs(processed_dir, exist_ok=True)
-        archive_path = os.path.join(processed_dir, f"{ts}_web_{file.filename}")
-        with open(archive_path, "wb") as f_out:
-            f_out.write(content)
+        # Arsipkan salinan file (hanya berguna di lokal; gagal menyimpan tidak membatalkan upload)
+        try:
+            ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            processed_dir = os.path.join(BASE_DIR, "data", "incoming", "processed")
+            os.makedirs(processed_dir, exist_ok=True)
+            with open(os.path.join(processed_dir, f"{ts}_web_{file.filename}"), "wb") as f_out:
+                f_out.write(content)
+        except OSError:
+            pass
 
         # Distribusi profil baru
         prof_counts = pd.Series([r["profile"] for r in records]).value_counts().to_dict()
@@ -362,6 +533,7 @@ async def import_survey_endpoint(
         return {
             "success": True,
             "filename": file.filename,
+            "model_version": MODEL_VERSION,
             "added_count": uploaded_count,
             "previous_total": last_id_num,
             "total_now": last_id_num + uploaded_count,
@@ -372,26 +544,4 @@ async def import_survey_endpoint(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Gagal memproses survei: {str(e)}")
-# ===== ENDPOINT CURHAT / STUDENT VOICE =====
-class VoiceIn(BaseModel):
-    text: str = Field(..., min_length=3, max_length=1000)
 
-
-@app.post("/api/v1/label-voice")
-def label_voice(req: VoiceIn):
-    """Label sentimen + kategori (topik dashboard) untuk satu curhat baru."""
-    if VOICE_MODELS is None:
-        raise HTTPException(status_code=503, detail="Model pelabelan belum tersedia di server.")
-    x = [req.text.strip().lower()]
-    sm, cm = VOICE_MODELS["sentiment"], VOICE_MODELS["category"]
-    ps, pc = sm.predict_proba(x)[0], cm.predict_proba(x)[0]
-    si, ci = int(ps.argmax()), int(pc.argmax())
-    idx, name = VOICE_TOPICS[cm.classes_[ci]]
-    return {
-        "sentiment": VOICE_SENT[sm.classes_[si]],      
-        "sentiment_confidence": round(float(ps[si]), 3),
-        "topic_index": idx,
-        "topic_name": name,
-        "topic_confidence": round(float(pc[ci]), 3),
-        "low_confidence": bool(ps[si] < 0.5 or pc[ci] < 0.5)
-    }

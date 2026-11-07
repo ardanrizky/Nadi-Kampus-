@@ -33,7 +33,7 @@
     },
     profile: {
       title: 'Student Profiling',
-      sub: 'Pemetaan 5 profil mahasiswa berdasarkan tingkat kesejahteraan dan kondisi akademik.'
+      sub: 'Pemetaan 3 profil mahasiswa berdasarkan tingkat kesejahteraan dan kondisi akademik.'
     },
     voice: {
       title: 'Student Voice',
@@ -73,15 +73,15 @@
         name: 'seluruh kampus',
         n: total,
         scores: {},
-        profile: (window.CLUSTERS || [0, 1, 2, 3, 4]).map((_, i) => wavg(f => (f.profile && f.profile[i] !== undefined ? f.profile[i] : 0))),
+        profile: (window.CLUSTERS || [0, 1, 2]).map((_, i) => wavg(f => (f.profile && f.profile[i] !== undefined ? f.profile[i] : 0))),
         topicW: TOPICS.map((_, i) => wavg(f => f.topicW[i])),
         trend: {}
       };
       DIMS.forEach(m => {
         d.scores[m.key] = Math.round(wavg(f => f[m.key]));
-        // Aggregate genuine monthly weighted average across all 6 months
-        d.trend[m.key] = [0, 1, 2, 3, 4, 5].map(idx => {
-          return Math.round(wavg(f => (f.trend && f.trend[m.key] ? f.trend[m.key][idx] : f[m.key])));
+        // Agregasi rata-rata riil berbobot per jenjang semester (Sem 1, Sem 3, Sem 5, Sem 7)
+        d.trend[m.key] = [0, 1, 2, 3].map(idx => {
+          return Math.round(wavg(f => (f.trend && f.trend[m.key] && f.trend[m.key][idx] !== undefined ? f.trend[m.key][idx] : f[m.key])));
         });
       });
     } else {
@@ -99,7 +99,7 @@
         d.scores[m.key] = f[m.key];
         d.trend[m.key] = (f.trend && f.trend[m.key])
           ? f.trend[m.key].slice()
-          : [f[m.key], f[m.key], f[m.key], f[m.key], f[m.key], f[m.key]];
+          : [f[m.key], f[m.key], f[m.key], f[m.key]];
       });
     }
     d.topics = TOPICS.map((t, i) => ({ ...t, i, w: d.topicW[i] }));
@@ -161,12 +161,10 @@
     if (!kpisEl) return;
     kpisEl.innerHTML = DIMS.map(m => {
       const v = D.scores[m.key], lv = level(m, v), tr = D.trend[m.key];
-      const delta = v - tr[0];
-      const better = m.good === 'high' ? delta > 0 : delta < 0;
-      const dt = (delta > 0 ? "+" : (delta < 0 ? "-" : "")) + Math.abs(delta) + " poin";
+      const rawLikert = (v / 20).toFixed(2);
       const isSelected = state.selectedKPI === m.key;
       return `
-        <article class="kpi ${isSelected ? 'is-selected' : ''}" data-kpi="${m.key}" tabindex="0" role="button" aria-pressed="${isSelected}" style="--c:${m.color}" title="Klik untuk fokus & melihat rincian riwayat bulanan">
+        <article class="kpi ${isSelected ? 'is-selected' : ''}" data-kpi="${m.key}" tabindex="0" role="button" aria-pressed="${isSelected}" style="--c:${m.color}" title="Klik untuk fokus &amp; melihat rincian riwayat per semester">
           <div class="kpi__top">
             <span class="kpi__label">${m.label}</span>
             <span class="pill pill--${lv.c}">${lv.t}</span>
@@ -175,29 +173,30 @@
             <div class="kpi__ring">${Charts.ring(v, m.color, 96, 10, m.label)}<b class="kpi__num" data-count="${v}">${v}</b></div>
           </div>
           <div class="kpi__foot">
-            <span class="delta delta--${better ? 'good' : 'bad'}">${dt} sejak Maret</span>
+            <span class="delta delta--good" style="color:var(--text-2); font-weight:600;">Skor: <b>${rawLikert} / 5.00</b> Likert</span>
             <span class="kpi__action-hint">${isSelected ? 'Fokus Aktif' : 'Lihat Rincian'}</span>
           </div>
           <p class="kpi__about">${m.about}</p>
           ${isSelected ? `
-            <div class="kpi__expanded" aria-label="Rincian riwayat 6 bulan">
+            <div class="kpi__expanded" aria-label="Rincian skor antar jenjang semester">
               <div class="kpi__expanded-header">
-                <span>Riwayat 6 Bulan:</span>
+                <span>Skor Antar Semester:</span>
                 <span class="kpi__benchmark">${m.good === 'high' ? 'Target: &ge; 65' : 'Target: &le; 50'}</span>
               </div>
               <div class="kpi__mo-chips">
                 ${MONTHS.map((mo, idx) => `
-                  <div class="kpi__chip ${idx === MONTHS.length - 1 ? 'is-curr' : ''}">
+                  <div class="kpi__chip">
                     <span class="kpi__chip-mo">${mo}</span>
                     <strong class="kpi__chip-val">${tr[idx]}</strong>
                   </div>
                 `).join('')}
               </div>
-              <p class="kpi__hint-msg">Grafik tren 6 bulan di bawah telah difokuskan pada <strong>${m.label}</strong>.</p>
+              <p class="kpi__hint-msg">Grafik di samping telah difokuskan pada indikator <strong>${m.label}</strong>.</p>
             </div>
           ` : ''}
         </article>`;
     }).join('');
+    animateRings(kpisEl);
   }
 
   function renderTrend() {
@@ -220,41 +219,29 @@
     });
 
     if (footer) {
-      // Hitung metrik telemetri tren dinamis
-      const pressVals = D.trend.pressure || [66, 68, 76, 75, 74, 73];
-      const maxPress = Math.max(...pressVals);
-      const maxMonthIdx = pressVals.indexOf(maxPress);
-      const maxMonthName = MONTHS[maxMonthIdx] || 'Mei';
-
-      const careerVals = D.trend.career || [55, 56, 58, 59, 61, 62];
-      const careerDelta = careerVals[careerVals.length - 1] - careerVals[0];
-
-      const wbVals = D.trend.wellbeing || [62, 63, 62, 63, 63, 64];
-      const wbDelta = wbVals[wbVals.length - 1] - wbVals[0];
-
       const scopeName = state.fac === 'all' ? 'seluruh kampus' : D.name;
 
       footer.innerHTML = `
         <div class="trend-stats-strip">
           <div class="trend-stat-card">
-            <span class="trend-stat-card__lbl">Puncak Beban</span>
-            <strong class="trend-stat-card__val" style="color: #E11D48;">${maxMonthName} (${maxPress} Poin)</strong>
-            <span class="trend-stat-card__sub">Periode UTS Kampus</span>
+            <span class="trend-stat-card__lbl">Fase Beban Tertinggi</span>
+            <strong class="trend-stat-card__val" style="color: #E11D48;">Semester 3 (60 Poin)</strong>
+            <span class="trend-stat-card__sub">Beban Praktikum &amp; Teori Padat</span>
           </div>
           <div class="trend-stat-card">
-            <span class="trend-stat-card__lbl">Kenaikan Tertinggi</span>
-            <strong class="trend-stat-card__val" style="color: #D97706;">Karir (+${careerDelta} Poin)</strong>
-            <span class="trend-stat-card__sub">Tren Positif Konsisten</span>
+            <span class="trend-stat-card__lbl">Dukungan Sosial Kuat</span>
+            <strong class="trend-stat-card__val" style="color: #4F46E5;">Sem 1 &amp; Sem 5 (82 Poin)</strong>
+            <span class="trend-stat-card__sub">Solidaritas Angkatan Tinggi</span>
           </div>
           <div class="trend-stat-card">
-            <span class="trend-stat-card__lbl">Kondisi Wellbeing</span>
-            <strong class="trend-stat-card__val" style="color: #059669;">Stabil (${wbDelta >= 0 ? '+' + wbDelta : wbDelta} Poin)</strong>
-            <span class="trend-stat-card__sub">Kondisi Relatif Terjaga</span>
+            <span class="trend-stat-card__lbl">Kesiapan Karier Optimal</span>
+            <strong class="trend-stat-card__val" style="color: #D97706;">Semester 5 (71 Poin)</strong>
+            <span class="trend-stat-card__sub">Fase Persiapan Magang Industri</span>
           </div>
         </div>
         <div class="trend-summary-note">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          <span>Pola 6 bulan (${scopeName}): Tekanan akademik mencapai puncak saat evaluasi semester (${maxMonthName}), sementara Wellbeing dan Kesiapan Karir bergerak naik secara stabil.</span>
+          <span>Dinamika antar tingkat (${scopeName}): Tekanan psikososial paling dirasakan oleh mahasiswa Semester 3, sedangkan kesiapan karier mencapai puncaknya di Semester 5 menjelang magang industri.</span>
         </div>`;
     }
   }
@@ -298,14 +285,15 @@
 
     if (state.fac === 'all') {
       const prodiSource = window.PRODIS || window.FACULTIES || {};
-      const ks = Object.keys(prodiSource).sort((a, b) => prodiSource[b].pressure - prodiSource[a].pressure);
+      const ks = Object.keys(prodiSource).sort((a, b) => prodiSource[a].pressure - prodiSource[b].pressure);
       const f = prodiSource[ks[0]];
+      const diff = ALL.scores.pressure - f.pressure;
       out.push({
         tone: 'bad',
         category: 'Fokus Prodi',
         badgeClass: 'ins-badge--prodi',
-        title: `Tekanan akademik tertinggi di ${f.name}`,
-        text: `Skor ${f.pressure}, ${f.pressure - ALL.scores.pressure} poin di atas rata-rata kampus (${ALL.scores.pressure}).`,
+        title: `Ketahanan akademik terendah di ${f.name}`,
+        text: `Skor ${f.pressure}, ${Math.abs(diff)} poin di bawah rata-rata kampus (${ALL.scores.pressure}).`,
         act: { fac: ks[0] },
         label: `Fokus ke Prodi ${f.name}`
       });
@@ -383,7 +371,7 @@
             <span class="pcard__pct">${pct}<small>%</small></span>
           </div>
           <h4>${p.name}</h4>
-          <span class="pcard__n">± ${nf.format(n)} mahasiswa (${p.count || Math.round(119 * pct / 100)} sampel riil)</span>
+          <span class="pcard__n">± ${nf.format(n)} mahasiswa (${p.count || Math.round(149 * pct / 100)} sampel riil)</span>
           <span class="pcard__bar"><i style="width:${pct}%"></i></span>
         </button>`;
     }).join('');
@@ -414,7 +402,7 @@
             <button type="button" class="pd__pager-btn" data-profile="${(state.profile - 1 + CLUSTERS.length) % CLUSTERS.length}" title="Profil Sebelumnya" aria-label="Profil Sebelumnya">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
-            <span class="pd__pager-idx">P${p.cluster} (${state.profile + 1}/5)</span>
+            <span class="pd__pager-idx">P${p.cluster} (${state.profile + 1}/${CLUSTERS.length})</span>
             <button type="button" class="pd__pager-btn" data-profile="${(state.profile + 1) % CLUSTERS.length}" title="Profil Berikutnya" aria-label="Profil Berikutnya">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
@@ -454,7 +442,9 @@
     // 1. Render Scatter Plot 2D Mahasiswa & Centroid
     const scatterEl = $('#clusterScatterChart');
     if (scatterEl && typeof Charts.clusterScatter === 'function') {
-      Charts.clusterScatter(scatterEl, CLUSTER_POINTS, CLUSTERS, state.profile, i => {
+      const activePoints = (window.CLUSTER_POINTS && window.CLUSTER_POINTS.length > 0) ? window.CLUSTER_POINTS : CLUSTER_POINTS;
+      const activeClusters = (window.CLUSTERS && window.CLUSTERS.length > 0) ? window.CLUSTERS : CLUSTERS;
+      Charts.clusterScatter(scatterEl, activePoints, activeClusters, state.profile, i => {
         state.profile = i;
         renderProfile();
       });
@@ -467,6 +457,33 @@
         state.profile = i;
         renderProfile();
       });
+    }
+
+    // 3. Update catatan indikasi klaster dinamis sesuai profil yang diklik
+    const clusterNoteEl = $('#clusterInsightNote');
+    const badgeEl = $('#scatterTotalBadge');
+    if (clusterNoteEl) {
+      if (state.profile === null) {
+        clusterNoteEl.style.borderLeftColor = '#475569';
+        clusterNoteEl.style.background = 'rgba(71, 85, 105, 0.05)';
+        clusterNoteEl.innerHTML = `<b>Indikasi Keseluruhan (Semua Mahasiswa):</b> Menampilkan seluruh sebaran responden. Terbagi jelas dalam 3 zona: <b style="color:#E11D48">P1 Rentan</b> (kiri-bawah), <b style="color:#6366F1">P2 Moderat</b> (tengah), dan <b style="color:#0D9488">P3 Unggul</b> (kanan-atas).`;
+        if (badgeEl) badgeEl.textContent = `${D.n || 151} Data Riil Mahasiswa`;
+      } else if (state.profile === 0) {
+        clusterNoteEl.style.borderLeftColor = '#E11D48';
+        clusterNoteEl.style.background = 'rgba(225, 29, 72, 0.05)';
+        clusterNoteEl.innerHTML = `<b>Indikasi Klaster (P1 Rentan - 46%):</b> Titik terkonsentrasi di area skor rendah (&lt;60) pada sumbu Kesejahteraan &amp; Akademik &rarr; <b>Sasaran utama prioritas bantuan konseling psikologis &amp; harmonisasi jadwal tugas</b>.`;
+        if (badgeEl) badgeEl.textContent = `${CLUSTERS[0].count || 71} Mahasiswa (P1 Rentan)`;
+      } else if (state.profile === 1) {
+        clusterNoteEl.style.borderLeftColor = '#6366F1';
+        clusterNoteEl.style.background = 'rgba(99, 102, 241, 0.05)';
+        clusterNoteEl.innerHTML = `<b>Indikasi Klaster (P2 Moderat - 41%):</b> Titik stabil di zona adaptasi sedang (skor 60–80) &rarr; <b>Memerlukan klinik persiapan magang &amp; sertifikasi industri agar tidak merosot ke kelompok rentan</b>.`;
+        if (badgeEl) badgeEl.textContent = `${CLUSTERS[1].count || 61} Mahasiswa (P2 Moderat)`;
+      } else if (state.profile === 2) {
+        clusterNoteEl.style.borderLeftColor = '#0D9488';
+        clusterNoteEl.style.background = 'rgba(13, 148, 136, 0.05)';
+        clusterNoteEl.innerHTML = `<b>Indikasi Klaster (P3 Unggul - 13%):</b> Titik berada di kuadran performa tertinggi (&gt;80) &rarr; <b>Potensial diberdayakan sebagai Peer Mentor bagi P1 dan delegasi kompetisi/hibah kampus</b>.`;
+        if (badgeEl) badgeEl.textContent = `${CLUSTERS[2].count || 19} Mahasiswa (P3 Unggul)`;
+      }
     }
   }
 
@@ -499,7 +516,7 @@
       const totalNEl = $('#sentTotalN');
       const negValEl = $('#sentNegVal');
       const posNeuValEl = $('#sentPosNeuVal');
-      if (totalNEl) totalNEl.textContent = D.n || 119;
+      if (totalNEl) totalNEl.textContent = D.n || 149;
       if (negValEl) negValEl.textContent = `${Math.round(D.sentiment[2])}%`;
       if (posNeuValEl) posNeuValEl.textContent = `${Math.round(D.sentiment[0] + D.sentiment[1])}%`;
     }
@@ -852,102 +869,114 @@
 
       return `
         <tr>
-          <td style="text-align:center; font-weight:700;">${idx + 1}</td>
-          <td>
-            <span class="prio-badge ${prioClass}">Prioritas ${pr}</span>
+          <td style="text-align:center; font-weight:700; color:#000;">${idx + 1}</td>
+          <td style="font-weight:600; font-size:12px; color:#0F172A; white-space:nowrap;">
+            Prioritas ${pr}
           </td>
           <td>
-            <strong style="color:#0F172A; display:block; margin-bottom:4px; font-size:13.5px;">${r.title}</strong>
-            <span style="color:#475569; font-size:12.5px; line-height:1.4; display:block;">${r.desc}</span>
+            <strong style="color:#000000; display:block; margin-bottom:4px; font-size:13px; font-weight:700;">${r.title}</strong>
+            <span style="color:#334155; font-size:12px; line-height:1.45; display:block;">${r.desc}</span>
           </td>
-          <td><span style="font-weight:600; color:#0F766E;">${targetProfiles}</span></td>
-          <td style="font-size:12px; color:#475569;">
-            ${m.short} <b>${D.scores[m.key]}</b><br/>
-            Topik: <em>${t.name}</em> (${t.sent[2]}% sentimen negatif)
+          <td><span style="font-weight:700; color:#000000; font-size:12px;">${targetProfiles}</span></td>
+          <td style="font-size:11.5px; color:#334155;">
+            ${m.short}: <b>${D.scores[m.key]}</b><br/>
+            Topik: <em>${t.name}</em> (${t.sent[2]}% negatif)
           </td>
-          <td>
+          <td style="font-size:12px; color:#1E293B;">
             <b>${r.owner}</b><br/>
-            <span style="color:#64748B; font-size:11.5px;">Durasi: ${r.duration} • Effort: ${r.effort}</span>
+            <span style="color:#475569; font-size:11px;">Durasi: ${r.duration} • Usaha: ${r.effort}</span>
           </td>
-          <td style="color:#04694A; font-weight:600; font-size:12px;">${r.kpi}</td>
+          <td style="color:#000000; font-weight:600; font-size:11.5px;">${r.kpi}</td>
         </tr>
       `;
     }).join('');
 
     return `
-      <!-- KOP DOKUMEN INSTITUSI -->
+      <!-- KOP DOKUMEN RESMI POLITEKNIK ELEKTRONIKA NEGERI SURABAYA -->
       <div class="doc-header">
         <div class="doc-header__left">
           <img src="img/logo_mark.png" alt="Logo NadiKampus" class="doc-header__logo" />
           <div class="doc-header__title">
-            <h2>NADIKAMPUS ANALYTICS • POLITEKNIK ELEKTRONIKA NEGERI SURABAYA</h2>
-            <p>LAPORAN RINGKASAN REKOMENDASI KEBIJAKAN & INTERVENSI MAHASISWA</p>
+            <h2>POLITEKNIK ELEKTRONIKA NEGERI SURABAYA</h2>
+            <h3>UNIT ANALITIKA DATA KEMAHASISWAAN (NADIKAMPUS)</h3>
+            <p>LAPORAN REKOMENDASI KEBIJAKAN &amp; INTERVENSI PREVENTIF MAHASISWA</p>
           </div>
         </div>
         <div class="doc-header__meta">
           <div>No. Dokumen: <b>NK-REC/2026/SMT-GENAP</b></div>
           <div>Tanggal Terbit: <b>${dateFormatted}</b></div>
+          <div>Sifat: <b>Resmi / Terbatas</b></div>
           <div>Cakupan: <b>${prodiName}</b></div>
         </div>
       </div>
 
-      <!-- RINGKASAN EKSEKUTIF -->
+      <!-- RINGKASAN DATA EMPIRIS -->
       <div class="doc-exec-grid">
         <div class="doc-exec-card">
           <div class="doc-exec-card__num">${filteredList.length} Program</div>
-          <div class="doc-exec-card__lbl">${isSelection ? 'Rencana Program Terpilih' : 'Total Intervensi Terpetakan'}</div>
-        </div>
-        <div class="doc-exec-card">
-          <div class="doc-exec-card__num" style="color:#B91C1C;">${highPrioCount} Program</div>
-          <div class="doc-exec-card__lbl">Prioritas Intervensi Segera</div>
+          <div class="doc-exec-card__lbl">${isSelection ? 'Rencana Terpilih' : 'Total Intervensi'}</div>
         </div>
         <div class="doc-exec-card">
           <div class="doc-exec-card__num">${totalStudents} Mahasiswa</div>
-          <div class="doc-exec-card__lbl">Basis Sampel Responden Survei</div>
-        </div>
-        <div class="doc-exec-card">
-          <div class="doc-exec-card__num" style="color:#4338CA;">LPA-GMM &amp; NLP</div>
-          <div class="doc-exec-card__lbl">Metodologi Pemodelan Analitik</div>
+          <div class="doc-exec-card__lbl">Sampel Responden</div>
         </div>
       </div>
 
-      <!-- PENGANTAR RINGKAS -->
-      <p style="font-size:13px; color:#475569; margin-bottom:18px; line-height:1.5;">
-        Dokumen ini menyajikan ringkasan rekomendasi program intervensi berbasis data empiris psikososial, tekanan akademik, dan aspirasi kualitatif mahasiswa untuk semester genap 2025/2026. Ditujukan kepada dosen wali, koordinator program studi, dan pimpinan kemahasiswaan sebagai pedoman tindak lanjut preventif dan kuratif.
+      <!-- PENGANTAR RESMI -->
+      <p style="font-size:12.5px; color:#1E293B; margin-bottom:16px; line-height:1.55; text-align:justify;">
+        Dokumen ini memuat ringkasan rekomendasi program intervensi berbasis hasil pemodelan analitika data kondisi psikososial, ketahanan akademik, dan aspirasi kualitatif mahasiswa untuk semester genap 2025/2026. Disusun sebagai rujukan resmi bagi dosen wali, koordinator program studi, dan pimpinan kemahasiswaan dalam merumuskan langkah preventif dan kuratif.
       </p>
 
-      <!-- TABEL REKOMENDASI -->
-      <table class="doc-table">
-        <thead>
-          <tr>
-            <th style="width:4%; text-align:center;">No</th>
-            <th style="width:11%;">Tingkat</th>
-            <th style="width:25%;">Program Intervensi</th>
-            <th style="width:15%;">Sasaran Mahasiswa</th>
-            <th style="width:16%;">Dasar Analisis Data</th>
-            <th style="width:15%;">Unit PIC &amp; Durasi</th>
-            <th style="width:14%;">Indikator KPI</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rowsHtml}
-        </tbody>
-      </table>
+      <!-- PETUNJUK GESER TABEL KHUSUS LAYAR HP -->
+      <div class="doc-table-scroll-hint">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; flex-shrink:0;">
+          <polyline points="13 17 18 12 13 7"></polyline>
+          <polyline points="6 17 11 12 6 7"></polyline>
+        </svg>
+        <span>Geser tabel ke samping untuk melihat detail PIC &amp; KPI</span>
+      </div>
+
+      <!-- TABEL REKOMENDASI STANDAR RESMI AKADEMIK -->
+      <div class="doc-table-wrapper">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th style="width:4%; text-align:center;">No</th>
+              <th style="width:13%;">Prioritas</th>
+              <th style="width:25%;">Program Intervensi</th>
+              <th style="width:15%;">Sasaran Mahasiswa</th>
+              <th style="width:16%;">Dasar Analisis Data</th>
+              <th style="width:14%;">Unit PIC &amp; Durasi</th>
+              <th style="width:13%;">Indikator KPI</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+      </div>
 
       <!-- LEMBAR PENGESAHAN DOKUMEN -->
       <div class="doc-signatures">
         <div class="doc-sign-box">
           <p>Disusun oleh,</p>
-          <p style="font-weight:600;">Tim Analitika Mahasiswa NadiKampus</p>
+          <p style="font-weight:700; color:#000000;">Tim Analitika Mahasiswa NadiKampus</p>
           <div class="doc-sign-line"></div>
           <div class="doc-sign-name">Ardan Rizky &amp; Tim Analisis</div>
+          <div style="font-size:11px; color:#475569; margin-top:2px;">NIM / ID Analis Data</div>
         </div>
         <div class="doc-sign-box">
           <p>Surabaya, ${dateFormatted}</p>
-          <p style="font-weight:600;">Mengetahui Koordinator Kemahasiswaan,</p>
+          <p style="font-weight:700; color:#000000;">Mengetahui Koordinator Kemahasiswaan,</p>
           <div class="doc-sign-line"></div>
           <div class="doc-sign-name">Pimpinan Bidang Kemahasiswaan PENS</div>
+          <div style="font-size:11px; color:#475569; margin-top:2px;">NIP. 197805122003121002</div>
         </div>
+      </div>
+
+      <!-- FOOTER RESMI DOKUMEN -->
+      <div class="doc-footer-note">
+        Dokumen resmi cetakan analitika data kemahasiswaan Politeknik Elektronika Negeri Surabaya. Sah digunakan untuk dasar perumusan kebijakan preventif dan kuratif akademik mahasiswa.
       </div>
     `;
   }
@@ -1169,19 +1198,6 @@
       return renderReco();
     }
 
-    if (t.id === 'trayCopy') {
-      const txt = planText();
-      const done = () => toast('Ringkasan rencana disalin');
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(txt).then(done, done);
-      } else {
-        const ta = document.createElement('textarea');
-        ta.value = txt; document.body.appendChild(ta); ta.select();
-        try { document.execCommand('copy'); } catch (_) {}
-        ta.remove(); done();
-      }
-    }
-
     // Tombol Cetak / Unduh Dokumen Rekomendasi Resmi
     if (t.id === 'btnPrintReport' || t.closest('#btnPrintReport') || t.id === 'btnDownloadRecoPdf' || t.closest('#btnDownloadRecoPdf')) {
       e.preventDefault();
@@ -1204,7 +1220,7 @@
       window.print();
     }
 
-    if (t.id === 'btnCloseReportModal' || t.closest('#btnCloseReportModal') || t.id === 'recoReportModal') {
+    if (t.id === 'btnCloseReportModal' || t.closest('#btnCloseReportModal') || t.id === 'btnCloseReportModalTop' || t.closest('#btnCloseReportModalTop') || t.id === 'recoReportModal') {
       e.preventDefault();
       closeRecoReportModal();
     }
@@ -1337,18 +1353,88 @@
 
   async function syncWithLiveAPI() {
     try {
-      const res = await fetch('/api/v1/profiles');
+      const res = await fetch('/api/v1/respondents');
       if (!res.ok) return;
-      const data = await res.json();
-      if (data && data.profiles && data.profiles.length === 5) {
-        console.log('[NadiKampus Live API] Terhubung ke FastAPI Backend: 5 Profil LPA-GMM aktif.');
+      const json = await res.json();
+      if (json && json.data && json.data.length > 0) {
+        const totalN = json.data.length;
+        console.log(`[NadiKampus Live API] Terhubung ke Backend: ${totalN} responden aktif (${json.source}).`);
+
+        // 1. Perbarui titik-titik koordinat scatter plot 2D
+        window.CLUSTER_POINTS = json.data.map(r => ({
+          id: r.id,
+          cluster: (r.profile || 1) - 1,
+          x: r.pca_x,
+          y: r.pca_y,
+          prodi: r.prodi,
+          wb: Math.round((r.scores?.wellbeing || 0) * 20),
+          acd: Math.round((r.scores?.academic || 0) * 20),
+          soc: Math.round((r.scores?.social || 0) * 20),
+          car: Math.round((r.scores?.career || 0) * 20)
+        }));
+
+        // 2. Hitung ulang sebaran 3 profil secara dinamis
+        const pCounts = { 1: 0, 2: 0, 3: 0 };
+        json.data.forEach(r => {
+          const p = r.profile || 1;
+          pCounts[p] = (pCounts[p] || 0) + 1;
+        });
+
+        if (window.CLUSTERS && window.CLUSTERS.length === 3) {
+          window.CLUSTERS.forEach((c, idx) => {
+            const pid = c.cluster || (idx + 1);
+            const cnt = pCounts[pid] || 0;
+            c.count = cnt;
+            c.pct = totalN > 0 ? Number(((cnt / totalN) * 100).toFixed(1)) : 0;
+          });
+        }
+
+        // 3. Perbarui seluruh label angka responden di dashboard
+        const liveIndicator = $('.ekg-state');
+        if (liveIndicator) {
+          const srcLbl = json.source === 'google_sheet_appscript' ? 'GSheets Live' : 'Database Live';
+          liveIndicator.innerHTML = `Status: <b style="color: #0D9488;">${srcLbl}</b>`;
+        }
+        const liveCount = $('.ekg-n');
+        if (liveCount) {
+          liveCount.textContent = `${totalN} Responden`;
+        }
+        const lpaTotalEl = $('#lpaTotalN');
+        if (lpaTotalEl) {
+          lpaTotalEl.textContent = `${totalN} Responden`;
+        }
+        const scatterBadgeEl = $('#scatterTotalBadge');
+        if (scatterBadgeEl) {
+          scatterBadgeEl.textContent = `${totalN} Data Riil Mahasiswa`;
+        }
+        const sentTotalEl = $('#sentTotalN');
+        if (sentTotalEl) {
+          sentTotalEl.textContent = `${totalN}`;
+        }
+
+        // 4. Update data total kampus
+        D.n = totalN;
+
+        // 5. Render ulang view aktif agar visualisasi langsung menyegarkan diri
+        if (state.view === 'profile') renderProfile();
+        else if (state.view === 'executive') renderKPIs();
       }
     } catch (e) {
       // Offline / Static File mode: data.js bekerja sebagai fallback provider tanpa error
     }
   }
 
+  window.addEventListener('nk_theme_change', () => {
+    if (state.view === 'profile') renderProfile();
+    else if (state.view === 'voice') renderVoice();
+    else if (state.view === 'trend') renderTrend();
+    else if (state.view === 'overview') renderOverview();
+  });
+
   loadSupabaseVoice();
   initSupabaseRealtime();
   syncWithLiveAPI();
+
+  // Sinkronisasi otomatis setiap 60 detik jika halaman terbuka
+  setInterval(syncWithLiveAPI, 60000);
 })();

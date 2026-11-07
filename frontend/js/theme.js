@@ -5,13 +5,10 @@
 (function () {
   'use strict';
 
-  // Inisialisasi cepat untuk mencegah flash saat reload
+  // Inisialisasi tema default (selalu terang / cerah di awal buka)
   function getPreferredTheme() {
     var stored = localStorage.getItem('nk_theme');
     if (stored === 'dark' || stored === 'light') return stored;
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
     return 'light';
   }
 
@@ -51,15 +48,6 @@
         }
       });
     });
-
-    // Sinkronisasi jika pengguna mengubah preferensi OS
-    if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-        if (!localStorage.getItem('nk_theme')) {
-          applyTheme(e.matches ? 'dark' : 'light');
-        }
-      });
-    }
   }
 
   if (document.readyState === 'loading') {

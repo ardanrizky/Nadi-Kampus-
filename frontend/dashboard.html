@@ -11,12 +11,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
   <script>
     (function() {
-      var t = localStorage.getItem('nk_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var t = localStorage.getItem('nk_theme') || 'light';
       document.documentElement.setAttribute('data-theme', t);
       document.documentElement.style.colorScheme = t;
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20261012_mobile_fix_v8" />
+  <link rel="stylesheet" href="css/style.css?v=20261026_topbar_compact_v5" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -148,20 +148,127 @@
         gap: 10px !important;
         box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03) !important;
       }
+      .topbar-left-group {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+      }
       .mobile-menu-btn {
         display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 10px !important;
+        border: 1px solid #E2E8F0 !important;
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        flex-shrink: 0 !important;
+      }
+      .mobile-menu-btn svg {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        min-height: 22px !important;
+        display: block !important;
+        stroke: currentColor !important;
       }
       .mobile-brand-link {
         display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        text-decoration: none !important;
+      }
+      .topbar-right-group {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+      .mobile-theme-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 50% !important;
+        border: 1px solid #E2E8F0 !important;
+        background: #FFFFFF !important;
+        color: #64748B !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        flex-shrink: 0 !important;
+      }
+      .mobile-theme-btn svg {
+        width: 18px !important;
+        height: 18px !important;
+        min-width: 18px !important;
+        min-height: 18px !important;
+        display: block !important;
+        stroke: currentColor !important;
+      }
+      .desktop-theme-btn {
+        display: none !important;
       }
       .mobile-quick-data-btn {
         display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        padding: 7px 12px !important;
+        border-radius: 999px !important;
+        background: #F0FDFA !important;
+        border: 1px solid #CCFBF1 !important;
+        color: #0D9488 !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
       }
       .app-topbar__crumb {
         display: none !important;
       }
       .desktop-only-btn {
         display: none !important;
+      }
+      .app-topbar__actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+      }
+      .app-topbar__actions .app-badge {
+        display: none !important;
+      }
+      .app-topbar__actions .select--app {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        padding: 2px 8px 2px 10px !important;
+      }
+      .app-topbar__actions .select--app select {
+        width: 100% !important;
+        font-size: 13px !important;
+        padding: 6px 28px 6px 6px !important;
+      }
+      .app-topbar__btn-group {
+        display: inline-flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+      }
+      #btnPrintReport {
+        padding: 8px 14px !important;
+        font-size: 12.5px !important;
+        white-space: nowrap !important;
+        border-radius: 999px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+      }
+      #btnPrintReport svg {
+        width: 15px !important;
+        height: 15px !important;
+        min-width: 15px !important;
+        min-height: 15px !important;
+        display: block !important;
       }
 
       /* KPI Cards Grid 2x2 */
@@ -350,8 +457,175 @@
       .profiles {
         grid-template-columns: 1fr !important;
       }
+
+      /* REKOMENDASI MOBILE POLISHED */
+      .reco-banner {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 16px 14px !important;
+        gap: 14px !important;
+      }
+      .reco-banner__left {
+        width: 100% !important;
+      }
+      .reco-banner__title {
+        font-size: 16px !important;
+        line-height: 1.35 !important;
+      }
+      .reco-banner__desc {
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+      }
+      .reco-banner__actions {
+        width: 100% !important;
+      }
+      .btn--reco-pdf {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 11px 16px !important;
+        font-size: 13.5px !important;
+        box-sizing: border-box !important;
+      }
+      #recoFilter, .seg--wrap {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 4px 2px 8px !important;
+        gap: 8px !important;
+        scrollbar-width: none !important;
+        margin-bottom: 16px !important;
+      }
+      #recoFilter::-webkit-scrollbar, .seg--wrap::-webkit-scrollbar {
+        display: none !important;
+      }
+      #recoFilter .seg__btn, .seg--wrap .seg__btn {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+        font-size: 12px !important;
+        padding: 6px 14px !important;
+      }
       .recos {
         grid-template-columns: 1fr !important;
+        gap: 14px !important;
+      }
+      .reco {
+        padding: 16px 16px 16px 20px !important;
+      }
+      .reco h4 {
+        font-size: 17px !important;
+      }
+      .reco__meta {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px 12px !important;
+      }
+
+      /* MODAL LAPORAN A4 PDF DI HP */
+      .reco-report-modal {
+        padding: 8px 6px !important;
+        align-items: center !important;
+      }
+      .reco-report-sheet {
+        max-height: 94vh !important;
+        width: 100% !important;
+        border-radius: 14px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+      }
+      .reco-report-toolbar {
+        padding: 10px 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        align-items: stretch !important;
+      }
+      .reco-report-toolbar__title {
+        font-size: 13px !important;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+      }
+      .reco-report-toolbar__btns {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+      }
+      .reco-report-toolbar__btns .btn {
+        flex: 1 !important;
+        padding: 9px 12px !important;
+        font-size: 12.5px !important;
+        justify-content: center !important;
+      }
+      .reco-report-content {
+        padding: 18px 14px !important;
+        max-height: calc(94vh - 105px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .doc-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+      .doc-header__left {
+        gap: 10px !important;
+      }
+      .doc-header__logo {
+        height: 40px !important;
+      }
+      .doc-header__title h2 {
+        font-size: 14px !important;
+      }
+      .doc-header__title h3 {
+        font-size: 12px !important;
+      }
+      .doc-header__meta {
+        text-align: left !important;
+        font-size: 11px !important;
+      }
+      .doc-exec-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+      }
+      .doc-exec-card {
+        padding: 8px 10px !important;
+      }
+      .doc-exec-card__num {
+        font-size: 16px !important;
+      }
+      .doc-exec-card__lbl {
+        font-size: 9.5px !important;
+      }
+      .doc-signatures {
+        flex-direction: column !important;
+        gap: 22px !important;
+        align-items: center !important;
+      }
+      .doc-sign-box {
+        width: 100% !important;
+        max-width: 260px !important;
+      }
+      .doc-table-scroll-hint {
+        display: flex !important;
+        align-items: center !important;
+        font-size: 11.5px !important;
+        font-weight: 600 !important;
+        color: #475569 !important;
+        background: #F1F5F9 !important;
+        border: 1px dashed #CBD5E1 !important;
+        padding: 6px 10px !important;
+        border-radius: 6px !important;
+        margin-bottom: 8px !important;
+      }
+      .doc-table-wrapper {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        margin-bottom: 22px !important;
+      }
+      .doc-table {
+        min-width: 660px !important;
       }
 
       /* DARK MODE MOBILE OVERRIDES (100% Selaras & Anti-Bocor) */
@@ -385,9 +659,493 @@
         background: #0F172A !important;
         border-color: #1E293B !important;
       }
-      [data-theme="dark"] .card {
+      [data-theme="dark"] .card,
+      [data-theme="dark"] .pcard {
         background: #0F172A !important;
         border-color: #1E293B !important;
+      }
+    }
+
+    /* GLOBAL DARK MODE HARMONY (Desktop & Mobile) */
+    [data-theme="dark"] body.page-app {
+      background: #070B14 !important;
+      color: #F1F5F9 !important;
+    }
+    [data-theme="dark"] .app-sidebar {
+      background: #0B1120 !important;
+      border-right: 1px solid #1E293B !important;
+    }
+    [data-theme="dark"] .app-topbar {
+      background: rgba(11, 17, 32, 0.94) !important;
+      border-bottom: 1px solid #1E293B !important;
+    }
+    [data-theme="dark"] .card,
+    [data-theme="dark"] .kpi {
+      background: #0F172A !important;
+      border-color: #1E293B !important;
+      color: #F1F5F9 !important;
+    }
+    /* 5 Kartu Profil Mahasiswa (Student Profiling) */
+    [data-theme="dark"] .pcard {
+      background: #0F172A !important;
+      border: 1.5px solid #1E293B !important;
+      color: #F1F5F9 !important;
+      box-shadow: 0 4px 18px -4px rgba(0, 0, 0, 0.4) !important;
+    }
+    [data-theme="dark"] .pcard:hover {
+      background: #151F32 !important;
+      border-color: var(--c) !important;
+      box-shadow: 0 16px 32px -16px var(--c) !important;
+    }
+    [data-theme="dark"] .pcard.is-sel {
+      background: #151F32 !important;
+      border-color: var(--c) !important;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 30%, transparent) !important;
+    }
+    [data-theme="dark"] .pcard h4 {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pcard__badge {
+      background: #1E293B !important;
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] .pcard__n {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pcard__bar {
+      background: #1E293B !important;
+    }
+    [data-theme="dark"] .lpa-note span {
+      background: rgba(45, 212, 191, 0.12) !important;
+      color: #5EEAD4 !important;
+      border: 1px solid rgba(45, 212, 191, 0.25) !important;
+    }
+    /* Student Voice (Sentimen & Highlight) */
+    [data-theme="dark"] .sent-overview {
+      border-top-color: #1E293B !important;
+    }
+    [data-theme="dark"] .sent-kpi {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+    }
+    [data-theme="dark"] .sent-kpi__lbl {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .sent-kpi__val {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .sent-kpi__sub {
+      color: #64748B !important;
+    }
+    [data-theme="dark"] .sent-highlight {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+    }
+    [data-theme="dark"] .sent-highlight__icon {
+      color: #2DD4BF !important;
+    }
+    [data-theme="dark"] .sent-highlight__text {
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .sent-highlight__text strong {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .lg {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .lg:hover {
+      background: #1E293B !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .lg.is-on {
+      background: #1E293B !important;
+      border-color: #0D9488 !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .quote {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .quote p {
+      color: #F1F5F9 !important;
+    }
+    [data-theme="dark"] .quote__meta {
+      border-top-color: #1E293B !important;
+    }
+    [data-theme="dark"] .quote__topic {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .quote__sent--pos {
+      background: rgba(16, 185, 129, 0.16) !important;
+      color: #34D399 !important;
+    }
+    [data-theme="dark"] .quote__sent--neu {
+      background: rgba(148, 163, 184, 0.16) !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .quote__sent--neg {
+      background: rgba(244, 63, 94, 0.16) !important;
+      color: #FB7185 !important;
+    }
+    /* Detail Profil Mahasiswa (Tabs P1-P5) */
+    [data-theme="dark"] .pd__nav-bar {
+      border-bottom-color: #1E293B !important;
+    }
+    [data-theme="dark"] .pd__tab {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pd__tab:hover {
+      background: #1E293B !important;
+      border-color: #334155 !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__tab.is-active {
+      background: #1E293B !important;
+      border-color: var(--tc, #2DD4BF) !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__tab-label {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__tab-name {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pd__tab.is-active .pd__tab-name {
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] .pd__tab-pct {
+      background: #0B1120 !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .pd__tab.is-active .pd__tab-pct {
+      background: rgba(45, 212, 191, 0.16) !important;
+      color: #5EEAD4 !important;
+    }
+    [data-theme="dark"] .pd__nav-pager {
+      background: #151F32 !important;
+      border-color: #1E293B !important;
+    }
+    [data-theme="dark"] .pd__pager-btn {
+      color: #94A3B8 !important;
+    }
+    [data-theme="dark"] .pd__pager-btn:hover {
+      background: #1E293B !important;
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__pager-idx {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .pd__traits li {
+      color: #E2E8F0 !important;
+    }
+    [data-theme="dark"] .pd__means {
+      border-top-color: #1E293B !important;
+      border-bottom-color: #1E293B !important;
+    }
+    [data-theme="dark"] .mean b {
+      color: #F8FAFC !important;
+    }
+    [data-theme="dark"] .mean__track {
+      background: #1E293B !important;
+    }
+    [data-theme="dark"] .reco__why {
+      background: #151F32 !important;
+      border: 1px solid #1E293B !important;
+      color: #CBD5E1 !important;
+    }
+    [data-theme="dark"] .prio--tinggi {
+      background: rgba(244, 63, 94, 0.16) !important;
+      color: #FB7185 !important;
+      border: 1px solid rgba(244, 63, 94, 0.3) !important;
+    }
+    [data-theme="dark"] .prio--sedang {
+      background: rgba(245, 158, 11, 0.16) !important;
+      color: #FBBF24 !important;
+      border: 1px solid rgba(245, 158, 11, 0.3) !important;
+    }
+    [data-theme="dark"] .prio--rendah {
+      background: rgba(16, 185, 129, 0.16) !important;
+      color: #34D399 !important;
+      border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    }
+
+    /* =========================================================
+       DESKTOP (>= 993px): SIDEBAR FIXED PERMANEN - ANTI-KOSONG
+       Sidebar kiri terkunci absolut di viewport kiri (top:0, left:0, bottom:0)
+       Logo & menu di atas, monitor di bawah, tidak akan pernah bergeser saat discroll
+       ========================================================= */
+    @media (min-width: 993px) {
+      .app-layout {
+        display: block !important;
+        width: 100% !important;
+        position: relative !important;
+        min-height: 100vh !important;
+      }
+      .app-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: 276px !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        background: #FFFFFF !important;
+        border-right: 1px solid #E2E8F0 !important;
+        box-shadow: 2px 0 12px rgba(15, 23, 42, 0.03) !important;
+        z-index: 100 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        padding: 20px 16px !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        transform: none !important;
+        transition: width .3s cubic-bezier(0.16, 1, 0.3, 1), padding .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      .app-main {
+        margin-left: 276px !important;
+        width: calc(100% - 276px) !important;
+        min-height: 100vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        transition: margin-left .3s cubic-bezier(0.16, 1, 0.3, 1), width .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      /* Mode Ciutkan: Sidebar menyusut rapi ke 72px icon bar */
+      .app-sidebar.is-collapsed {
+        width: 72px !important;
+        padding: 16px 8px !important;
+        align-items: center !important;
+      }
+      .app-sidebar.is-collapsed ~ .app-main {
+        margin-left: 72px !important;
+        width: calc(100% - 72px) !important;
+      }
+
+      /* 1. Header saat Ciut */
+      .app-sidebar.is-collapsed .sidebar-brand-row {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        padding: 0 0 14px !important;
+        width: 100% !important;
+      }
+      .app-sidebar.is-collapsed .brand--app {
+        padding: 0 !important;
+        margin: 0 !important;
+        justify-content: center !important;
+      }
+      .app-sidebar.is-collapsed .brand__text {
+        display: none !important;
+      }
+      .app-sidebar.is-collapsed .brand__logo-img {
+        height: 32px !important;
+        width: auto !important;
+        margin: 0 auto !important;
+      }
+      .app-sidebar.is-collapsed .sidebar-collapse-btn {
+        width: 28px !important;
+        height: 28px !important;
+        margin: 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .app-sidebar.is-collapsed .sidebar-collapse-btn svg {
+        transform: rotate(180deg) !important;
+      }
+
+      /* 2. Menu Navigasi saat Ciut */
+      .app-sidebar.is-collapsed .app-nav {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+      .app-sidebar.is-collapsed .app-nav__item {
+        width: 48px !important;
+        height: 48px !important;
+        padding: 0 !important;
+        margin: 0 auto !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 12px !important;
+        gap: 0 !important;
+      }
+      .app-sidebar.is-collapsed .nav-text,
+      .app-sidebar.is-collapsed .nav-badge,
+      .app-sidebar.is-collapsed .pulse-chip,
+      .app-sidebar.is-collapsed .cluster-mini-pips,
+      .app-sidebar.is-collapsed .nlp-soundwave,
+      .app-sidebar.is-collapsed .prio-counter {
+        display: none !important;
+      }
+      .app-sidebar.is-collapsed .nav-icon {
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .app-sidebar.is-collapsed .nav-icon svg {
+        width: 20px !important;
+        height: 20px !important;
+      }
+
+      /* 3. Bottom Widget saat Ciut */
+      .app-sidebar.is-collapsed .app-sidebar__bottom {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 12px !important;
+        padding-top: 14px !important;
+      }
+      .app-sidebar.is-collapsed .campus-ekg-card {
+        display: none !important;
+      }
+      .app-sidebar.is-collapsed .app-back-btn {
+        width: 44px !important;
+        height: 44px !important;
+        padding: 0 !important;
+        margin: 0 auto !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 50% !important;
+        background: #F8FAFC !important;
+        border: 1px solid #E2E8F0 !important;
+      }
+      .app-sidebar.is-collapsed .app-back-btn:hover {
+        background: #F1F5F9 !important;
+        color: var(--em-700) !important;
+      }
+      .app-sidebar.is-collapsed .app-back-btn__text {
+        display: none !important;
+      }
+      .app-sidebar.is-collapsed .app-back-btn__icon {
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      [data-theme="dark"] .app-sidebar {
+        background: #0B1120 !important;
+        border-right: 1px solid #1E293B !important;
+      }
+      [data-theme="dark"] .app-sidebar.is-collapsed .app-back-btn {
+        background: #151F32 !important;
+        border-color: #1E293B !important;
+        color: #CBD5E1 !important;
+      }
+
+      /* 4. Topbar Header Desktop: Rapi, Pas di Layar, Anti-Overflow */
+      .topbar-right-group,
+      .mobile-theme-btn,
+      .mobile-menu-btn,
+      .mobile-brand-link,
+      .mobile-quick-data-btn {
+        display: none !important;
+      }
+      .app-topbar {
+        padding: 10px 24px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+      }
+      .app-topbar__nav-row {
+        width: auto !important;
+        flex: 0 1 auto !important;
+        min-width: 0 !important;
+      }
+      .topbar-left-group {
+        min-width: 0 !important;
+      }
+      .app-topbar__crumb {
+        display: flex !important;
+        min-width: 0 !important;
+      }
+      .crumb-title {
+        font-size: 16px !important;
+        white-space: nowrap !important;
+      }
+      .app-topbar__actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important;
+        flex-wrap: nowrap !important;
+        min-width: 0 !important;
+      }
+      .app-badge {
+        padding: 5px 12px !important;
+        font-size: 12px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+      }
+      .app-topbar__actions .select--app {
+        padding: 3px 8px 3px 12px !important;
+        flex-shrink: 1 !important;
+      }
+      .app-topbar__actions .select--app span {
+        font-size: 12.5px !important;
+      }
+      .app-topbar__actions .select--app select {
+        font-size: 12.5px !important;
+        padding: 6px 28px 6px 8px !important;
+        max-width: 180px !important;
+        text-overflow: ellipsis !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+      }
+      .app-topbar__btn-group {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        flex-shrink: 0 !important;
+      }
+      .app-topbar__btn-group .btn {
+        padding: 7px 14px !important;
+        font-size: 12.5px !important;
+        white-space: nowrap !important;
+        border-radius: 999px !important;
+        flex-shrink: 0 !important;
+      }
+      .theme-toggle-btn.desktop-theme-btn {
+        display: inline-flex !important;
+        width: 34px !important;
+        height: 34px !important;
+        flex-shrink: 0 !important;
+      }
+      #btnPrintReport {
+        margin-right: 0 !important;
+        flex-shrink: 0 !important;
+      }
+    }
+
+    /* Penyesuaian Responsif Layar Laptop Standar (993px - 1280px) */
+    @media (min-width: 993px) and (max-width: 1280px) {
+      .app-topbar {
+        padding: 10px 16px !important;
+        gap: 10px !important;
+      }
+      .app-badge {
+        display: none !important;
+      }
+      .app-topbar__actions .select--app select {
+        max-width: 145px !important;
       }
     }
   </style>
@@ -398,7 +1156,6 @@
     <!-- Overlay Backdrop untuk Mobile Drawer (Seperti ETHOL PENS) -->
     <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
 
-    <!-- ============ SIDEBAR KIRI (OFFCANVAS DRAWER DI MOBILE) ============ -->
     <aside class="app-sidebar" id="appSidebar" aria-label="Navigasi aplikasi">
       <div class="app-sidebar__top">
         <div class="sidebar-brand-row">
@@ -485,7 +1242,7 @@
 
           <div class="ekg-meta">
             <span class="ekg-state">Status: <b>Terkendali</b></span>
-            <span class="ekg-n">119 Responden</span>
+            <span class="ekg-n">149 Responden</span>
           </div>
         </div>
 
@@ -507,18 +1264,16 @@
       <header class="app-topbar">
         <div class="app-topbar__nav-row">
           <div class="topbar-left-group">
-            <!-- Tombol Hamburger Mobile (Seperti ETHOL PENS) -->
+            <!-- Tombol Hamburger Mobile (Dengan SVG path anti-collapse) -->
             <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Buka menu navigasi" title="Buka Menu">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
+                <path d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
             </button>
 
             <!-- Brand Logo Ringkas di Mobile Header -->
             <a class="mobile-brand-link" href="index.html" title="Kembali ke Beranda">
-              <img src="img/logo_mark.png" alt="Logo Nadi Kampus" class="mobile-brand-logo" />
+              <img src="img/logo_mark.png" alt="Logo Nadi Kampus" class="brand__logo-img mobile-brand-logo" />
               <span class="mobile-brand-title">Nadi<b>Kampus</b></span>
             </a>
 
@@ -530,14 +1285,25 @@
             </div>
           </div>
 
-          <!-- Quick Actions di Header Mobile (Data Survei) -->
-          <a href="data.html" class="mobile-quick-data-btn" title="Kelola Data Survei (Admin)">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <span>Data 🔒</span>
-          </a>
+          <!-- Quick Actions di Header Mobile (Theme Switcher + Data Survei) -->
+          <div class="topbar-right-group">
+            <button class="theme-toggle-btn mobile-theme-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
+              <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg class="theme-icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Filter & Aksi Tambahan (Desktop & Mobile) -->
@@ -554,7 +1320,7 @@
 
           <div class="app-topbar__btn-group">
             <!-- Tombol Toggle Tema Desktop -->
-            <button class="theme-toggle-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
+            <button class="theme-toggle-btn desktop-theme-btn" type="button" aria-label="Ganti mode gelap/terang" title="Mode Gelap / Terang">
               <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="5"></circle>
                 <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -570,14 +1336,6 @@
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
               </svg>
             </button>
-
-            <a href="data.html" class="btn btn--outline btn--sm desktop-only-btn" title="Kelola &amp; Ingest Data Survei Baru (Admin)">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-              <span>Data Survei 🔒</span>
-            </a>
 
             <button type="button" class="btn btn--outline btn--sm" id="btnPrintReport" title="Cetak atau unduh ringkasan rekomendasi resmi">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
@@ -608,9 +1366,10 @@
           <div class="grid2">
             <article class="card card--trend">
               <div class="card__head">
-                <h4>Tren 6 bulan terakhir</h4>
+                <h4>Dinamika Kondisi Berdasarkan Semester</h4>
                 <div class="seg" id="trendToggles" role="group" aria-label="Pilih indikator tren"></div>
               </div>
+              <p class="card__hint">Perbandingan kondisi psikososial &amp; akademik antar tingkat mahasiswa (Semester 1, 3, 5, dan 7).</p>
               <div class="chart" id="trendChart"></div>
               <div class="trend-footer" id="trendFooter"></div>
             </article>
@@ -638,26 +1397,29 @@
         <section class="view" id="view-profile" role="tabpanel" aria-labelledby="tab-profile" hidden>
           <div class="view__head">
             <h3>Student Profiling <span id="prScope">seluruh kampus</span></h3>
-            <p>Pemetaan 5 profil mahasiswa berdasarkan tingkat kesejahteraan dan kondisi akademik.</p>
+            <p>Pemetaan 3 profil mahasiswa berdasarkan tingkat kesejahteraan dan kondisi akademik.</p>
           </div>
 
           <div class="lpa-note">
-            <span><b>5 Profil</b> Mahasiswa</span>
-            <span>Total <b>119 Responden</b></span>
+            <span><b>3 Profil</b> Mahasiswa</span>
+            <span>Total <b id="lpaTotalN">149 Responden</b></span>
           </div>
 
-          <!-- 5 LPA Profile Cards -->
+          <!-- 3 LPA Profile Cards -->
           <div class="profiles" id="profiles"></div>
 
           <!-- Grid 1: Peta Klaster 2D & Pola Centroid -->
           <div class="grid2 grid2--cluster-top">
             <article class="card">
               <div class="card__head">
-                <h4>Peta Klaster Mahasiswa (2D Cluster Map)</h4>
-                <span class="card__badge">119 Data Riil Mahasiswa</span>
+                <h4>Peta Klaster Mahasiswa</h4>
+                <span class="card__badge" id="scatterTotalBadge">149 Data Riil Mahasiswa</span>
               </div>
-              <p class="card__hint">Arahkan kursor ke titik responden atau klik Centroid (P1–P5) untuk memfokuskan analisis profil.</p>
+              <p class="card__hint">Arahkan kursor ke titik responden atau klik Centroid (P1–P3) untuk memfokuskan analisis profil.</p>
               <div class="chart" id="clusterScatterChart"></div>
+              <div class="card__insight-note" id="clusterInsightNote" style="margin-top: 12px; padding: 10px 14px; background: rgba(225, 29, 72, 0.05); border-left: 3px solid #E11D48; border-radius: 6px; font-size: 12.5px; line-height: 1.5; color: var(--text-2);">
+                <b>Indikasi Klaster (P1 Rentan):</b> Titik terkonsentrasi di area rentan skor &lt;60 &rarr; <b>sasaran utama prioritas bantuan &amp; konseling kampus</b>.
+              </div>
             </article>
 
             <article class="card">
@@ -666,6 +1428,9 @@
               </div>
               <p class="card__hint">Grafik perbandingan skor tiap profil pada 4 dimensi indikator utama.</p>
               <div class="chart" id="profileChart"></div>
+              <div class="card__insight-note" style="margin-top: 12px; padding: 10px 14px; background: rgba(13, 148, 136, 0.05); border-left: 3px solid #0D9488; border-radius: 6px; font-size: 12.5px; line-height: 1.5; color: var(--text-2);">
+                <b>Interpretasi Pola:</b> Garis hijau (<b>Profil 3</b>) konsisten tertinggi di seluruh dimensi, garis biru (<b>Profil 2</b>) stabil di tengah, dan merah (<b>Profil 1</b>) terendah. Membuktikan 3 kelompok terpisah secara tegas dan valid.
+              </div>
             </article>
           </div>
 
@@ -695,7 +1460,7 @@
                 <div class="sent-kpis">
                   <div class="sent-kpi">
                     <span class="sent-kpi__lbl">Total Respon</span>
-                    <strong class="sent-kpi__val" id="sentTotalN">119</strong>
+                    <strong class="sent-kpi__val" id="sentTotalN">149</strong>
                     <span class="sent-kpi__sub">Data survei riil</span>
                   </div>
                   <div class="sent-kpi">
@@ -848,21 +1613,27 @@
   <div class="tray" id="tray" hidden>
     <span id="trayCount">0 program dipilih</span>
     <button class="btn btn--em btn--sm" id="trayDownloadPdf" type="button" title="Unduh rencana terpilih dalam format PDF">📄 Unduh PDF Rencana</button>
-    <button class="btn btn--outline btn--sm" id="trayCopy" type="button">Salin Teks</button>
     <button class="tray__clear" id="trayClear" type="button">Kosongkan</button>
   </div>
 
   <!-- ============ MODAL LAPORAN REKOMENDASI KAMPUS (A4 PRINT & PDF READY) ============ -->
   <div class="reco-report-modal" id="recoReportModal" role="dialog" aria-modal="true" aria-labelledby="modalReportTitle" hidden>
     <div class="reco-report-sheet">
-      <!-- Toolbar Modal -->
+      <!-- Toolbar Modal Adaptif & Ramah Sentuhan HP -->
       <div class="reco-report-toolbar">
         <div class="reco-report-toolbar__title" id="modalReportTitle">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0D9488">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-          </svg>
-          <span>Pratinjau Dokumen Rekomendasi Kampus (A4 PDF)</span>
+          <div class="modal-title-left">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0D9488; flex-shrink:0;">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <span>Pratinjau Dokumen Rekomendasi (A4 PDF)</span>
+          </div>
+          <button type="button" class="modal-close-icon-btn" id="btnCloseReportModalTop" aria-label="Tutup pratinjau" title="Tutup">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6L6 18M6 6l12 12"></path>
+            </svg>
+          </button>
         </div>
         <div class="reco-report-toolbar__btns">
           <button type="button" class="btn btn--em btn--sm" id="btnPrintModalContent" title="Cetak atau simpan ke PDF">
@@ -892,9 +1663,9 @@
 
   <!-- Scripts -->
   <script src="js/theme.js"></script>
-  <script src="js/data.js?v=21"></script>
-  <script src="js/charts.js?v=21"></script>
-  <script src="js/app.js?v=21"></script>
+  <script src="js/data.js?v=20261102_fix1"></script>
+  <script src="js/charts.js?v=20261102_fix1"></script>
+  <script src="js/app.js?v=20261102_fix1"></script>
 
   <!-- Mobile Drawer Controller (seperti ETHOL PENS) -->
   <script>

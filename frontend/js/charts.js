@@ -15,13 +15,14 @@ const Charts = (() => {
   function ring(value, color, size = 92, stroke = 10, label = '') {
     const r = (size - stroke) / 2;
     const c = 2 * Math.PI * r;
+    const target = c * (1 - value / 100);
     return `
       <svg class="ring ring--interactive" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="${label ? label + ': ' : ''}${value} dari 100">
         <title>${label ? label + ': ' : ''}${value}/100 poin</title>
         <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="#E2E8F0" stroke-width="${stroke}"/>
         <circle class="ring__val" cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${color}"
-          stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}"
-          data-target="${c * (1 - value / 100)}" transform="rotate(-90 ${size / 2} ${size / 2})"/>
+          stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${target}"
+          data-target="${target}" transform="rotate(-90 ${size / 2} ${size / 2})"/>
       </svg>`;
   }
 
@@ -247,7 +248,7 @@ const Charts = (() => {
       svgEl('path', { d, fill: 'none', stroke: p.color, 'stroke-width': on ? 4 : 2.5, 'stroke-linecap': 'round',
         'stroke-linejoin': 'round', pathLength: 1, class: 'lc__path' }, g);
       dims.forEach((dm, i) => {
-        svgEl('circle', { cx: x(i), cy: y(p.means[dm.key]), r: on ? 5.5 : 3.5, fill: '#fff', stroke: p.color, 'stroke-width': 2.5 }, g);
+        svgEl('circle', { cx: x(i), cy: y(p.means[dm.key]), r: on ? 5.5 : 3.5, fill: '#fff', stroke: p.color, 'stroke-width': 2.5, class: 'pl__dot' }, g);
         if (on) {
           const t = svgEl('text', { x: x(i), y: y(p.means[dm.key]) - 12, class: 'pl__val', 'text-anchor': 'middle', fill: p.color }, g);
           t.textContent = p.means[dm.key];
@@ -300,39 +301,45 @@ const Charts = (() => {
     // 2. Legend Filter Interaktif di Bagian Atas
     const filterG = svgEl('g', { class: 'sc__filters' }, svg);
     const filterPills = [
-      { id: null, label: 'Semua (119)', color: '#334155' },
+      { id: null, label: `Semua (${points.length || 149})`, color: '#334155' },
       ...clusters.map((c, idx) => ({ id: idx, label: `P${c.cluster} (${c.count})`, color: c.color }))
     ];
     let fOffset = pad.l;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     filterPills.forEach(fp => {
       const isAct = fp.id === activeCluster || (fp.id === null && activeCluster === null);
       const pillW = fp.id === null ? 76 : 64;
       const g = svgEl('g', { style: 'cursor: pointer;' }, filterG);
       svgEl('rect', {
         x: fOffset, y: pad.t - 32, width: pillW, height: 20, rx: 10,
-        fill: isAct ? fp.color : '#F1F5F9',
-        stroke: isAct ? fp.color : '#CBD5E1',
+        class: 'sc__filter-pill' + (isAct ? ' is-act' : ''),
+        fill: isAct ? fp.color : (isDark ? '#1E293B' : '#F1F5F9'),
+        stroke: isAct ? fp.color : (isDark ? '#334155' : '#CBD5E1'),
         'stroke-width': 1
       }, g);
       const txt = svgEl('text', {
         x: fOffset + pillW / 2, y: pad.t - 18,
+        class: 'sc__filter-txt' + (isAct ? ' is-act' : ''),
         'text-anchor': 'middle', 'font-size': '10px', 'font-weight': '700',
-        fill: isAct ? '#FFFFFF' : '#475569'
+        fill: isAct ? '#FFFFFF' : (isDark ? '#CBD5E1' : '#475569')
       }, g);
       txt.textContent = fp.label;
       g.addEventListener('click', () => onPick(fp.id));
       fOffset += pillW + 6;
     });
 
-    // 3. Titik-titik Responden (119 Mahasiswa)
+    // 3. Titik-titik Responden (149 Mahasiswa Riil)
     const ptsGroup = svgEl('g', { class: 'sc__pts' }, svg);
-    points.forEach(pt => {
+    const safePoints = (points && points.length > 0) ? points : (window.CLUSTER_POINTS || []);
+    safePoints.forEach(pt => {
       const c = clusters[pt.cluster];
+      if (!c) return;
       const isSel = activeCluster === null || pt.cluster === activeCluster;
 
       // Sedikit deterministik micro-jitter agar titik berskor sama tetap terlihat
       let hash = 0;
-      for (let k = 0; k < pt.id.length; k++) hash = (hash * 31 + pt.id.charCodeAt(k)) & 0xff;
+      const idStr = String(pt.id || '');
+      for (let k = 0; k < idStr.length; k++) hash = (hash * 31 + idStr.charCodeAt(k)) & 0xff;
       const jx = ((hash % 11) - 5) * 0.45;
       const jy = (((hash >> 2) % 11) - 5) * 0.45;
 

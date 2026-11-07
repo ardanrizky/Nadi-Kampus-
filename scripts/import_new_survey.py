@@ -1,7 +1,7 @@
 """
 Nadi Kampus — Pipeline Otomatis Ingest Kuesioner Baru
 Memproses data survei mentah baru dari data/incoming/, menghitung skor 4 dimensi,
-menginferensikan ke 5 Profil LPA-GMM, memproyeksikan koordinat PCA 2D,
+menginferensikan ke 3 Profil LPA-GMM, memproyeksikan koordinat PCA 2D,
 dan mengunggah secara append ke Supabase 'student_surveys'.
 """
 
@@ -29,19 +29,17 @@ MODELS_PROFILES_JSON = os.path.join(BASE_DIR, "models", "lpa_profiles.json")
 
 
 def load_lpa_metadata():
-    """Memuat parameter 5 profil LPA dari models/lpa_profiles.json."""
+    """Memuat parameter 3 profil LPA dari models/lpa_profiles.json."""
     if os.path.exists(MODELS_PROFILES_JSON):
         with open(MODELS_PROFILES_JSON, "r", encoding="utf-8") as f:
             data = json.load(f)
             return data.get("profiles", [])
     
-    # Fallback default profil LPA-GMM
+    # Fallback default profil LPA-GMM k=3
     return [
-        {"profile_id": 1, "scores_likert": {"wellbeing": 2.85, "academic": 2.94, "social": 4.10, "career": 3.34}, "name": "Socially Supported, Academically Strained"},
-        {"profile_id": 2, "scores_likert": {"wellbeing": 4.06, "academic": 3.88, "social": 4.25, "career": 3.65}, "name": "Thriving & High Functioning"},
-        {"profile_id": 3, "scores_likert": {"wellbeing": 3.13, "academic": 3.12, "social": 3.70, "career": 3.05}, "name": "Moderate / Average Adaptation"},
-        {"profile_id": 4, "scores_likert": {"wellbeing": 2.11, "academic": 2.31, "social": 2.41, "career": 1.77}, "name": "High Risk / Vulnerable"},
-        {"profile_id": 5, "scores_likert": {"wellbeing": 4.48, "academic": 4.52, "social": 5.00, "career": 4.02}, "name": "Flourishing / Optimal Well-being"}
+        {"profile_id": 1, "scores_likert": {"wellbeing": 2.80, "academic": 2.79, "social": 3.46, "career": 2.90}, "name": "Vulnerable / Low Adaptation"},
+        {"profile_id": 2, "scores_likert": {"wellbeing": 3.79, "academic": 3.76, "social": 4.21, "career": 3.58}, "name": "Moderate / Average Adaptation"},
+        {"profile_id": 3, "scores_likert": {"wellbeing": 4.60, "academic": 4.60, "social": 5.00, "career": 4.24}, "name": "Thriving & High Functioning"}
     ]
 
 
