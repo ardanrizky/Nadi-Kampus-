@@ -2,7 +2,7 @@
    NadiKampus — Logika Dashboard Analytics
    ========================================================= */
 (() => {
-  const $  = (s, r = document) => r.querySelector(s);
+  const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const nf = new Intl.NumberFormat('id-ID');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -54,6 +54,7 @@
     profile: 0,
     topic: null,
     sent: 'all',
+    source: 'all',
     recoProfile: 'all',
     plan: new Set()
   };
@@ -388,15 +389,15 @@
           </div>
           <div class="pd__tabs" role="tablist" aria-label="Pilih Profil Klaster">
             ${CLUSTERS.map((cl, idx) => {
-              const isSel = state.profile === idx;
-              return `
+        const isSel = state.profile === idx;
+        return `
                 <button type="button" class="pd__tab ${isSel ? 'is-active' : ''}" data-profile="${idx}" style="--tc:${cl.color}">
                   <span class="pd__tab-dot"></span>
                   <strong class="pd__tab-label">P${cl.cluster}</strong>
                   <span class="pd__tab-name">${cl.short}</span>
                   <span class="pd__tab-pct">${cl.pct}%</span>
                 </button>`;
-            }).join('')}
+      }).join('')}
           </div>
           <div class="pd__nav-pager">
             <button type="button" class="pd__pager-btn" data-profile="${(state.profile - 1 + CLUSTERS.length) % CLUSTERS.length}" title="Profil Sebelumnya" aria-label="Profil Sebelumnya">
@@ -423,15 +424,15 @@
         <div class="pd__means">
           <h5 class="pd__means-title">Nilai Centroid pada 4 Dimensi Utama:</h5>
           ${DIMS.map(dm => {
-            const val = p.means[dm.key];
-            const raw = p.rawMeans ? p.rawMeans[dm.key] : (val / 20).toFixed(2);
-            return `
+        const val = p.means[dm.key];
+        const raw = p.rawMeans ? p.rawMeans[dm.key] : (val / 20).toFixed(2);
+        return `
               <div class="mean">
                 <span>${dm.short}</span>
                 <span class="mean__track"><i style="width:${val}%;background:${dm.color}"></i></span>
                 <b>${val} <small style="font-size:11px;font-weight:normal;color:#64748B">(Likert: ${raw})</small></b>
               </div>`;
-          }).join('')}
+      }).join('')}
         </div>
         <p class="pd__need"><strong>Kebutuhan intervensi:</strong> ${p.need}</p>
         <button type="button" class="btn btn--outline btn--sm" data-recoprofile="${state.profile}">
@@ -495,7 +496,7 @@
     if (donutEl && legendEl) {
       const parts = [
         { key: 'pos', label: 'Positif', value: D.sentiment[0], color: '#059669' },
-        { key: 'neu', label: 'Netral',  value: D.sentiment[1], color: '#7E92A2' },
+        { key: 'neu', label: 'Netral', value: D.sentiment[1], color: '#7E92A2' },
         { key: 'neg', label: 'Negatif', value: D.sentiment[2], color: '#E0664A' }
       ];
       Charts.donut(donutEl, parts, {
@@ -545,6 +546,19 @@
         </div>`;
     }
 
+    // Filter sumber komentar (GForm vs Telegram)
+    const sourceFilter = $('#sourceFilter');
+    if (sourceFilter) {
+      sourceFilter.innerHTML = [
+        ['all', 'Semua Sumber'],
+        ['gform', '📋 GForm'],
+        ['telegram', '💬 Menfess Tele']
+      ].map(([k, l]) => `
+        <button type="button" class="seg__btn" aria-pressed="${(state.source || 'all') === k}" data-source="${k}">
+          ${l}
+        </button>`).join('');
+    }
+
     // Filter sentimen komentar
     const sentFilter = $('#sentFilter');
     if (sentFilter) {
@@ -576,6 +590,7 @@
       const filtered = QUOTES.filter(q => {
         if (state.topic !== null && q.t !== state.topic) return false;
         if (state.sent !== 'all' && q.s !== state.sent) return false;
+        if (state.source && state.source !== 'all' && (q.source || 'gform') !== state.source) return false;
         return true;
       });
       if (filtered.length === 0) {
@@ -583,10 +598,15 @@
       } else {
         qList.innerHTML = filtered.map(q => `
           <li class="quote ${q.isNew ? 'quote--new' : ''}">
-            ${q.isNew ? `<span class="quote__new-tag">✨ Curhat Baru (Anonim${q.prodi ? ' · ' + q.prodi : ''}${q.sem ? ' · Sem ' + q.sem : ''})</span>` : ''}
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span class="quote__src-badge quote__src-badge--${q.source || 'gform'}">
+                ${q.source === 'telegram' ? '💬 Menfess Telegram' : '📋 Kuesioner GForm'}
+              </span>
+              ${q.isNew ? `<span class="quote__new-tag">✨ Curhat Baru (Anonim${q.prodi ? ' · ' + q.prodi : ''}${q.sem ? ' · Sem ' + q.sem : ''})</span>` : ''}
+            </div>
             <p>“${q.x}”</p>
             <div class="quote__meta">
-              <span class="quote__topic">${TOPICS[q.t].name}</span>
+              <span class="quote__topic">${TOPICS[q.t] ? TOPICS[q.t].name : 'Umum'}</span>
               <span class="quote__bullet">•</span>
               <span class="quote__sent quote__sent--${q.s}">${q.s === 'pos' ? 'Positif' : q.s === 'neg' ? 'Negatif' : 'Netral'}</span>
             </div>
@@ -600,14 +620,14 @@
      --------------------------------------------------------- */
   function analyzeVoiceNLP(text) {
     const lower = text.toLowerCase();
-    
+
     // Klasifikasi topik berdasarkan frekuensi kata kunci
     const extraTopicLexicons = [
-      ['tugas','deadline','ujian','praktikum','tubes','kuliah','jadwal','kelas','materi','begadang','dosen','wali','bimbingan','skripsi','revisi','feedback','wifi','fasilitas','ruang','lab','gedung','perpustakaan','toilet','parkir','parkiran','server','lemot','antrean','kantin','layanan'],
-      ['magang','karier','cv','kerja','portofolio','interview','loker','alumni','industri','profesi','masa depan'],
-      ['ukt','biaya','uang','finansial','bayar','kos','makan','beasiswa','keringanan','mahal','spp','ekonomi'],
-      ['teman','sendirian','kesepian','sosial','rantau','asrama','isolasi','berteman','ngobrol','relasi','asing','ukm','organisasi','kegiatan','bem','hima','lomba','acara','komunitas','kepanitiaan'],
-      ['stres','stress','cemas','tidur','istirahat','lelah','capek','overthinking','konseling','psikolog','dukungan','semangat','tenang','burnout']
+      ['tugas', 'deadline', 'ujian', 'praktikum', 'tubes', 'kuliah', 'jadwal', 'kelas', 'materi', 'begadang', 'dosen', 'wali', 'bimbingan', 'skripsi', 'revisi', 'feedback', 'wifi', 'fasilitas', 'ruang', 'lab', 'gedung', 'perpustakaan', 'toilet', 'parkir', 'parkiran', 'server', 'lemot', 'antrean', 'kantin', 'layanan'],
+      ['magang', 'karier', 'cv', 'kerja', 'portofolio', 'interview', 'loker', 'alumni', 'industri', 'profesi', 'masa depan'],
+      ['ukt', 'biaya', 'uang', 'finansial', 'bayar', 'kos', 'makan', 'beasiswa', 'keringanan', 'mahal', 'spp', 'ekonomi'],
+      ['teman', 'sendirian', 'kesepian', 'sosial', 'rantau', 'asrama', 'isolasi', 'berteman', 'ngobrol', 'relasi', 'asing', 'ukm', 'organisasi', 'kegiatan', 'bem', 'hima', 'lomba', 'acara', 'komunitas', 'kepanitiaan'],
+      ['stres', 'stress', 'cemas', 'tidur', 'istirahat', 'lelah', 'capek', 'overthinking', 'konseling', 'psikolog', 'dukungan', 'semangat', 'tenang', 'burnout']
     ];
 
     const topicScores = TOPICS.map((topic, i) => {
@@ -622,7 +642,7 @@
       }
       return { topicIndex: i, score };
     });
-    
+
     topicScores.sort((a, b) => b.score - a.score);
     const bestTopic = topicScores[0].score > 0 ? topicScores[0].topicIndex : 0;
 
@@ -632,7 +652,7 @@
       'tidak', 'belum', 'lambat', 'bingung', 'panik', 'mahal', 'sendiri', 'kesepian',
       'terlambat', 'rusak', 'susah', 'takut', 'cemas', 'masalah', 'keluhan', 'keluh', 'parah',
       'begadang', 'drop', 'menumpuk', 'tabrakan', 'bentrok', 'padat', 'pusing', 'down', 'overthinking',
-       'sempit', 'brobok', 'jelek'
+      'sempit', 'brobok', 'jelek'
     ];
     const posWords = [
       'bagus', 'senang', 'membantu', 'nyaman', 'terbantu', 'puas', 'mantap', 'baik', 'ramah',
@@ -787,8 +807,8 @@
       { short: 'P3 Unggul' }
     ];
 
-    const opts = [['all', 'Semua profil'], ...profileList.map((p, i) => [String(i), p.short || `Profil ${i+1}`])];
-    
+    const opts = [['all', 'Semua profil'], ...profileList.map((p, i) => [String(i), p.short || `Profil ${i + 1}`])];
+
     fBox.innerHTML = opts.map(([k, l]) => `
       <button type="button" class="seg__btn" aria-pressed="${state.recoProfile === k}" data-recofilter="${k}">
         ${l}
@@ -807,8 +827,8 @@
     rBox.innerHTML = ranked.map(x => {
       const { r, m, t } = x;
       const on = state.plan.has(r.id);
-      const targetProfiles = r.profiles 
-        ? r.profiles.map(i => (profileList[i] ? profileList[i].short : `P${i+1}`)).join(', ')
+      const targetProfiles = r.profiles
+        ? r.profiles.map(i => (profileList[i] ? profileList[i].short : `P${i + 1}`)).join(', ')
         : 'Semua Profil';
 
       return `
@@ -1572,6 +1592,11 @@
       return runAct({ recoProfile: t.dataset.recoprofile, view: 'reco' });
     }
 
+    if (t.dataset.source) {
+      state.source = t.dataset.source;
+      return renderVoice();
+    }
+
     if (t.dataset.sent) {
       state.sent = state.sent === t.dataset.sent && t.classList.contains('lg') ? 'all' : t.dataset.sent;
       return renderVoice();
@@ -1687,7 +1712,7 @@
   /* ---------------------------------------------------------
      Sinkronisasi Asinkron dengan Live FastAPI Backend & Supabase
      --------------------------------------------------------- */
- async function loadSupabaseVoice() {
+  async function loadSupabaseVoice() {
     if (!supabaseClient) return;
     try {
       const { data, error } = await supabaseClient
@@ -1705,9 +1730,9 @@
       if (data && data.length > 0) {
         // Ambil komentar lokal yang bertanda isNew (yang dikirim user saat sesi berlangsung)
         const localNewQuotes = QUOTES.filter(q => q.isNew);
-        
+
         QUOTES.length = 0; // Kosongkan array lama
-        
+
         // Masukkan data baru dari Supabase
         data.forEach(d => {
           QUOTES.push({

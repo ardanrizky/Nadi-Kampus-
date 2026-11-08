@@ -4453,3 +4453,10 @@ body.drawer-locked {
   }
 }
 
+
+/* Badges Sumber Komentar (GForm vs Telegram) */
+.quote__src-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; }
+.quote__src-badge--gform { background: #EEF2FF; color: #4338CA; border: 1px solid #C7D2FE; }
+.quote__src-badge--telegram { background: #F0F9FF; color: #0369A1; border: 1px solid #BAE6FD; }
+[data-theme="dark"] .quote__src-badge--gform { background: rgba(99, 102, 241, 0.15); color: #A5B4FC; border-color: rgba(99, 102, 241, 0.3); }
+[data-theme="dark"] .quote__src-badge--telegram { background: rgba(14, 165, 233, 0.15); color: #7DD3FC; border-color: rgba(14, 165, 233, 0.3); }
