@@ -492,12 +492,46 @@
      3. STUDENT VOICE (NLP)
      --------------------------------------------------------- */
   function renderVoice() {
+    const curSource = state.source || 'all';
+    const voiceStats = (window.VOICE_STATS_BY_SOURCE && window.VOICE_STATS_BY_SOURCE[curSource]) || {
+      n: 5204,
+      sentiment: [12.6, 55.7, 31.7],
+      topics: [
+        { weight: 67.9, sent: [5.3, 69.2, 25.4] },
+        { weight: 13.9, sent: [20.8, 30.6, 48.6] },
+        { weight: 9.5, sent: [14.0, 23.9, 62.1] },
+        { weight: 4.2, sent: [78.7, 8.3, 13.0] },
+        { weight: 1.7, sent: [4.6, 54.6, 40.9] }
+      ]
+    };
+
+    // Subtitle label dinamis
+    const subLabel = curSource === 'all' 
+      ? `${nf.format(voiceStats.n)} data riil gabungan (Tele + GForm)`
+      : (curSource === 'gform' ? `${nf.format(voiceStats.n)} respon survei GForm` : `${nf.format(voiceStats.n)} pesan Menfess Telegram`);
+    const voiceSubEl = $('#voiceSourceSub');
+    if (voiceSubEl) voiceSubEl.textContent = subLabel;
+
+    // Filter sumber di Donut Card & Quotes Card (Tersinkronisasi)
+    const sourceFilters = [$('#voiceSourceFilter'), $('#sourceFilter')];
+    sourceFilters.forEach(el => {
+      if (!el) return;
+      el.innerHTML = [
+        ['all', `Semua (${curSource === 'all' ? voiceStats.n : '5.2k'})`],
+        ['gform', '📋 GForm (553)'],
+        ['telegram', '💬 Menfess Tele (4.6k)']
+      ].map(([k, l]) => `
+        <button type="button" class="seg__btn" aria-pressed="${curSource === k}" data-source="${k}">
+          ${l}
+        </button>`).join('');
+    });
+
     const donutEl = $('#donut'), legendEl = $('#sentLegend');
     if (donutEl && legendEl) {
       const parts = [
-        { key: 'pos', label: 'Positif', value: D.sentiment[0], color: '#059669' },
-        { key: 'neu', label: 'Netral', value: D.sentiment[1], color: '#7E92A2' },
-        { key: 'neg', label: 'Negatif', value: D.sentiment[2], color: '#E0664A' }
+        { key: 'pos', label: 'Positif', value: voiceStats.sentiment[0], color: '#059669' },
+        { key: 'neu', label: 'Netral', value: voiceStats.sentiment[1], color: '#7E92A2' },
+        { key: 'neg', label: 'Negatif', value: voiceStats.sentiment[2], color: '#E0664A' }
       ];
       Charts.donut(donutEl, parts, {
         active: state.sent,
@@ -510,32 +544,35 @@
         <button type="button" class="lg ${state.sent === p.key ? 'is-on' : ''}" data-sent="${p.key}">
           <i style="background:${p.color}"></i>
           <span>${p.label}</span>
-          <b>${Math.round(p.value)}%</b>
+          <b>${p.value.toFixed(1)}%</b>
         </button>`).join('');
 
-      // Sinkronisasi angka kartu ringkasan sentimen
+      // Sinkronisasi angka barometer sentimen mahasiswa
       const totalNEl = $('#sentTotalN');
       const negValEl = $('#sentNegVal');
       const posNeuValEl = $('#sentPosNeuVal');
-      if (totalNEl) totalNEl.textContent = D.n || 149;
-      if (negValEl) negValEl.textContent = `${Math.round(D.sentiment[2])}%`;
-      if (posNeuValEl) posNeuValEl.textContent = `${Math.round(D.sentiment[0] + D.sentiment[1])}%`;
+      if (totalNEl) totalNEl.textContent = nf.format(voiceStats.n);
+      if (negValEl) negValEl.textContent = `${Math.round(voiceStats.sentiment[2])}%`;
+      if (posNeuValEl) posNeuValEl.textContent = `${Math.round(voiceStats.sentiment[0] + voiceStats.sentiment[1])}%`;
     }
 
     const topicsBox = $('#topics');
     if (topicsBox) {
-      topicsBox.innerHTML = D.topics.map(t => {
-        const sel = state.topic === t.i;
+      topicsBox.innerHTML = TOPICS.map((t, idx) => {
+        const sel = state.topic === idx;
+        const topicSourceStat = (voiceStats.topics && voiceStats.topics[idx]) || { weight: 20, sent: t.sent };
+        const w = topicSourceStat.weight;
+        const sent = topicSourceStat.sent;
         return `
-          <button type="button" class="topic ${sel ? 'is-sel' : ''}" data-topic="${t.i}">
+          <button type="button" class="topic ${sel ? 'is-sel' : ''}" data-topic="${idx}">
             <div class="topic__row">
               <span class="topic__name">${t.name}</span>
-              <b>${Math.round(t.w)}%</b>
+              <b>${w}%</b>
             </div>
             <div class="topic__track">
-              <i style="width:${t.sent[0]}%;background:#059669"></i>
-              <i style="width:${t.sent[1]}%;background:#B6C2CE"></i>
-              <i style="width:${t.sent[2]}%;background:#E0664A"></i>
+              <i style="width:${sent[0]}%;background:#059669" title="Positif: ${sent[0]}%"></i>
+              <i style="width:${sent[1]}%;background:#B6C2CE" title="Netral: ${sent[1]}%"></i>
+              <i style="width:${sent[2]}%;background:#E0664A" title="Negatif: ${sent[2]}%"></i>
             </div>
           </button>`;
       }).join('') + `
@@ -544,33 +581,6 @@
           <i style="background:#B6C2CE"></i> Netral
           <i style="background:#E0664A"></i> Negatif
         </div>`;
-    }
-
-    // Filter sumber komentar (GForm vs Telegram)
-    const sourceFilter = $('#sourceFilter');
-    if (sourceFilter) {
-      sourceFilter.innerHTML = [
-        ['all', 'Semua Sumber'],
-        ['gform', '📋 GForm'],
-        ['telegram', '💬 Menfess Tele']
-      ].map(([k, l]) => `
-        <button type="button" class="seg__btn" aria-pressed="${(state.source || 'all') === k}" data-source="${k}">
-          ${l}
-        </button>`).join('');
-    }
-
-    // Filter sentimen komentar
-    const sentFilter = $('#sentFilter');
-    if (sentFilter) {
-      sentFilter.innerHTML = [
-        ['all', 'Semua'],
-        ['pos', 'Positif'],
-        ['neu', 'Netral'],
-        ['neg', 'Negatif']
-      ].map(([k, l]) => `
-        <button type="button" class="seg__btn" aria-pressed="${state.sent === k}" data-sent="${k}">
-          ${l}
-        </button>`).join('');
     }
 
     // Keywords
@@ -593,6 +603,11 @@
         if (state.source && state.source !== 'all' && (q.source || 'gform') !== state.source) return false;
         return true;
       });
+      const quotesSubEl = $('#quotesSub');
+      if (quotesSubEl) {
+        const srcText = curSource === 'all' ? '30 GForm + 30 Menfess Tele' : (curSource === 'gform' ? 'Kuesioner GForm' : 'Menfess Telegram');
+        quotesSubEl.textContent = `Menampilkan ${filtered.length} komentar terpilih (${srcText})`;
+      }
       if (filtered.length === 0) {
         qList.innerHTML = `<li class="empty">Tidak ada komentar untuk kombinasi filter ini.</li>`;
       } else {

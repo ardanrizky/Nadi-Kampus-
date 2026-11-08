@@ -1447,8 +1447,12 @@
 
           <div class="grid2 grid2--voice">
             <article class="card">
-              <div class="card__head">
-                <h4>Sentimen komentar</h4>
+              <div class="card__head" style="flex-wrap:wrap; gap:8px;">
+                <div>
+                  <h4 style="margin:0;">Sentimen Komentar</h4>
+                  <small style="color:var(--c-sub); font-size:11px;" id="voiceSourceSub">5.204 data riil gabungan</small>
+                </div>
+                <div class="seg" id="voiceSourceFilter" role="group" aria-label="Filter Sumber Sentimen"></div>
               </div>
               <div class="donutwrap">
                 <div class="donut" id="donut"></div>
@@ -1559,7 +1563,10 @@
 
           <article class="card">
             <div class="card__head" style="flex-wrap:wrap; gap:10px;">
-              <h4 id="quotesTitle">Komentar Mahasiswa (GForm &amp; Menfess Telegram)</h4>
+              <div>
+                <h4 id="quotesTitle" style="margin:0;">Komentar Mahasiswa</h4>
+                <small style="color:var(--c-sub); font-size:11px;" id="quotesSub">60 sampel representatif (30 GForm + 30 Menfess Telegram)</small>
+              </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
                 <div class="seg" id="sourceFilter" role="group" aria-label="Filter Sumber"></div>
                 <div class="seg" id="sentFilter" role="group" aria-label="Filter sentimen"></div>

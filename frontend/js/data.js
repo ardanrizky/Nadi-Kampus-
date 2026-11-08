@@ -21,6 +21,47 @@ var SEMESTERS = ['Sem 1', 'Sem 3', 'Sem 5', 'Sem 7'];
 var MONTHS = SEMESTERS;
 
 /* Tujuh topik hasil NLP: bobot dasar dan pembagian sentimen [positif, netral, negatif] */
+/* Statistik Agregat NLP Riil Berdasarkan Sumber Data (Total 5.204 Dokumen Valid) */
+var VOICE_STATS_BY_SOURCE = {
+  all: {
+    n: 5204,
+    label: 'Semua Sumber (5.204 Data Riil)',
+    sentiment: [12.6, 55.7, 31.7],
+    topics: [
+      { weight: 67.9, sent: [5.3, 69.2, 25.4] },
+      { weight: 13.9, sent: [20.8, 30.6, 48.6] },
+      { weight: 9.5, sent: [14.0, 23.9, 62.1] },
+      { weight: 4.2, sent: [78.7, 8.3, 13.0] },
+      { weight: 1.7, sent: [4.6, 54.6, 40.9] }
+    ]
+  },
+  gform: {
+    n: 553,
+    label: 'Kuesioner GForm (553 Responden)',
+    sentiment: [57.9, 17.0, 25.1],
+    topics: [
+      { weight: 44.7, sent: [35.6, 19.8, 44.5] },
+      { weight: 0.7, sent: [75.0, 25.0, 0.0] },
+      { weight: 3.1, sent: [47.1, 23.5, 29.4] },
+      { weight: 33.3, sent: [86.4, 7.1, 6.5] },
+      { weight: 1.8, sent: [40.0, 20.0, 40.0] }
+    ]
+  },
+  telegram: {
+    n: 4651,
+    label: 'Menfess Telegram (4.651 Pesan)',
+    sentiment: [7.3, 60.3, 32.5],
+    topics: [
+      { weight: 70.6, sent: [3.0, 72.9, 24.0] },
+      { weight: 15.5, sent: [20.5, 30.6, 48.8] },
+      { weight: 10.2, sent: [12.8, 24.0, 63.2] },
+      { weight: 0.7, sent: [34.4, 15.6, 50.0] },
+      { weight: 1.7, sent: [0.0, 59.0, 41.0] }
+    ]
+  }
+};
+window.VOICE_STATS_BY_SOURCE = VOICE_STATS_BY_SOURCE;
+
 var TOPICS = [
   { name: 'Akademik & beban studi', sent: [5.9, 9.3, 84.8], metric: 'pressure',
     keywords: ['jadwal', 'materi', 'wifi', 'mendadak', 'deadline'] },
