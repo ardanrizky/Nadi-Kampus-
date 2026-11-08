@@ -758,12 +758,12 @@
   /* ---------------------------------------------------------
      4. RECOMMENDATION PROGRAM
      --------------------------------------------------------- */
-  function rankRecos() {
+  function rankRecos(targetData = D) {
     return RECOS.map(r => {
       const m = dim(r.metric);
-      const t = (D.topics && D.topics[r.t]) ? D.topics[r.t] : { ...TOPICS[r.t], w: 15 };
+      const t = (targetData.topics && targetData.topics[r.t]) ? targetData.topics[r.t] : { ...TOPICS[r.t], w: 15 };
       const tw = t.w || 15;
-      const prioScore = need(m, D.scores[m.key]) * 0.6 + (t.sent[2] * tw / 100) * 0.4;
+      const prioScore = need(m, targetData.scores[m.key]) * 0.6 + (t.sent[2] * tw / 100) * 0.4;
       const pr = prioScore >= 45 ? 'Tinggi' : prioScore >= 30 ? 'Sedang' : 'Rendah';
       return { r, prioScore, pr, m, t: { ...t, w: tw } };
     }).sort((a, b) => b.prioScore - a.prioScore);
@@ -838,22 +838,41 @@
   /* ---------------------------------------------------------
      Laporan Rekomendasi Eksekutif Kampus (A4 PDF & Cetak)
      --------------------------------------------------------- */
-  function generateRecoReportHtml(selectedIds = null) {
+  function generateRecoReportHtml(selectedIds = null, targetFacKey = null) {
     const today = new Date();
     const dateFormatted = today.toLocaleDateString('id-ID', {
       day: 'numeric', month: 'long', year: 'numeric'
     });
 
+    const activeFac = targetFacKey || state.fac || 'all';
+    const currData = compute(activeFac);
+    const prodiSource = window.PRODIS || window.FACULTIES || {};
     const isSelection = Array.isArray(selectedIds) && selectedIds.length > 0;
-    const rankedList = rankRecos();
+    const rankedList = rankRecos(currData);
     const filteredList = isSelection
       ? rankedList.filter(x => selectedIds.includes(x.r.id))
       : rankedList;
 
-    const highPrioCount = filteredList.filter(x => x.pr === 'Tinggi').length;
-    const prodiName = D.name || 'Seluruh Kampus Politeknik Elektronika Negeri Surabaya (PENS)';
-    const totalStudents = D.n || 149;
+    const totalStudents = currData.n || 0;
+    const isAllCampus = activeFac === 'all';
+    const scopeLabel = isAllCampus
+      ? 'Seluruh Kampus PENS (18 Program Studi)'
+      : (currData.name.startsWith('Prodi') ? currData.name : `Prodi ${currData.name}`);
 
+    const p1Pct = Number(currData.profile && currData.profile[0] !== undefined ? currData.profile[0] : 0);
+    const p2Pct = Number(currData.profile && currData.profile[1] !== undefined ? currData.profile[1] : 0);
+    const p3Pct = Number(currData.profile && currData.profile[2] !== undefined ? currData.profile[2] : 0);
+
+    const posPct = Math.round(currData.sentiment ? currData.sentiment[0] : 0);
+    const netPct = Math.round(currData.sentiment ? currData.sentiment[1] : 0);
+    const negPct = Math.round(currData.sentiment ? currData.sentiment[2] : 0);
+
+    // Estimasi jumlah mahasiswa tiap profil
+    const p1Count = Math.round((p1Pct / 100) * totalStudents);
+    const p2Count = Math.round((p2Pct / 100) * totalStudents);
+    const p3Count = Math.max(0, totalStudents - p1Count - p2Count);
+
+    // Rekomendasi Rows
     const rowsHtml = filteredList.map((item, idx) => {
       const { r, m, t, pr } = item;
       const targetProfiles = r.profiles.map(i => PROFILES[i] ? PROFILES[i].short : `Profil ${i + 1}`).join(', ');
@@ -862,118 +881,411 @@
       return `
         <tr>
           <td style="text-align:center; font-weight:700; color:#000;">${idx + 1}</td>
-          <td style="font-weight:600; font-size:12px; color:#0F172A; white-space:nowrap;">
-            Prioritas ${pr}
+          <td style="font-weight:600; font-size:11.5px; color:#0F172A; white-space:nowrap;">
+            <span class="doc-badge-pill ${prioClass}">Prioritas ${pr}</span>
           </td>
           <td>
-            <strong style="color:#000000; display:block; margin-bottom:4px; font-size:13px; font-weight:700;">${r.title}</strong>
-            <span style="color:#334155; font-size:12px; line-height:1.45; display:block;">${r.desc}</span>
+            <strong style="color:#000000; display:block; margin-bottom:3px; font-size:12.5px; font-weight:700;">${r.title}</strong>
+            <span style="color:#334155; font-size:11.5px; line-height:1.45; display:block;">${r.desc}</span>
           </td>
-          <td><span style="font-weight:700; color:#000000; font-size:12px;">${targetProfiles}</span></td>
+          <td><span style="font-weight:700; color:#000000; font-size:11.5px;">${targetProfiles}</span></td>
           <td style="font-size:11.5px; color:#334155;">
-            ${m.short}: <b>${D.scores[m.key]}</b><br/>
+            ${m.short}: <b>${currData.scores[m.key]}</b><br/>
             Topik: <em>${t.name}</em> (${t.sent[2]}% negatif)
           </td>
-          <td style="font-size:12px; color:#1E293B;">
+          <td style="font-size:11.5px; color:#1E293B;">
             <b>${r.owner}</b><br/>
-            <span style="color:#475569; font-size:11px;">Durasi: ${r.duration} • Usaha: ${r.effort}</span>
+            <span style="color:#475569; font-size:10.5px;">Durasi: ${r.duration} • Usaha: ${r.effort}</span>
           </td>
           <td style="color:#000000; font-weight:600; font-size:11.5px;">${r.kpi}</td>
         </tr>
       `;
     }).join('');
 
+    // Dimensi Rows
+    const dimsHtml = DIMS.map(m => {
+      const val = currData.scores[m.key];
+      const lvl = level(m, val);
+      const campAvg = ALL.scores[m.key];
+      const diff = val - campAvg;
+      const diffHtml = isAllCampus ? '' : `
+        <td style="text-align:center; font-size:11.5px; font-weight:700; color:${diff >= 0 ? '#0D9488' : '#E11D48'};">
+          ${diff > 0 ? '+' + diff : diff} poin ${diff > 0 ? '▲' : diff < 0 ? '▼' : '='}
+        </td>
+      `;
+
+      let interp = '';
+      if (m.key === 'wellbeing') {
+        interp = val >= 70 ? 'Tingkat kepuasan emosional dan kesejahteraan mental mahasiswa dalam kondisi kondusif.' : 'Tingkat stres mental terdeteksi, perlu dukungan ruang konseling dan pendampingan psikologis.';
+      } else if (m.key === 'pressure') {
+        interp = val >= 70 ? 'Daya tahan mahasiswa terhadap ritme tugas dan praktikum tergolong kuat.' : 'Mahasiswa merasa terbebani oleh penumpukan deadline tugas dan jadwal ujian bersamaan.';
+      } else if (m.key === 'social') {
+        interp = val >= 75 ? 'Solidaritas antar mahasiswa dan relasi dengan dosen pembimbing terjalin sangat optimal.' : 'Sebagian responden merasa kurang terhubung dengan lingkungan pertemanan kampus.';
+      } else {
+        interp = val >= 70 ? 'Aspirasi dan portofolio persiapan karier/magang industri sudah mulai terbentuk matang.' : 'Tingginya kecemasan terhadap ketersediaan lowongan magang dan prospek kerja setelah lulus.';
+      }
+
+      return `
+        <tr>
+          <td><strong style="color:#000; font-size:12px;">${m.label}</strong><br><span style="color:#475569; font-size:11px;">${m.about}</span></td>
+          <td style="text-align:center; font-weight:800; font-size:13.5px; color:#000;">${val}</td>
+          <td><span class="doc-status-badge doc-status--${lvl.c}">${lvl.t}</span></td>
+          ${diffHtml}
+          <td style="font-size:11.5px; color:#1E293B; line-height:1.45;">${interp}</td>
+        </tr>
+      `;
+    }).join('');
+
+    // NLP Topics Rows (Top 7 diurutkan dari bobot terbesar)
+    const sortedTopics = [...(currData.topics || [])].sort((a, b) => b.w - a.w);
+    const topicsHtml = sortedTopics.map((t, idx) => {
+      const m = dim(t.metric);
+      const negRate = t.sent[2];
+      const kw = (t.keywords || []).slice(0, 4).join(', ');
+      return `
+        <tr>
+          <td style="text-align:center; font-weight:700; color:#000;">${idx + 1}</td>
+          <td>
+            <strong style="color:#000000; font-size:12px;">${t.name}</strong>
+          </td>
+          <td style="text-align:center; font-weight:700; color:#0F172A;">${t.w}%</td>
+          <td style="text-align:center; font-weight:700; color:${negRate >= 60 ? '#E11D48' : '#D97706'};">${negRate}% Negatif</td>
+          <td style="font-size:11.5px; color:#334155;">${m ? m.short : '-'}</td>
+          <td style="font-size:11px; color:#475569; font-style:italic;">${kw}</td>
+        </tr>
+      `;
+    }).join('');
+
+    // Bagian Distribusi Prodi
+    let prodiSectionHtml = '';
+    if (isAllCampus) {
+      const prodiEntries = Object.entries(prodiSource).map(([k, f]) => ({
+        k,
+        name: f.name,
+        n: f.n,
+        wb: f.wellbeing,
+        pr: f.pressure,
+        cr: f.career,
+        sc: f.social,
+        vulPct: (f.profile && f.profile[0] !== undefined) ? f.profile[0] : 0
+      })).sort((a, b) => b.vulPct - a.vulPct);
+
+      const prodiRowsHtml = prodiEntries.map((p, idx) => `
+        <tr>
+          <td style="text-align:center; font-weight:700; color:#000;">${idx + 1}</td>
+          <td style="font-weight:600; color:#0F172A; font-size:12px;">${p.name}</td>
+          <td style="text-align:center; font-weight:700;">${p.n}</td>
+          <td style="text-align:center; font-weight:600; color:${p.wb >= 65 ? '#0D9488' : '#E11D48'};">${p.wb}</td>
+          <td style="text-align:center; font-weight:600; color:${p.pr >= 65 ? '#0D9488' : '#E11D48'};">${p.pr}</td>
+          <td style="text-align:center; font-weight:600;">${p.cr}</td>
+          <td style="text-align:center; font-weight:800; color:${p.vulPct >= 45 ? '#E11D48' : '#0F172A'};">
+            ${p.vulPct}%
+          </td>
+        </tr>
+      `).join('');
+
+      prodiSectionHtml = `
+        <div class="doc-section">
+          <h4 class="doc-section-title">5. Distribusi &amp; Pemetaan Per Program Studi (18 Prodi PENS)</h4>
+          <p class="doc-section-p">
+            Tabel berikut merangkum sebaran 149 responden riil di seluruh 18 program studi PENS, diurutkan berdasarkan konsentrasi kelompok mahasiswa rentan (Profil 1) tertinggi untuk mempermudah prioritisasi intervensi:
+          </p>
+          <div class="doc-table-wrapper">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th style="width:4%; text-align:center;">No</th>
+                  <th style="width:34%;">Program Studi</th>
+                  <th style="width:10%; text-align:center;">Responden</th>
+                  <th style="width:13%; text-align:center;">Wellbeing</th>
+                  <th style="width:13%; text-align:center;">Ketahanan</th>
+                  <th style="width:12%; text-align:center;">Karier</th>
+                  <th style="width:14%; text-align:center;">% Rentan (P1)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${prodiRowsHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    } else {
+      const campAvgWb = ALL.scores.wellbeing;
+      const campAvgPr = ALL.scores.pressure;
+      const campAvgCr = ALL.scores.career;
+      const campAvgSc = ALL.scores.social;
+
+      prodiSectionHtml = `
+        <div class="doc-section">
+          <h4 class="doc-section-title">5. Komparasi Terhadap Rata-Rata Seluruh Kampus</h4>
+          <p class="doc-section-p">
+            Posisi indikator <b>${scopeLabel}</b> (N = ${totalStudents} responden) dikomparasikan terhadap standar agregat 18 program studi se-PENS:
+          </p>
+          <div class="doc-table-wrapper">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th style="width:28%;">Indikator Analisis</th>
+                  <th style="width:20%; text-align:center;">Skor Prodi Ini</th>
+                  <th style="width:22%; text-align:center;">Rata-rata Kampus</th>
+                  <th style="width:30%;">Analisis Komparatif</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Kesejahteraan Mental (Wellbeing)</b></td>
+                  <td style="text-align:center; font-weight:800; font-size:13px;">${currData.scores.wellbeing}</td>
+                  <td style="text-align:center; font-weight:600;">${campAvgWb}</td>
+                  <td style="font-size:11.5px; color:${currData.scores.wellbeing >= campAvgWb ? '#0D9488' : '#E11D48'};">
+                    ${currData.scores.wellbeing >= campAvgWb ? `+${currData.scores.wellbeing - campAvgWb} poin di atas rata-rata kampus` : `${currData.scores.wellbeing - campAvgWb} poin di bawah rata-rata kampus`}
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Ketahanan Akademik (Resilience)</b></td>
+                  <td style="text-align:center; font-weight:800; font-size:13px;">${currData.scores.pressure}</td>
+                  <td style="text-align:center; font-weight:600;">${campAvgPr}</td>
+                  <td style="font-size:11.5px; color:${currData.scores.pressure >= campAvgPr ? '#0D9488' : '#E11D48'};">
+                    ${currData.scores.pressure >= campAvgPr ? `+${currData.scores.pressure - campAvgPr} poin di atas rata-rata kampus` : `${currData.scores.pressure - campAvgPr} poin di bawah rata-rata kampus`}
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Dukungan Sosial (Support)</b></td>
+                  <td style="text-align:center; font-weight:800; font-size:13px;">${currData.scores.social}</td>
+                  <td style="text-align:center; font-weight:600;">${campAvgSc}</td>
+                  <td style="font-size:11.5px; color:${currData.scores.social >= campAvgSc ? '#0D9488' : '#E11D48'};">
+                    ${currData.scores.social >= campAvgSc ? `+${currData.scores.social - campAvgSc} poin di atas rata-rata kampus` : `${currData.scores.social - campAvgSc} poin di bawah rata-rata kampus`}
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Kesiapan Karier &amp; Magang</b></td>
+                  <td style="text-align:center; font-weight:800; font-size:13px;">${currData.scores.career}</td>
+                  <td style="text-align:center; font-weight:600;">${campAvgCr}</td>
+                  <td style="font-size:11.5px; color:${currData.scores.career >= campAvgCr ? '#0D9488' : '#E11D48'};">
+                    ${currData.scores.career >= campAvgCr ? `+${currData.scores.career - campAvgCr} poin di atas rata-rata kampus` : `${currData.scores.career - campAvgCr} poin di bawah rata-rata kampus`}
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Persentase Mahasiswa Rentan (Profil 1)</b></td>
+                  <td style="text-align:center; font-weight:800; font-size:13px; color:#E11D48;">${p1Pct.toFixed(1)}%</td>
+                  <td style="text-align:center; font-weight:600;">${ALL.profile[0].toFixed(1)}%</td>
+                  <td style="font-size:11.5px;">
+                    ${p1Pct > ALL.profile[0] ? 'Konsentrasi kerentanan lebih tinggi dari rata-rata kampus, memerlukan supervisi dosen wali ekstra.' : 'Lebih rendah dari rata-rata kampus, iklim adaptasi tergolong kondusif.'}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
     return `
-      <!-- KOP DOKUMEN RESMI POLITEKNIK ELEKTRONIKA NEGERI SURABAYA -->
+      <!-- HEADER LAPORAN ANALITIKA RESMI PENS -->
       <div class="doc-header">
         <div class="doc-header__left">
           <img src="img/logo_mark.png" alt="Logo NadiKampus" class="doc-header__logo" />
           <div class="doc-header__title">
             <h2>POLITEKNIK ELEKTRONIKA NEGERI SURABAYA</h2>
             <h3>UNIT ANALITIKA DATA KEMAHASISWAAN (NADIKAMPUS)</h3>
-            <p>LAPORAN REKOMENDASI KEBIJAKAN &amp; INTERVENSI PREVENTIF MAHASISWA</p>
+            <p>LAPORAN ANALITIKA DATA KESEJAHTERAAN &amp; KETAHANAN MAHASISWA</p>
           </div>
         </div>
         <div class="doc-header__meta">
-          <div>No. Dokumen: <b>NK-REC/2026/SMT-GENAP</b></div>
-          <div>Tanggal Terbit: <b>${dateFormatted}</b></div>
-          <div>Sifat: <b>Resmi / Terbatas</b></div>
-          <div>Cakupan: <b>${prodiName}</b></div>
+          <div>Periode: <b>Semester Genap 2025/2026</b></div>
+          <div>Tanggal Generate: <b>${dateFormatted}</b></div>
+          <div>Cakupan Data: <b>${scopeLabel}</b></div>
+          <div>Metode: <b>LPA-GMM (k=3) &amp; NLP Sentimen</b></div>
         </div>
       </div>
 
-      <!-- RINGKASAN DATA EMPIRIS -->
-      <div class="doc-exec-grid">
+      <!-- RINGKASAN METRIK EKSEKUTIF -->
+      <div class="doc-exec-grid doc-exec-grid--4">
         <div class="doc-exec-card">
-          <div class="doc-exec-card__num">${filteredList.length} Program</div>
-          <div class="doc-exec-card__lbl">${isSelection ? 'Rencana Terpilih' : 'Total Intervensi'}</div>
-        </div>
-        <div class="doc-exec-card">
-          <div class="doc-exec-card__num">${totalStudents} Mahasiswa</div>
+          <div class="doc-exec-card__num">${totalStudents} Mhs</div>
           <div class="doc-exec-card__lbl">Sampel Responden</div>
         </div>
-      </div>
-
-      <!-- PENGANTAR RESMI -->
-      <p style="font-size:12.5px; color:#1E293B; margin-bottom:16px; line-height:1.55; text-align:justify;">
-        Dokumen ini memuat ringkasan rekomendasi program intervensi berbasis hasil pemodelan analitika data kondisi psikososial, ketahanan akademik, dan aspirasi kualitatif mahasiswa untuk semester genap 2025/2026. Disusun sebagai rujukan resmi bagi dosen wali, koordinator program studi, dan pimpinan kemahasiswaan dalam merumuskan langkah preventif dan kuratif.
-      </p>
-
-      <!-- PETUNJUK GESER TABEL KHUSUS LAYAR HP -->
-      <div class="doc-table-scroll-hint">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px; flex-shrink:0;">
-          <polyline points="13 17 18 12 13 7"></polyline>
-          <polyline points="6 17 11 12 6 7"></polyline>
-        </svg>
-        <span>Geser tabel ke samping untuk melihat detail PIC &amp; KPI</span>
-      </div>
-
-      <!-- TABEL REKOMENDASI STANDAR RESMI AKADEMIK -->
-      <div class="doc-table-wrapper">
-        <table class="doc-table">
-          <thead>
-            <tr>
-              <th style="width:4%; text-align:center;">No</th>
-              <th style="width:13%;">Prioritas</th>
-              <th style="width:25%;">Program Intervensi</th>
-              <th style="width:15%;">Sasaran Mahasiswa</th>
-              <th style="width:16%;">Dasar Analisis Data</th>
-              <th style="width:14%;">Unit PIC &amp; Durasi</th>
-              <th style="width:13%;">Indikator KPI</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rowsHtml}
-          </tbody>
-        </table>
-      </div>
-
-      <!-- LEMBAR PENGESAHAN DOKUMEN -->
-      <div class="doc-signatures">
-        <div class="doc-sign-box">
-          <p>Disusun oleh,</p>
-          <p style="font-weight:700; color:#000000;">Tim Analitika Mahasiswa NadiKampus</p>
-          <div class="doc-sign-line"></div>
-          <div class="doc-sign-name">Ardan Rizky &amp; Tim Analisis</div>
-          <div style="font-size:11px; color:#475569; margin-top:2px;">NIM / ID Analis Data</div>
+        <div class="doc-exec-card">
+          <div class="doc-exec-card__num" style="color:#E11D48 !important;">${p1Pct.toFixed(1)}%</div>
+          <div class="doc-exec-card__lbl">Kelompok Rentan (Profil 1)</div>
         </div>
-        <div class="doc-sign-box">
-          <p>Surabaya, ${dateFormatted}</p>
-          <p style="font-weight:700; color:#000000;">Mengetahui Koordinator Kemahasiswaan,</p>
-          <div class="doc-sign-line"></div>
-          <div class="doc-sign-name">Pimpinan Bidang Kemahasiswaan PENS</div>
-          <div style="font-size:11px; color:#475569; margin-top:2px;">NIP. 197805122003121002</div>
+        <div class="doc-exec-card">
+          <div class="doc-exec-card__num" style="color:#0D9488 !important;">${currData.scores.wellbeing}/100</div>
+          <div class="doc-exec-card__lbl">Indeks Kesejahteraan</div>
+        </div>
+        <div class="doc-exec-card">
+          <div class="doc-exec-card__num" style="color:#4F46E5 !important;">${currData.scores.pressure}/100</div>
+          <div class="doc-exec-card__lbl">Ketahanan Akademik</div>
         </div>
       </div>
 
-      <!-- FOOTER RESMI DOKUMEN -->
+      <!-- 1. PENGANTAR ANALITIKA -->
+      <div class="doc-section">
+        <h4 class="doc-section-title">1. Ringkasan Eksekutif &amp; Metodologi Analisis</h4>
+        <p class="doc-section-p">
+          Laporan ini menyajikan sintesis analitika komprehensif terhadap kondisi psikososial, ketahanan perkuliahan, adaptasi relasi sosial, dan kesiapan karier mahasiswa di lingkungan Politeknik Elektronika Negeri Surabaya. Analisis dibangun secara objektif memadukan algoritma <i>Latent Profile Analysis</i> berbasis <i>Gaussian Mixture Model</i> (LPA-GMM $k=3$) dengan reduksi dimensi PCA 2D untuk segmentasi profil risiko, serta <i>Natural Language Processing</i> (NLP) untuk menyerap sentimen keluhan dan aspirasi terbuka mahasiswa.
+        </p>
+      </div>
+
+      <!-- 2. SEGMENTASI PROFIL MAHASISWA (LPA-GMM k=3) -->
+      <div class="doc-section">
+        <h4 class="doc-section-title">2. Segmentasi Kelompok Mahasiswa (Latent Profile Analysis, k=3)</h4>
+        <p class="doc-section-p">
+          Berdasarkan hasil pemodelan probabilitas Gaussian Mixture Model pada 4 dimensi metrik, populasi responden terbagi menjadi 3 kelompok adaptasi:
+        </p>
+        <div class="doc-table-wrapper">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th style="width:22%;">Profil Karakteristik</th>
+                <th style="width:13%; text-align:center;">Proporsi</th>
+                <th style="width:13%; text-align:center;">Estimasi Mhs</th>
+                <th style="width:28%;">Karakteristik Dominan</th>
+                <th style="width:24%;">Fokus Kebutuhan Intervensi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong style="color:#E11D48; font-size:12px;">Profil 1: Rentan (Vulnerable)</strong>
+                </td>
+                <td style="text-align:center; font-weight:800; font-size:13px; color:#E11D48;">${p1Pct.toFixed(1)}%</td>
+                <td style="text-align:center; font-weight:600;">~${p1Count} mhs</td>
+                <td style="font-size:11.5px; color:#334155; line-height:1.45;">
+                  Skor terendah pada kesejahteraan mental (56/100) dan ketahanan akademik (56/100). Beban psikososial berat dan rentan stres perkuliahan.
+                </td>
+                <td style="font-size:11.5px; color:#1E293B; line-height:1.45;">
+                  Pendampingan intensif dosen wali, layanan konseling psikologis berkala, serta harmonisasi jadwal tugas.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong style="color:#4F46E5; font-size:12px;">Profil 2: Moderat (Moderate)</strong>
+                </td>
+                <td style="text-align:center; font-weight:800; font-size:13px; color:#4F46E5;">${p2Pct.toFixed(1)}%</td>
+                <td style="text-align:center; font-weight:600;">~${p2Count} mhs</td>
+                <td style="font-size:11.5px; color:#334155; line-height:1.45;">
+                  Adaptasi dan ketahanan akademik stabil (75/100), relasi sosial baik (84/100). Mampu mengelola kuliah dengan teratur.
+                </td>
+                <td style="font-size:11.5px; color:#1E293B; line-height:1.45;">
+                  Klinik persiapan magang, pelatihan sertifikasi industri, dan workshop manajemen waktu.
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong style="color:#0D9488; font-size:12px;">Profil 3: Unggul (Thriving)</strong>
+                </td>
+                <td style="text-align:center; font-weight:800; font-size:13px; color:#0D9488;">${p3Pct.toFixed(1)}%</td>
+                <td style="text-align:center; font-weight:600;">~${p3Count} mhs</td>
+                <td style="font-size:11.5px; color:#334155; line-height:1.45;">
+                  Ketahanan akademik dan mental prima (92/100), dukungan sosial optimal (100/100), dan portofolio karier sangat siap (85/100).
+                </td>
+                <td style="font-size:11.5px; color:#1E293B; line-height:1.45;">
+                  Pemberdayaan sebagai duta kampus / peer mentor, hibah kompetisi inovasi, dan jalur akselerasi karier elit.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. EVALUASI 4 DIMENSI KUNCI -->
+      <div class="doc-section">
+        <h4 class="doc-section-title">3. Evaluasi 4 Dimensi Kunci Kesejahteraan &amp; Ketahanan</h4>
+        <div class="doc-table-wrapper">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th style="width:25%;">Dimensi Pengukuran</th>
+                <th style="width:12%; text-align:center;">Skor Rata-rata</th>
+                <th style="width:18%;">Status Kualitatif</th>
+                ${isAllCampus ? '' : '<th style="width:16%; text-align:center;">vs Rata-rata Kampus</th>'}
+                <th>Interpretasi Data &amp; Kondisi Lapangan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${dimsHtml}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. ANALISIS SENTIMEN & TOPIK NLP -->
+      <div class="doc-section">
+        <h4 class="doc-section-title">4. Analisis Suara Mahasiswa &amp; Sentimen Kualitatif (NLP)</h4>
+        <p class="doc-section-p">
+          Distribusi sentimen dari aspirasi terbuka mahasiswa: 
+          <b>Positif: ${posPct}%</b> • 
+          <b>Netral: ${netPct}%</b> • 
+          <b style="color:#E11D48;">Negatif: ${negPct}%</b>.
+          Berikut rincian 7 topik keluhan dan aspirasi paling dominan:
+        </p>
+        <div class="doc-table-wrapper">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th style="width:4%; text-align:center;">No</th>
+                <th style="width:26%;">Topik Aspirasi</th>
+                <th style="width:13%; text-align:center;">Bobot Masalah</th>
+                <th style="width:17%; text-align:center;">Sentimen Negatif</th>
+                <th style="width:16%;">Dimensi Terdampak</th>
+                <th>Kata Kunci Dominan Responden</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${topicsHtml}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 5. DISTRIBUSI PROGRAM STUDI / KOMPARASI -->
+      ${prodiSectionHtml}
+
+      <!-- 6. MATRIKS REKOMENDASI INTERVENSI BERBASIS DATA -->
+      <div class="doc-section">
+        <h4 class="doc-section-title">${isSelection ? '6. Rencana Program Intervensi Terpilih (Action Plan)' : '6. Rekomendasi Program Intervensi Berbasis Data Empiris'}</h4>
+        <p class="doc-section-p">
+          Rencana tindakan strategis yang diprioritaskan berdasarkan integrasi skor dimensi terendah dan bobot sentimen keluhan kualitatif mahasiswa:
+        </p>
+        <div class="doc-table-wrapper">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th style="width:4%; text-align:center;">No</th>
+                <th style="width:12%;">Prioritas</th>
+                <th style="width:25%;">Program Intervensi</th>
+                <th style="width:15%;">Sasaran Mahasiswa</th>
+                <th style="width:16%;">Dasar Analisis Data</th>
+                <th style="width:15%;">Unit PIC &amp; Durasi</th>
+                <th style="width:13%;">Indikator KPI</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FOOTER LAPORAN RESMI (TANPA TANDA TANGAN DINAS) -->
       <div class="doc-footer-note">
-        Dokumen resmi cetakan analitika data kemahasiswaan Politeknik Elektronika Negeri Surabaya. Sah digunakan untuk dasar perumusan kebijakan preventif dan kuratif akademik mahasiswa.
+        <p style="margin:0 0 4px 0; font-weight:700; color:#334155; font-size:11px;">Sistem Analitika Kemahasiswaan NadiKampus • Politeknik Elektronika Negeri Surabaya</p>
+        <p style="margin:0; font-size:10.5px; color:#64748B;">Laporan ini digenerate secara otomatis berdasarkan data survei empiris responden dan pemodelan statistik LPA-GMM (k=3) serta NLP sentimen. Sah digunakan sebagai rujukan akademik perumusan kebijakan pendampingan kemahasiswaan preventif.</p>
       </div>
     `;
   }
 
-  function openRecoReportModal(selectedIds = null) {
+  function updateModalReport(facKey) {
+    const container = $('#recoReportPrintArea');
+    const modal = $('#recoReportModal');
+    if (container && modal) {
+      modal._currentFac = facKey;
+      container.innerHTML = generateRecoReportHtml(modal._selectedIds || null, facKey);
+    }
+  }
+
+  function openRecoReportModal(selectedIds = null, targetFacKey = null) {
     const modal = $('#recoReportModal');
     const container = $('#recoReportPrintArea');
     if (!modal || !container) {
@@ -981,7 +1293,25 @@
       return;
     }
 
-    container.innerHTML = generateRecoReportHtml(selectedIds);
+    const facKey = targetFacKey || state.fac || 'all';
+    modal._selectedIds = selectedIds;
+    modal._currentFac = facKey;
+
+    // Sinkronisasi opsi dropdown cakupan prodi di dalam modal
+    const modalFilter = $('#modalReportProdiFilter');
+    if (modalFilter) {
+      const prodiSource = window.PRODIS || window.FACULTIES || {};
+      if (modalFilter.options.length === 0) {
+        modalFilter.innerHTML = `<option value="all">Seluruh Kampus (18 Prodi PENS)</option>` +
+          Object.keys(prodiSource).map(k => `<option value="${k}">Prodi ${prodiSource[k].name}</option>`).join('');
+        modalFilter.addEventListener('change', e => {
+          updateModalReport(e.target.value);
+        });
+      }
+      modalFilter.value = facKey;
+    }
+
+    container.innerHTML = generateRecoReportHtml(selectedIds, facKey);
     modal.hidden = false;
     modal.classList.add('is-open');
     document.body.classList.add('drawer-locked');

@@ -4151,6 +4151,76 @@ body.drawer-locked {
   background: #F8FAFC;
 }
 
+/* Styling Laporan Analitika Data Eksekutif (PDF A4) */
+.doc-section {
+  margin-bottom: 24px;
+}
+.doc-section-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #000000;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-left: 3.5px solid #0D9488;
+  padding-left: 8px;
+}
+.doc-section-p {
+  font-size: 12px;
+  color: #1E293B;
+  line-height: 1.55;
+  margin: 0 0 10px 0;
+  text-align: justify;
+}
+.doc-exec-grid--4 {
+  grid-template-columns: repeat(4, 1fr) !important;
+}
+.doc-badge-pill {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.doc-badge-pill.prio-tinggi {
+  background: #000000;
+  color: #FFFFFF;
+}
+.doc-badge-pill.prio-sedang {
+  background: #F1F5F9;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
+}
+.doc-badge-pill.prio-rendah {
+  background: #FFFFFF;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+}
+.doc-status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.doc-status--good {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+.doc-status--warn {
+  background: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+.doc-status--bad {
+  background: #FFE4E6;
+  color: #BE123C;
+  border: 1px solid #FECDD3;
+}
+
 /* Kolom Tanda Tangan Resmi Pengesahan */
 .doc-signatures {
   display: flex;
