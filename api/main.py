@@ -346,7 +346,6 @@ def get_respondents():
 
     return {"total": 0, "data": []}
 
-
 @app.post("/api/v1/predict-profile")
 @app.post("/api/v1/predict-cluster")
 def predict_profile(req: PredictStudentProfileRequest):
@@ -545,3 +544,4 @@ async def import_survey_endpoint(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Gagal memproses survei: {str(e)}")
+

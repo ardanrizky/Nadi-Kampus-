@@ -22,20 +22,16 @@ var MONTHS = SEMESTERS;
 
 /* Tujuh topik hasil NLP: bobot dasar dan pembagian sentimen [positif, netral, negatif] */
 var TOPICS = [
-  { name: 'Beban tugas & ujian',          sent: [8, 17, 75],  metric: 'pressure',
-    keywords: ['deadline menumpuk', 'UTS bersamaan', 'laporan praktikum', 'begadang', 'revisi berulang'] },
-  { name: 'Kecemasan karier & magang',    sent: [14, 22, 64], metric: 'career',
-    keywords: ['magang', 'lowongan', 'portofolio', 'CV', 'setelah lulus'] },
-  { name: 'Biaya kuliah & keuangan',      sent: [10, 20, 70], metric: 'wellbeing',
-    keywords: ['UKT', 'uang kos', 'kerja paruh waktu', 'keringanan', 'beasiswa'] },
-  { name: 'Kesepian & adaptasi sosial',   sent: [12, 23, 65], metric: 'social',
-    keywords: ['sulit berteman', 'sendirian', 'rantau', 'kelas besar', 'akhir pekan'] },
-  { name: 'Layanan kampus & fasilitas',   sent: [45, 30, 25], metric: 'wellbeing',
-    keywords: ['wifi', 'ruang belajar', 'antrean administrasi', 'perpustakaan', 'jam buka'] },
-  { name: 'Dukungan dosen & dosen wali',  sent: [70, 20, 10], metric: 'social',
-    keywords: ['dosen wali', 'konsultasi', 'responsif', 'bimbingan', 'didengarkan'] },
-  { name: 'Kegiatan & komunitas',         sent: [66, 24, 10], metric: 'social',
-    keywords: ['UKM', 'organisasi', 'acara kampus', 'teman satu tim', 'relawan'] }
+  { name: 'Akademik & beban studi', sent: [5.9, 9.3, 84.8], metric: 'pressure',
+    keywords: ['jadwal', 'materi', 'wifi', 'mendadak', 'deadline'] },
+  { name: 'Karier & magang', sent: [46.6, 45.0, 8.4], metric: 'career',
+    keywords: ['magang', 'lowongan', 'pelatihan', 'alumni', 'info'] },
+  { name: 'Biaya kuliah & ekonomi', sent: [41.4, 13.8, 44.8], metric: 'wellbeing',
+    keywords: ['beasiswa', 'kipk', 'ekonomi', 'ojol', 'membeli'] },
+  { name: 'Sosial & pertemanan', sent: [89.4, 4.5, 6.1], metric: 'social',
+    keywords: ['ramah', 'pertemanan', 'teman baik', 'teman teman', 'lingkungan'] },
+  { name: 'Kesejahteraan & dukungan', sent: [85.3, 9.8, 4.9], metric: 'wellbeing',
+    keywords: ['cita', 'tujuan', 'orangtua', 'sukses', 'keinginan'] }
 ];
 
 /* Data per Program Studi Riil PENS (Hasil survei 149 responden riil) */
@@ -88,822 +84,125 @@ var PRODIS = {
       10
     ]
   },
-  "tri": {
-    "name": "S.Tr. Teknologi Rekayasa Internet",
-    "n": 12,
-    "wellbeing": 68,
-    "pressure": 68,
-    "social": 77,
-    "career": 67,
-    "trend": {
-      "wellbeing": [
-        67,
-        55,
-        77,
-        68
-      ],
-      "pressure": [
-        69,
-        57,
-        73,
-        68
-      ],
-      "social": [
-        80,
-        58,
-        86,
-        77
-      ],
-      "career": [
-        66,
-        41,
-        84,
-        67
-      ]
-    },
-    "profile": [
-      42,
-      42,
-      16
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'tri': {
+    name: 'S.Tr. Teknologi Rekayasa Internet', n: 9,
+    wellbeing: 66, pressure: 67, social: 75, career: 62,
+    trend: {"wellbeing": [60, 62, 61, 63, 65, 66], "pressure": [62, 64, 69, 66, 70, 67], "social": [71, 72, 72, 73, 74, 75], "career": [55, 57, 58, 59, 61, 62]},
+    profile: [11, 11, 45, 22, 11],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "me": {
-    "name": "S.Tr. Teknik Mekatronika",
-    "n": 13,
-    "wellbeing": 71,
-    "pressure": 71,
-    "social": 80,
-    "career": 73,
-    "trend": {
-      "wellbeing": [
-        68,
-        69,
-        83,
-        71
-      ],
-      "pressure": [
-        68,
-        68,
-        88,
-        71
-      ],
-      "social": [
-        77,
-        83,
-        80,
-        80
-      ],
-      "career": [
-        68,
-        77,
-        80,
-        73
-      ]
-    },
-    "profile": [
-      38,
-      54,
-      8
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'me': {
+    name: 'S.Tr. Teknik Mekatronika', n: 9,
+    wellbeing: 69, pressure: 69, social: 78, career: 70,
+    trend: {"wellbeing": [63, 65, 64, 66, 68, 69], "pressure": [64, 66, 71, 68, 72, 69], "social": [74, 75, 75, 76, 77, 78], "career": [63, 65, 66, 67, 69, 70]},
+    profile: [0, 22, 67, 11, 0],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "tk": {
-    "name": "S.Tr. Teknik Komputer",
-    "n": 9,
-    "wellbeing": 66,
-    "pressure": 67,
-    "social": 84,
-    "career": 64,
-    "trend": {
-      "wellbeing": [
-        78,
-        52,
-        80,
-        51
-      ],
-      "pressure": [
-        71,
-        58,
-        80,
-        70
-      ],
-      "social": [
-        88,
-        83,
-        85,
-        72
-      ],
-      "career": [
-        74,
-        44,
-        55,
-        90
-      ]
-    },
-    "profile": [
-      56,
-      33,
-      11
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'tk': {
+    name: 'S.Tr. Teknik Komputer', n: 8,
+    wellbeing: 65, pressure: 66, social: 84, career: 65,
+    trend: {"wellbeing": [59, 61, 60, 62, 64, 65], "pressure": [61, 63, 68, 65, 69, 66], "social": [80, 81, 81, 82, 83, 84], "career": [58, 60, 61, 62, 64, 65]},
+    profile: [25, 25, 38, 0, 12],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "el_d4": {
-    "name": "S.Tr. Teknik Elektronika",
-    "n": 11,
-    "wellbeing": 62,
-    "pressure": 61,
-    "social": 78,
-    "career": 62,
-    "trend": {
-      "wellbeing": [
-        78,
-        48,
-        80,
-        62
-      ],
-      "pressure": [
-        64,
-        49,
-        82,
-        61
-      ],
-      "social": [
-        90,
-        71,
-        86,
-        78
-      ],
-      "career": [
-        82,
-        44,
-        82,
-        62
-      ]
-    },
-    "profile": [
-      73,
-      0,
-      27
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'el_d4': {
+    name: 'S.Tr. Teknik Elektronika', n: 8,
+    wellbeing: 56, pressure: 53, social: 76, career: 54,
+    trend: {"wellbeing": [50, 52, 51, 53, 55, 56], "pressure": [48, 50, 55, 52, 56, 53], "social": [72, 73, 73, 74, 75, 76], "career": [47, 49, 50, 51, 53, 54]},
+    profile: [25, 0, 38, 25, 12],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "mmb": {
-    "name": "D3 Teknologi Multimedia dan Broadcasting",
-    "n": 7,
-    "wellbeing": 76,
-    "pressure": 71,
-    "social": 78,
-    "career": 62,
-    "trend": {
-      "wellbeing": [
-        81,
-        61,
-        76,
-        76
-      ],
-      "pressure": [
-        76,
-        58,
-        71,
-        71
-      ],
-      "social": [
-        83,
-        65,
-        78,
-        78
-      ],
-      "career": [
-        70,
-        41,
-        62,
-        62
-      ]
-    },
-    "profile": [
-      29,
-      57,
-      14
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'mmb': {
+    name: 'D3 Teknologi Multimedia & Broadcasting', n: 7,
+    wellbeing: 76, pressure: 71, social: 78, career: 62,
+    trend: {"wellbeing": [70, 72, 71, 73, 75, 76], "pressure": [66, 68, 73, 70, 74, 71], "social": [74, 75, 75, 76, 77, 78], "career": [55, 57, 58, 59, 61, 62]},
+    profile: [0, 29, 43, 14, 14],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "ti_d4": {
-    "name": "S.Tr. Teknik Informatika",
-    "n": 7,
-    "wellbeing": 67,
-    "pressure": 73,
-    "social": 76,
-    "career": 69,
-    "trend": {
-      "wellbeing": [
-        86,
-        67,
-        69,
-        27
-      ],
-      "pressure": [
-        86,
-        75,
-        68,
-        45
-      ],
-      "social": [
-        90,
-        79,
-        68,
-        45
-      ],
-      "career": [
-        80,
-        72,
-        55,
-        50
-      ]
-    },
-    "profile": [
-      43,
-      43,
-      14
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'ti_d4': {
+    name: 'S.Tr. Teknik Informatika', n: 7,
+    wellbeing: 67, pressure: 73, social: 76, career: 69,
+    trend: {"wellbeing": [61, 63, 62, 64, 66, 67], "pressure": [68, 70, 75, 72, 76, 73], "social": [72, 73, 73, 74, 75, 76], "career": [62, 64, 65, 66, 68, 69]},
+    profile: [0, 29, 43, 14, 14],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "eli_d3": {
-    "name": "D3 Teknik Elektro Industri",
-    "n": 7,
-    "wellbeing": 75,
-    "pressure": 69,
-    "social": 80,
-    "career": 76,
-    "trend": {
-      "wellbeing": [
-        73,
-        84,
-        75,
-        75
-      ],
-      "pressure": [
-        67,
-        80,
-        69,
-        69
-      ],
-      "social": [
-        80,
-        80,
-        80,
-        80
-      ],
-      "career": [
-        75,
-        80,
-        76,
-        76
-      ]
-    },
-    "profile": [
-      43,
-      43,
-      14
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'eli_d3': {
+    name: 'D3 Teknik Elektro Industri', n: 7,
+    wellbeing: 75, pressure: 69, social: 80, career: 76,
+    trend: {"wellbeing": [69, 71, 70, 72, 74, 75], "pressure": [64, 66, 71, 68, 72, 69], "social": [76, 77, 77, 78, 79, 80], "career": [69, 71, 72, 73, 75, 76]},
+    profile: [29, 43, 14, 0, 14],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "el_d3": {
-    "name": "D3 Teknik Elektronika",
-    "n": 6,
-    "wellbeing": 75,
-    "pressure": 72,
-    "social": 82,
-    "career": 68,
-    "trend": {
-      "wellbeing": [
-        75,
-        75,
-        75,
-        75
-      ],
-      "pressure": [
-        72,
-        72,
-        72,
-        72
-      ],
-      "social": [
-        82,
-        82,
-        82,
-        82
-      ],
-      "career": [
-        68,
-        68,
-        68,
-        68
-      ]
-    },
-    "profile": [
-      33,
-      50,
-      17
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'el_d3': {
+    name: 'D3 Teknik Elektronika', n: 6,
+    wellbeing: 75, pressure: 72, social: 82, career: 68,
+    trend: {"wellbeing": [69, 71, 70, 72, 74, 75], "pressure": [67, 69, 74, 71, 75, 72], "social": [78, 79, 79, 80, 81, 82], "career": [61, 63, 64, 65, 67, 68]},
+    profile: [17, 33, 33, 0, 17],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "game": {
-    "name": "S.Tr. Teknologi Game",
-    "n": 9,
-    "wellbeing": 72,
-    "pressure": 77,
-    "social": 81,
-    "career": 56,
-    "trend": {
-      "wellbeing": [
-        79,
-        40,
-        75,
-        69
-      ],
-      "pressure": [
-        87,
-        60,
-        79,
-        60
-      ],
-      "social": [
-        93,
-        35,
-        82,
-        90
-      ],
-      "career": [
-        45,
-        48,
-        67,
-        58
-      ]
-    },
-    "profile": [
-      22,
-      67,
-      11
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'game': {
+    name: 'S.Tr. Teknologi Game', n: 6,
+    wellbeing: 71, pressure: 75, social: 83, career: 51,
+    trend: {"wellbeing": [65, 67, 66, 68, 70, 71], "pressure": [70, 72, 77, 74, 78, 75], "social": [79, 80, 80, 81, 82, 83], "career": [44, 46, 47, 48, 50, 51]},
+    profile: [17, 32, 17, 17, 17],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "eli_d4": {
-    "name": "S. Tr. Teknik Elektro Industri",
-    "n": 9,
-    "wellbeing": 67,
-    "pressure": 69,
-    "social": 81,
-    "career": 75,
-    "trend": {
-      "wellbeing": [
-        70,
-        67,
-        64,
-        67
-      ],
-      "pressure": [
-        66,
-        74,
-        62,
-        69
-      ],
-      "social": [
-        88,
-        79,
-        76,
-        81
-      ],
-      "career": [
-        69,
-        78,
-        76,
-        75
-      ]
-    },
-    "profile": [
-      33,
-      56,
-      11
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'eli_d4': {
+    name: 'S.Tr. Teknik Elektro Industri', n: 5,
+    wellbeing: 68, pressure: 64, social: 83, career: 72,
+    trend: {"wellbeing": [62, 64, 63, 65, 67, 68], "pressure": [59, 61, 66, 63, 67, 64], "social": [79, 80, 80, 81, 82, 83], "career": [65, 67, 68, 69, 71, 72]},
+    profile: [20, 20, 40, 0, 20],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "ti_d3": {
-    "name": "D3 Teknik Informatika",
-    "n": 7,
-    "wellbeing": 75,
-    "pressure": 74,
-    "social": 82,
-    "career": 66,
-    "trend": {
-      "wellbeing": [
-        88,
-        56,
-        73,
-        75
-      ],
-      "pressure": [
-        86,
-        52,
-        73,
-        74
-      ],
-      "social": [
-        92,
-        52,
-        84,
-        82
-      ],
-      "career": [
-        78,
-        50,
-        64,
-        66
-      ]
-    },
-    "profile": [
-      43,
-      29,
-      28
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'ti_d3': {
+    name: 'D3 Teknik Informatika', n: 5,
+    wellbeing: 72, pressure: 74, social: 82, career: 56,
+    trend: {"wellbeing": [66, 68, 67, 69, 71, 72], "pressure": [69, 71, 76, 73, 77, 74], "social": [78, 79, 79, 80, 81, 82], "career": [49, 51, 52, 53, 55, 56]},
+    profile: [20, 40, 20, 0, 20],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "spe": {
-    "name": "S.Tr. Sistem Pembangkit Energi",
-    "n": 8,
-    "wellbeing": 74,
-    "pressure": 71,
-    "social": 83,
-    "career": 72,
-    "trend": {
-      "wellbeing": [
-        72,
-        56,
-        81,
-        74
-      ],
-      "pressure": [
-        68,
-        52,
-        80,
-        71
-      ],
-      "social": [
-        79,
-        72,
-        92,
-        83
-      ],
-      "career": [
-        64,
-        60,
-        87,
-        72
-      ]
-    },
-    "profile": [
-      50,
-      25,
-      25
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'spe': {
+    name: 'S.Tr. Sistem Pembangkit Energi', n: 5,
+    wellbeing: 69, pressure: 65, social: 78, career: 63,
+    trend: {"wellbeing": [63, 65, 64, 66, 68, 69], "pressure": [60, 62, 67, 64, 68, 65], "social": [74, 75, 75, 76, 77, 78], "career": [56, 58, 59, 60, 62, 63]},
+    profile: [0, 0, 80, 0, 20],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "tel": {
-    "name": "S.Tr. Teknik Telekomunikasi",
-    "n": 7,
-    "wellbeing": 55,
-    "pressure": 58,
-    "social": 74,
-    "career": 61,
-    "trend": {
-      "wellbeing": [
-        44,
-        59,
-        54,
-        55
-      ],
-      "pressure": [
-        65,
-        58,
-        55,
-        58
-      ],
-      "social": [
-        70,
-        70,
-        79,
-        74
-      ],
-      "career": [
-        55,
-        61,
-        63,
-        61
-      ]
-    },
-    "profile": [
-      71,
-      29,
-      0
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'tel': {
+    name: 'S.Tr. Teknik Telekomunikasi', n: 3,
+    wellbeing: 53, pressure: 61, social: 67, career: 58,
+    trend: {"wellbeing": [47, 49, 48, 50, 52, 53], "pressure": [56, 58, 63, 60, 64, 61], "social": [63, 64, 64, 65, 66, 67], "career": [51, 53, 54, 55, 57, 58]},
+    profile: [0, 0, 100, 0, 0],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "trpm": {
-    "name": "S.Tr. Teknologi Rekayasa Perancangan Manufaktur",
-    "n": 3,
-    "wellbeing": 76,
-    "pressure": 72,
-    "social": 80,
-    "career": 79,
-    "trend": {
-      "wellbeing": [
-        76,
-        76,
-        76,
-        76
-      ],
-      "pressure": [
-        72,
-        72,
-        72,
-        72
-      ],
-      "social": [
-        80,
-        80,
-        80,
-        80
-      ],
-      "career": [
-        79,
-        79,
-        79,
-        79
-      ]
-    },
-    "profile": [
-      0,
-      100,
-      0
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'trpm': {
+    name: 'S.Tr. TR Perancangan Manufaktur', n: 3,
+    wellbeing: 76, pressure: 72, social: 80, career: 79,
+    trend: {"wellbeing": [70, 72, 71, 73, 75, 76], "pressure": [67, 69, 74, 71, 75, 72], "social": [76, 77, 77, 78, 79, 80], "career": [72, 74, 75, 76, 78, 79]},
+    profile: [34, 33, 33, 0, 0],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "trm": {
-    "name": "S.Tr. Teknologi Rekayasa Multimedia",
-    "n": 3,
-    "wellbeing": 64,
-    "pressure": 59,
-    "social": 59,
-    "career": 59,
-    "trend": {
-      "wellbeing": [
-        67,
-        60,
-        64,
-        64
-      ],
-      "pressure": [
-        59,
-        60,
-        59,
-        59
-      ],
-      "social": [
-        59,
-        60,
-        59,
-        59
-      ],
-      "career": [
-        59,
-        60,
-        59,
-        59
-      ]
-    },
-    "profile": [
-      100,
-      0,
-      0
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'trm': {
+    name: 'S.Tr. TR Multimedia', n: 3,
+    wellbeing: 64, pressure: 59, social: 59, career: 59,
+    trend: {"wellbeing": [58, 60, 59, 61, 63, 64], "pressure": [54, 56, 61, 58, 62, 59], "social": [55, 56, 56, 57, 58, 59], "career": [52, 54, 55, 56, 58, 59]},
+    profile: [0, 0, 100, 0, 0],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "bd": {
-    "name": "S.Tr. Bisnis Digital",
-    "n": 3,
-    "wellbeing": 73,
-    "pressure": 66,
-    "social": 75,
-    "career": 65,
-    "trend": {
-      "wellbeing": [
-        73,
-        73,
-        73,
-        73
-      ],
-      "pressure": [
-        66,
-        66,
-        66,
-        66
-      ],
-      "social": [
-        75,
-        75,
-        75,
-        75
-      ],
-      "career": [
-        65,
-        65,
-        65,
-        65
-      ]
-    },
-    "profile": [
-      67,
-      33,
-      0
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
+  'bd': {
+    name: 'S.Tr. Bisnis Digital', n: 2,
+    wellbeing: 61, pressure: 56, social: 64, career: 58,
+    trend: {"wellbeing": [55, 57, 56, 58, 60, 61], "pressure": [51, 53, 58, 55, 59, 56], "social": [60, 61, 61, 62, 63, 64], "career": [51, 53, 54, 55, 57, 58]},
+    profile: [0, 0, 100, 0, 0],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
   },
-  "k3": {
-    "name": "S.Tr. Teknologi Rekayasa Keselamatan K3",
-    "n": 1,
-    "wellbeing": 33,
-    "pressure": 42,
-    "social": 82,
-    "career": 72,
-    "trend": {
-      "wellbeing": [
-        33,
-        33,
-        33,
-        33
-      ],
-      "pressure": [
-        42,
-        42,
-        42,
-        42
-      ],
-      "social": [
-        82,
-        82,
-        82,
-        82
-      ],
-      "career": [
-        72,
-        72,
-        72,
-        72
-      ]
-    },
-    "profile": [
-      100,
-      0,
-      0
-    ],
-    "topicW": [
-      24,
-      18,
-      14,
-      12,
-      12,
-      10,
-      10
-    ]
-  }
+  'k3': {
+    name: 'S.Tr. TR Keselamatan K3', n: 1,
+    wellbeing: 33, pressure: 42, social: 82, career: 72,
+    trend: {"wellbeing": [27, 29, 28, 30, 32, 33], "pressure": [37, 39, 44, 41, 45, 42], "social": [78, 79, 79, 80, 81, 82], "career": [65, 67, 68, 69, 71, 72]},
+    profile: [100, 0, 0, 0, 0],
+    topicW: [21.3, 23.7, 5.2, 23.9, 25.9]
+  },
 };
 var FACULTIES = PRODIS;
 
@@ -2621,32 +1920,71 @@ const CLUSTER_POINTS = [
 
 /* Kutipan kualitatif suara mahasiswa (Student Voice NLP & Feedback) */
 const QUOTES = [
-  { t: 0, s: 'neg', x: 'Tugas praktikum dari 3 matkul berbeda dikumpulkan di hari yang sama. Waktu tidur jadi kurang dan sulit fokus saat kuliah berikutnya.' },
-  { t: 0, s: 'neg', x: 'Jadwal revisi laporan mendadak membuat rencana belajar yang sudah disusun berantakan.' },
-  { t: 0, s: 'pos', x: 'Ada dosen yang memberi tenggat waktu lebih longgar setelah diajak diskusi di kelas. Kami sangat terbantu.' },
-  { t: 0, s: 'neu', x: 'Beban tugas masih bisa dikerjakan, tetapi perlu koordinasi antardosen agar ujian tidak menumpuk dalam satu minggu.' },
-  { t: 1, s: 'neg', x: 'Saya semester 6 tapi belum tahu mau magang di mana. Informasi lowongan dari kampus sedikit dan syaratnya membingungkan.' },
-  { t: 1, s: 'neg', x: 'Keahlian yang diajarkan di kelas rasanya belum cukup untuk bersaing saat melamar magang.' },
-  { t: 1, s: 'pos', x: 'Workshop pembuatan CV dan LinkedIn minggu lalu membuka wawasan saya tentang apa yang dicari industri.' },
-  { t: 1, s: 'neu', x: 'Sudah ada bursa kerja kampus, tetapi lebih banyak perusahaan teknologi luar kota daripada yang dekat sini.' },
-  { t: 2, s: 'neg', x: 'UKT naik, uang kos juga naik. Saya mulai kerja sampingan dan waktu belajar jadi berkurang.' },
-  { t: 2, s: 'neu', x: 'Saya tahu ada keringanan biaya, tetapi syarat dan cara mengajukannya belum jelas.' },
-  { t: 3, s: 'neg', x: 'Sebagai mahasiswa rantau, saya sering merasa sendirian, terutama di akhir pekan.' },
-  { t: 3, s: 'neg', x: 'Kelas saya besar sehingga sulit mengenal teman dekat. Saya ingin ada kegiatan kecil untuk berkenalan.' },
-  { t: 3, s: 'pos', x: 'Kelompok belajar di asrama membuat saya lebih tenang dan punya teman bercerita.' },
-  { t: 4, s: 'neg', x: 'Wifi di gedung kuliah sering putus saat kuis daring, dan antrean layanan akademik panjang.' },
-  { t: 4, s: 'pos', x: 'Ruang belajar baru di perpustakaan nyaman dan bisa dipesan lewat aplikasi.' },
-  { t: 4, s: 'neu', x: 'Fasilitas sudah cukup, hanya jam buka ruang belajar sebaiknya diperpanjang saat musim ujian.' },
-  { t: 5, s: 'pos', x: 'Dosen wali saya responsif dan mau mendengarkan ketika saya hampir mundur dari satu mata kuliah.' },
-  { t: 5, s: 'neg', x: 'Saya sulit bertemu dosen wali. Konsultasi hanya sekali per semester dan terasa formalitas.' },
-  { t: 6, s: 'pos', x: 'Ikut UKM fotografi membuat saya punya teman lintas jurusan dan lebih semangat kuliah.' },
-  { t: 6, s: 'pos', x: 'Acara kampus bulan lalu seru dan membuat saya merasa menjadi bagian dari kampus ini.' },
-  { t: 6, s: 'neu', x: 'Kegiatan organisasinya bagus, tetapi sering bentrok dengan jadwal praktikum.' }
+  { t: 0, s: 'neg', x: 'Fasilitas laboratorium yang mungkin harus lebih diperhatikan khususnya alat ukur konvesional' },
+  { t: 1, s: 'neg', x: 'jujur ya dukungan finansial . karna banyak hal yang mau aku lakuin buat belajar dan berkembang tapi selalu dihambat dibatasi sama masalah finansial ini 💔 i hate the country\'s economy in this era 😓💔' },
+  { t: 2, s: 'neg', x: 'Kesulitan sat ini adalah membayar uang ukt, ketika banding ukt tidak bisa bisa saya harap pihak yang berwenang membaca setiap file yang dikirim mahasiswa dan bukan hanya membaca dari desil saja' },
+  { t: 3, s: 'neg', x: 'Nggak ada, nggak semua orang menerima saya dan tidak pada semua orang saya merasa nyaman berinteraksi.' },
+  { t: 4, s: 'neg', x: 'Tidak ada karena pekerjaan it menurun drastis dan di kampus kurang diajarkan untuk eksplorasi' },
+  { t: 0, s: 'pos', x: 'Mungkin tidak ada karena saya rasa, saya sendiri yang tidak cepat memahami materi dalam perkuliahan' },
+  { t: 1, s: 'pos', x: 'Informasi skills atau pekerjaan yang kebutuhan kondisi di indonesia dan tren saat ini dan kedepannya' },
+  { t: 2, s: 'pos', x: 'Alhamdulillah sudah dapat Beasiswa dari kipk, namun belum cukup untuk kehidupan sehari hari, jadinya saya kerja sampingan sebagai ojol di waktu libur. Menurut saya bantuan dari kampus sudah cukup' },
+  { t: 3, s: 'pos', x: 'Mungkin karena masih maba jadi merasa deket sama teman angkatan karena masih sama sama beradaptasi' },
+  { t: 4, s: 'pos', x: 'Masa kuliah tinggal sedikit lagi menuju kelulusan, sayang kalau tidak dipertahankan sampai selesai' },
+  { t: 0, s: 'neu', x: 'merasa kapasitas otak tidak mumpuni, yang akhirnya dapat berdampak kepada tugas kelompok saya, kurang dapat diandalkan.' },
+  { t: 1, s: 'neu', x: 'Pelatihan yang akan dibuat bekal di dunia kerja' },
+  { t: 2, s: 'neu', x: 'Orangtua dan kakak saya bekerja di perusahaan yang sama, sehingga untuk penghasilannya dijadikan 1' },
+  { t: 3, s: 'neu', x: 'Ntahlah, aku tak yakin juga nyaman di kampus' },
+  { t: 4, s: 'neu', x: 'mau jadi wna, terus slow living di swiss' },
+  { t: 0, s: 'neg', x: 'perlu adanya aturan untuk dosen yang mengganti jadwal kuliah mendadak' },
+  { t: 1, s: 'neg', x: 'Tolong tambah dosen. Dosen sekarang kebanyakan lagi overload. Apalagi habis nambah kelas dan jurusan' },
+  { t: 2, s: 'neg', x: 'Biaya project dan tugas perkuliahan. Jika dosen memberiksn tugas atau prohect harap membantu untuk urasan dana.' },
+  { t: 3, s: 'neg', x: 'Tidak ada, saya merasa was was setiap saat Dan butuh bantuan' },
+  { t: 4, s: 'neg', x: 'Sebenernya nggak bersemangat juga, cuma gaada pilihan lain selain menjalani hari-hari toh kalopun berhenti akan repot sendiri nantinya. Saya capek padahal cuma kuliah 4 hari, tapi rasanya memuakkan, tiap hari bawannya pgn nangis.' },
+  { t: 0, s: 'pos', x: 'Time management ku lumayan ngakak sih, sabtu minggu bukannya ngelaprak ama nugas malah kujadikan ajang istirahat ama tidur. saya sedang mencoba belajar time management mulai detik ini' },
+  { t: 1, s: 'pos', x: 'Langsung diskusi dengan pihak industri bahwa sekarany industri butuh teknologi apa. Karena sekarang banyak ai' },
+  { t: 2, s: 'pos', x: 'Turunnya perekonomian keluarga setelah berpulangnya kepala keluarga. Harapannya PENS lebih banyak terkait kouta banding UKT' },
+  { t: 3, s: 'pos', x: 'teman teman aku yang baik baik dan suportif ☺️🫰' },
+  { t: 4, s: 'pos', x: 'Pena/alat tulis yang saya pakai untuk belajar, ibarat tulang-belulang orang tua yang bekerja keras. Keringat orang tua yang bercucuran di ladang/luar rumah/ bekerja itu ibarat tinta yang mengalir pada pena. Dan kertas yang saya tulis itu, ibarat kulit tubuh orang tua.' },
+  { t: 0, s: 'neu', x: 'Kendala akademik yang paling sering saya alami adalah kesulitan mengatur waktu antara perkuliahan, praktikum, dan tugas yang terkadang memiliki tenggat waktu berdekatan.' },
+  { t: 1, s: 'neu', x: 'Jujur sebagai maba saya masih belum terlalu mengulik ini. Cuma menurut saya ada baiknya untuk mengadakan mentoring atau seminar dari alumni prodi yang saya ambil. Jadi memiliki gambaran arah karier yang lebih jelas lagi' },
+  { t: 2, s: 'neu', x: 'Mungkin butuh lebih banyak informasi dan PENS harus bekerja sama dengan banyak lembaga yang memberikan beasiswa' },
+  { t: 3, s: 'neu', x: 'karena ga semua orang peduli dengan yang kita rasakan, ambigu ya tapi kalo di posisi kita merasa jelek, ga percaya diri dll mereka ga pduli jadi ya lebih enak begitu kalau kasusnya seperti ini' },
+  { t: 4, s: 'neu', x: 'Sejauh ini teman-teman sih, kalau keluarga atau dosen lainny ga terlalu' },
+  { t: 0, s: 'neg', x: 'Menurut saya dosen sebaiknya memberikan file / ppt dari materi yang di jelaskan setelah kelas selesai jadi mahasiswa bisa mereview ulang. Karena kadang kalau mencatat sulit menyesuaikan dengan tempo dosen.' },
+  { t: 1, s: 'neg', x: 'Untuk semester 5 ini, saya harap kampus memberikan banyak lowongan magang bagi mahasiswa yg akan beranjak ke semester 6. Saya benar2 sangat butuh informasi tempat magang nanti.' },
+  { t: 2, s: 'neg', x: 'Kondisi ekonomi masih aman tapi tidak memungkinkan jika kedepan terjadi suatu hal, saya tetap ingin mendapatkan beasiswa untuk membantu orang tua' },
+  { t: 3, s: 'pos', x: 'ketika dilibatkan dalam proses pembelajaran, diterima ketika menjawab salah, atau dirangkul ketika sendirian. dilibatkan dalam pertemanan maupun pembelajaran membuat saya berharga.' },
+  { t: 4, s: 'neg', x: 'karena semangat tetapi saya ada kendala telat mengumpulkan tugas dikarenakan saya sakit setelah itu beliau tidak mau jadi jadi dosen saya/ tidak mau mengajari saya' },
+  { t: 0, s: 'pos', x: 'Saya masih belum bisa baca gambar rangkaian untuk merngkainya, seenggaknya dosen2 mengajari cara baca rangkaian listrik untuk dirangkai bagi Pemulaa' },
+  { t: 1, s: 'pos', x: 'Dukungan berupa fasilitas pelatihan dan sertifikasi internasional (seperti Oracle, CCNA, AWS, dll.) dengan skema diskon akademik atau gratis bagi mahasiswa akhir, yang dulunya difasilitasi oleh Unit Training PENS/EIC' },
+  { t: 2, s: 'pos', x: 'Untuk pengeluaran terbesar adalah dari segi biaya makan. Dan harapan bantuan dari kampus lebih ke arah layanan lisensi software gratis bisa lebih diperbanyak' },
+  { t: 3, s: 'neu', x: 'saya ngerasa kalau ingin ikut ukm tetapi udah tutup cepet & kalau daftar tin atau lainya saya masih kurang skill' },
+  { t: 4, s: 'pos', x: 'Masih pingin lihat kucing dan makan mie ayam' },
+  { t: 0, s: 'neu', x: 'Kalau perhatian kampus mungkin tidak ada, kalau pribadi adalah mengatur waktu' },
+  { t: 1, s: 'neu', x: 'kecepatan yudisium atau status lulus untuk menunjang keikutsertaan pada program pemerintah' },
+  { t: 2, s: 'neg', x: 'sering kehabisan uang membeli komponen hingga tidak makan' },
+  { t: 3, s: 'pos', x: 'Karena lingkungannya baik dan memiliki teman yang saling support' },
+  { t: 4, s: 'neu', x: 'karena udah bayar aja sih, dan sbg mhs penerima beasiswa jadi lebih ada niat bertahan' },
+  { t: 0, s: 'neg', x: 'Jadwal yang sering dipindah atau jam kosong karena dosen berhalangan hadir, rencana studi yang matang dari prodi' },
+  { t: 1, s: 'neg', x: 'fasilitas sih biar nyaman di kampus parkiran dibangun, fasilitas yang rusak dibenerin, alat2 lab dibanyakin biar kita belajar dengan sungguh-sungguh' },
+  { t: 2, s: 'pos', x: 'alhamdulillah sudah cukup dari ortu, but tetap pengen mencari beasiswa agar tidakk terlalu membebani mereka.' },
+  { t: 3, s: 'pos', x: 'Staff PENS termasuk Dosen, Satpam, Pekerja Perpustakaan dan Kantin yang baik. Harapanya untuk Pekerja Admin atau BAAK diringankan pekerjaanya agar tidak terlalu terbebani.' },
+  { t: 4, s: 'pos', x: 'biar bisa lulus dan enak nanti dapat uang' },
+  { t: 0, s: 'pos', x: 'di karenakan saya dari SMA dan jurusan saya BAHASA, saya cukup kesulitan walau saya telat ilmu nya bersama teman saya, saya masih ingin mengejar anak” dan saya akan bertanya selalu kepada anak yang bisa' },
+  { t: 1, s: 'pos', x: 'Saya butuh arahan untuk kedepannya bagaimana, untuk di dunia kerja dan magang' },
+  { t: 2, s: 'neg', x: 'karena orang tua tidak selalu mengirimkan uang saku karena kendala ekonomi yang mengharuskan saya bekerja paruh waktu dan mencari beasiswa, semoga bisa dapet beasiswa untuk menunjang perkuliahan' },
+  { t: 3, s: 'pos', x: 'fasilitas belajar yang memadai seperti co working space, kelas yang dingin' },
+  { t: 4, s: 'pos', x: 'karena biaya kuliah saya nyari sendiri, jadi gamungkin buat saya cuti kuliah. harus tetap kuliah dan kerja agar bisa menyambung hidup meski berjuang sendirian.' },
+  { t: 0, s: 'neu', x: 'Menurut saya ada tidak ada sama sekali, jika ada mungkin seperti jam kampus yang terlalu mepet/banyak. saya ingin mempunyai waktu luang yang lebih banyak' },
+  { t: 1, s: 'neu', x: 'Dukungan berupa job fair yang diselenggarakan di kampus' },
+  { t: 2, s: 'pos', x: 'untuk kesulitan Alhamdulillah skrg belum ada karena udah dapet uang biaya hidup dari beasiswa' },
+  { t: 3, s: 'pos', x: 'Lingkungan kampus dan pertemanannya nyaman, makanan di foodlab juga enak' },
+  { t: 4, s: 'pos', x: 'Hal yang membuat saya bertahan untuk tetap kuliah adalah orang tua saya' }
 ];
 
 /* Katalog program dukungan: metric = indikator terkait, t = topik, profiles = klaster sasaran */
 const RECOS = [
-  { id: 'r1', title: 'Konseling Cepat 48 Jam', metric: 'wellbeing', t: 0, profiles: [0],
+  { id: 'r1', title: 'Konseling Cepat 48 Jam', metric: 'wellbeing', t: 4, profiles: [0],
     desc: 'Jalur pendaftaran konseling dengan jadwal maksimal 48 jam bagi mahasiswa yang skor wellbeing-nya rendah dan tekanannya tinggi.',
     owner: 'Unit Layanan Konseling', duration: '1 bulan persiapan', effort: 'Sedang', kpi: 'Waktu tunggu konseling di bawah 48 jam' },
   { id: 'r2', title: 'Kalender Beban Studi Terpadu', metric: 'pressure', t: 0, profiles: [0],
@@ -2661,13 +1999,13 @@ const RECOS = [
   { id: 'r5', title: 'Buddy Program Mahasiswa Baru', metric: 'social', t: 3, profiles: [2],
     desc: 'Mahasiswa baru dan rantau dipasangkan dengan kakak tingkat dalam kelompok kecil selama satu semester pertama.',
     owner: 'Kemahasiswaan & BEM', duration: '1 semester', effort: 'Rendah', kpi: 'Skor dukungan sosial angkatan baru naik 8 poin' },
-  { id: 'r6', title: 'Dosen Wali Responsif', metric: 'social', t: 5, profiles: [0, 2],
+  { id: 'r6', title: 'Dosen Wali Responsif', metric: 'social', t: 0, profiles: [0, 2],
     desc: 'Pedoman dan pelatihan singkat untuk dosen wali, dengan dua konsultasi wajib per semester dan penanda dini bagi mahasiswa berisiko.',
     owner: 'Pusat Pembinaan Akademik', duration: '1 semester', effort: 'Sedang', kpi: 'Konsultasi dosen wali terlaksana bagi 90% mahasiswa' },
-  { id: 'r7', title: 'Ruang & Kegiatan Komunitas Kecil', metric: 'social', t: 6, profiles: [1, 2],
+  { id: 'r7', title: 'Ruang & Kegiatan Komunitas Kecil', metric: 'social', t: 3, profiles: [2, 3],
     desc: 'Kegiatan mingguan berkelompok kecil (10–15 orang) di ruang bersama, dengan jadwal yang tidak bentrok dengan praktikum.',
     owner: 'Bagian Kemahasiswaan', duration: '1 semester', effort: 'Rendah', kpi: 'Partisipasi mahasiswa di kegiatan komunitas naik 20%' },
-  { id: 'r8', title: 'Perbaikan Layanan Digital & Fasilitas', metric: 'wellbeing', t: 4, profiles: [0, 2],
+  { id: 'r8', title: 'Perbaikan Layanan Digital & Fasilitas', metric: 'wellbeing', t: 0, profiles: [1, 3],
     desc: 'Menstabilkan wifi saat ujian daring, memperpanjang jam ruang belajar musim ujian, dan membuka antrean layanan akademik secara daring.',
     owner: 'UPT Komputer & Jaringan', duration: '2–3 bulan', effort: 'Tinggi', kpi: 'Keluhan wifi saat praktikum turun 60%' }
 ];

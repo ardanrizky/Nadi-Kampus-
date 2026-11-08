@@ -603,13 +603,11 @@
     
     // Klasifikasi topik berdasarkan frekuensi kata kunci
     const extraTopicLexicons = [
-      ['tugas', 'deadline', 'ujian', 'praktikum', 'tubes', 'kuliah', 'tidur', 'jadwal', 'kelas', 'materi', 'begadang', 'lelah', 'istirahat', 'capek'], // 0
-      ['magang', 'karier', 'cv', 'kerja', 'portofolio', 'interview', 'loker', 'alumni', 'industri', 'profesi', 'masa depan'], // 1
-      ['ukt', 'biaya', 'uang', 'finansial', 'bayar', 'kos', 'makan', 'beasiswa', 'keringanan', 'mahal', 'spp', 'ekonomi'], // 2
-      ['teman', 'sendirian', 'kesepian', 'sosial', 'rantau', 'asrama', 'isolasi', 'berteman', 'ngobrol', 'relasi', 'asing'], // 3
-      ['wifi', 'fasilitas', 'ruang', 'lab', 'gedung', 'perpustakaan', 'toilet', 'ac', 'parkir', 'layanan', 'antrean', 'server', 'lemot'], // 4
-      ['dosen', 'wali', 'bimbingan', 'skripsi', 'konsultasi', 'pengajar', 'revisi', 'feedback', 'jurusan', 'prodi', 'dosen wali'], // 5
-      ['ukm', 'organisasi', 'kegiatan', 'bem', 'hima', 'lomba', 'acara', 'komunitas', 'ekskul', 'kepanitiaan'] // 6
+      ['tugas','deadline','ujian','praktikum','tubes','kuliah','jadwal','kelas','materi','begadang','dosen','wali','bimbingan','skripsi','revisi','feedback','wifi','fasilitas','ruang','lab','gedung','perpustakaan','toilet','parkir','parkiran','server','lemot','antrean','kantin','layanan'],
+      ['magang','karier','cv','kerja','portofolio','interview','loker','alumni','industri','profesi','masa depan'],
+      ['ukt','biaya','uang','finansial','bayar','kos','makan','beasiswa','keringanan','mahal','spp','ekonomi'],
+      ['teman','sendirian','kesepian','sosial','rantau','asrama','isolasi','berteman','ngobrol','relasi','asing','ukm','organisasi','kegiatan','bem','hima','lomba','acara','komunitas','kepanitiaan'],
+      ['stres','stress','cemas','tidur','istirahat','lelah','capek','overthinking','konseling','psikolog','dukungan','semangat','tenang','burnout']
     ];
 
     const topicScores = TOPICS.map((topic, i) => {
@@ -633,7 +631,8 @@
       'sulit', 'berat', 'stres', 'stress', 'capek', 'lelah', 'kecewa', 'kurang', 'buruk', 'putus',
       'tidak', 'belum', 'lambat', 'bingung', 'panik', 'mahal', 'sendiri', 'kesepian',
       'terlambat', 'rusak', 'susah', 'takut', 'cemas', 'masalah', 'keluhan', 'keluh', 'parah',
-      'begadang', 'drop', 'menumpuk', 'tabrakan', 'bentrok', 'padat', 'pusing', 'down', 'overthinking'
+      'begadang', 'drop', 'menumpuk', 'tabrakan', 'bentrok', 'padat', 'pusing', 'down', 'overthinking',
+       'sempit', 'brobok', 'jelek'
     ];
     const posWords = [
       'bagus', 'senang', 'membantu', 'nyaman', 'terbantu', 'puas', 'mantap', 'baik', 'ramah',
@@ -650,6 +649,13 @@
     else if (negCount === 0 && posCount === 0) sentiment = 'neu';
 
     return { topicIndex: bestTopic, sentiment };
+  }
+  const OLD_TO_NEW_TOPIC = { 0: 0, 1: 1, 2: 2, 3: 3, 4: 0, 5: 0, 6: 3 };
+  function topicFromRow(d) {
+    const byName = TOPICS.findIndex(t => t.name === d.topic_name);
+    if (byName >= 0) return byName;
+    const m = OLD_TO_NEW_TOPIC[d.topic_index];
+    return m !== undefined ? m : 0;
   }
 
   function initVoiceForm() {
@@ -761,7 +767,8 @@
   function rankRecos(targetData = D) {
     return RECOS.map(r => {
       const m = dim(r.metric);
-      const t = (targetData.topics && targetData.topics[r.t]) ? targetData.topics[r.t] : { ...TOPICS[r.t], w: 15 };
+      const base = (targetData.topics && targetData.topics[r.t]) || TOPICS[r.t] || { name: '', sent: [0, 0, 0] };
+      const t = { ...base, sent: base.sent || [0, 0, 0], w: base.w ?? 15 };
       const tw = t.w || 15;
       const prioScore = need(m, targetData.scores[m.key]) * 0.6 + (t.sent[2] * tw / 100) * 0.4;
       const pr = prioScore >= 45 ? 'Tinggi' : prioScore >= 30 ? 'Sedang' : 'Rendah';
@@ -773,7 +780,15 @@
     const fBox = $('#recoFilter'), rBox = $('#recos');
     if (!fBox || !rBox) return;
 
-    const opts = [['all', 'Semua profil'], ...PROFILES.map((p, i) => [String(i), p.short])];
+    // Safe fallback jika PROFILES / CLUSTERS belum terdefinisi
+    const profileList = window.PROFILES || window.CLUSTERS || [
+      { short: 'P1 Rentan' },
+      { short: 'P2 Moderat' },
+      { short: 'P3 Unggul' }
+    ];
+
+    const opts = [['all', 'Semua profil'], ...profileList.map((p, i) => [String(i), p.short || `Profil ${i+1}`])];
+    
     fBox.innerHTML = opts.map(([k, l]) => `
       <button type="button" class="seg__btn" aria-pressed="${state.recoProfile === k}" data-recofilter="${k}">
         ${l}
@@ -781,21 +796,30 @@
 
     const ranked = rankRecos().filter(x => {
       if (state.recoProfile === 'all') return true;
-      return x.r.profiles.includes(+state.recoProfile);
+      return x.r.profiles && x.r.profiles.includes(+state.recoProfile);
     });
+
+    if (!ranked || ranked.length === 0) {
+      rBox.innerHTML = `<div class="p-4 text-center text-slate-500">Tidak ada program rekomendasi untuk profil ini.</div>`;
+      return;
+    }
 
     rBox.innerHTML = ranked.map(x => {
       const { r, m, t } = x;
       const on = state.plan.has(r.id);
+      const targetProfiles = r.profiles 
+        ? r.profiles.map(i => (profileList[i] ? profileList[i].short : `P${i+1}`)).join(', ')
+        : 'Semua Profil';
+
       return `
         <article class="reco reco--${x.pr.toLowerCase()}">
           <div class="reco__top">
             <span class="prio prio--${x.pr.toLowerCase()}">Prioritas ${x.pr}</span>
-            <span class="reco__for">${r.profiles.map(i => PROFILES[i].short).join(', ')}</span>
+            <span class="reco__for">${targetProfiles}</span>
           </div>
           <h4>${r.title}</h4>
           <p>${r.desc}</p>
-          <p class="reco__why"><b>Dasar data:</b> ${m.short} ${D.scores[m.key]} · ${Math.round(t.w)}% komentar membahas ${t.name.toLowerCase()} (${t.sent[2]}% negatif)</p>
+          <p class="reco__why"><b>Dasar data:</b> ${m ? m.short : 'Indikator'} ${D.scores[m ? m.key : 'wellbeing']} · ${Math.round(t.w)}% komentar membahas ${t.name ? t.name.toLowerCase() : 'topik'} (${t.sent ? t.sent[2] : 0}% negatif)</p>
           <dl class="reco__meta">
             <div><dt>Penanggung jawab</dt><dd>${r.owner}</dd></div>
             <div><dt>Durasi</dt><dd>${r.duration}</dd></div>
@@ -1609,7 +1633,7 @@
   /* ---------------------------------------------------------
      Sinkronisasi Asinkron dengan Live FastAPI Backend & Supabase
      --------------------------------------------------------- */
-  async function loadSupabaseVoice() {
+ async function loadSupabaseVoice() {
     if (!supabaseClient) return;
     try {
       const { data, error } = await supabaseClient
@@ -1617,13 +1641,20 @@
         .select('*')
         .order('created_at', { ascending: false })
         .limit(100);
+
       if (error) {
-        console.warn('[Supabase] Gagal memuat suara mahasiswa:', error);
+        console.warn('[Supabase] Gagal memuat suara mahasiswa, menggunakan fallback data.js:', error);
         return;
       }
+
+      // HANYA GANTI DATA JIKA SUPABASE BENAR-BENAR MEMILIKI ISI (DATA > 0)
       if (data && data.length > 0) {
-        // Jadikan data cloud Supabase sebagai data utama
-        QUOTES.length = 0;
+        // Ambil komentar lokal yang bertanda isNew (yang dikirim user saat sesi berlangsung)
+        const localNewQuotes = QUOTES.filter(q => q.isNew);
+        
+        QUOTES.length = 0; // Kosongkan array lama
+        
+        // Masukkan data baru dari Supabase
         data.forEach(d => {
           QUOTES.push({
             t: d.topic_index,
@@ -1636,11 +1667,16 @@
           });
         });
 
+        // Gabungkan kembali komentar yang baru saja diketik user
+        QUOTES.unshift(...localNewQuotes);
+
         if (state.view === 'voice') renderVoice();
         console.log(`[Supabase] Berhasil memuat ${data.length} suara mahasiswa dari database cloud.`);
+      } else {
+        console.log('[Supabase] Tabel student_voice di cloud masih kosong. Menggunakan data fallback lokal dari data.js.');
       }
     } catch (err) {
-      console.warn('[Supabase] Error fetch:', err);
+      console.warn('[Supabase] Error fetch, menggunakan data lokal:', err);
     }
   }
 
