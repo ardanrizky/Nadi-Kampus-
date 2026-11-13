@@ -842,8 +842,8 @@
     rBox.innerHTML = ranked.map(x => {
       const { r, m, t } = x;
       const on = state.plan.has(r.id);
-      const targetProfiles = r.profiles
-        ? r.profiles.map(i => (profileList[i] ? profileList[i].short : `P${i + 1}`)).join(', ')
+      const targetProfiles = (r.profiles && r.profiles.length)
+        ? r.profiles.filter(i => profileList[i]).map(i => profileList[i].short).join(', ')
         : 'Semua Profil';
 
       return `
@@ -996,7 +996,9 @@
     // 2. Rows Rekomendasi Program (Tabel 4)
     const recosTableHtml = filteredList.map((item, idx) => {
       const { r, m, t, pr } = item;
-      const targetProfiles = r.profiles ? r.profiles.map(i => PROFILES[i] ? PROFILES[i].short : `P${i + 1}`).join(', ') : 'Semua Profil';
+      const targetProfiles = (r.profiles && r.profiles.length)
+        ? r.profiles.filter(i => PROFILES[i]).map(i => PROFILES[i].short).join(', ')
+        : 'Semua Profil';
       return `
         <tr>
           <td style="padding:7px 8px; border:1px solid #000; text-align:center; font-weight:700; font-size:11px;">${idx + 1}</td>

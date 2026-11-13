@@ -2043,7 +2043,7 @@ const RECOS = [
   { id: 'r6', title: 'Dosen Wali Responsif', metric: 'social', t: 0, profiles: [0, 2],
     desc: 'Pedoman dan pelatihan singkat untuk dosen wali, dengan dua konsultasi wajib per semester dan penanda dini bagi mahasiswa berisiko.',
     owner: 'Pusat Pembinaan Akademik', duration: '1 semester', effort: 'Sedang', kpi: 'Konsultasi dosen wali terlaksana bagi 90% mahasiswa' },
-  { id: 'r7', title: 'Ruang & Kegiatan Komunitas Kecil', metric: 'social', t: 3, profiles: [2, 3],
+  { id: 'r7', title: 'Ruang & Kegiatan Komunitas Kecil', metric: 'social', t: 3, profiles: [1, 2],
     desc: 'Kegiatan mingguan berkelompok kecil (10–15 orang) di ruang bersama, dengan jadwal yang tidak bentrok dengan praktikum.',
     owner: 'Kemahasiswaan & Hima', duration: '1 semester', effort: 'Rendah', kpi: 'Tingkat keterlibatan mahasiswa non-aktif naik 20%' },
   { id: 'r8', title: 'Perbaikan Layanan Digital & Fasilitas Belajar', metric: 'wellbeing', t: 0, profiles: [0],
