@@ -806,7 +806,7 @@
       const t = { ...base, sent: base.sent || [0, 0, 0], w: base.w ?? 15 };
       const tw = t.w || 15;
       const prioScore = need(m, targetData.scores[m.key]) * 0.6 + (t.sent[2] * tw / 100) * 0.4;
-      const pr = prioScore >= 45 ? 'Tinggi' : prioScore >= 30 ? 'Sedang' : 'Rendah';
+      const pr = prioScore >= 25 ? 'Tinggi' : prioScore >= 18 ? 'Sedang' : 'Rendah';
       return { r, prioScore, pr, m, t: { ...t, w: tw } };
     }).sort((a, b) => b.prioScore - a.prioScore);
   }
