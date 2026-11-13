@@ -4499,12 +4499,15 @@ body.drawer-locked {
 
 .reco-report-content td {
   border: 1px solid #000000 !important;
-  background: #FFFFFF !important;
+  background: #FFFFFF;
 }
 
 .reco-report-content tr[style*="background:#F1F5F9"] td,
-.reco-report-content tr[style*="background:#E2E8F0"] td {
-  background: #E2E8F0 !important;
+.reco-report-content tr[style*="background:#E2E8F0"] td,
+.reco-report-content td[style*="background:#F8FAFC"],
+.reco-report-content td[style*="background:#F1F5F9"],
+.reco-report-content td[style*="background:#E2E8F0"] {
+  background: #F1F5F9 !important;
   color: #000000 !important;
 }
 

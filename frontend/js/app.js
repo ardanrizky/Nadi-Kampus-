@@ -1042,7 +1042,7 @@
 
     return `
       <!-- KOP RESMI LAPORAN PEMERIKSAAN (STANDAR FORMAL PSIKOLOGIS & KAMPUS) -->
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:2px solid #000; padding-bottom:10px;">
+      <div style="display:flex; justify-content:flex-start; align-items:center; margin-bottom:14px; border-bottom:2px solid #000; padding-bottom:10px;">
         <div style="display:flex; align-items:center; gap:12px;">
           <img src="img/logo_mark.png" alt="Logo NadiKampus" style="height:44px; width:auto; object-fit:contain;" />
           <div>
@@ -1051,46 +1051,34 @@
             <div style="font-size:10px; color:#444;">Jl. Raya ITS, Sukolilo, Surabaya 60111 • Email: nadikampus@pens.ac.id</div>
           </div>
         </div>
-        <div style="border:1.5px solid #000; padding:3px 12px; font-size:10.5px; font-weight:800; letter-spacing:1px; text-transform:uppercase;">
-          RAHASIA
-        </div>
       </div>
 
-      <!-- JUDUL LAPORAN RESMI (CENTERED, EXACT MATCH DOKUMEN PSIKOLOGIS) -->
+      <!-- JUDUL LAPORAN RESMI (CENTERED) -->
       <div style="text-align:center; margin:16px 0 20px;">
         <h2 style="font-size:15px; font-weight:800; text-transform:uppercase; margin:0; letter-spacing:0.5px;">
           LAPORAN PEMERIKSAAN KONDISI PSIKOSOSIAL &amp; AKADEMIK MAHASISWA
         </h2>
-        <div style="font-size:11.5px; font-weight:600; margin-top:4px; color:#111;">
-          Asesmen Berbasis Latent Profile Analysis (LPA-GMM) dan Natural Language Processing
-        </div>
       </div>
 
-      <!-- TABEL IDENTITAS & METADATA PEMERIKSAAN (TWO COLUMNS FORMAL) -->
-      <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:20px; border-bottom:1px solid #000; padding-bottom:8px;">
+      <!-- TABEL IDENTITAS & METADATA PEMERIKSAAN (4 KOLOM FORMAL TANPA TITIK DUA) -->
+      <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:20px; border:1px solid #000;">
         <tr>
-          <td style="width:19%; font-weight:700; padding:2px 0;">CAKUPAN DATA</td>
-          <td style="width:2%; text-align:center; padding:2px 0;">:</td>
-          <td style="width:39%; padding:2px 0;">${scopeLabel}</td>
-          <td style="width:18%; font-weight:700; padding:2px 0;">TANGGAL ASESMEN</td>
-          <td style="width:2%; text-align:center; padding:2px 0;">:</td>
-          <td style="width:20%; padding:2px 0;">${dateFormatted}</td>
+          <td style="width:20%; font-weight:700; padding:6px 8px; border:1px solid #000; background:#F8FAFC;">CAKUPAN DATA</td>
+          <td style="width:30%; padding:6px 8px; border:1px solid #000;">${scopeLabel}</td>
+          <td style="width:20%; font-weight:700; padding:6px 8px; border:1px solid #000; background:#F8FAFC;">TANGGAL ASESMEN</td>
+          <td style="width:30%; padding:6px 8px; border:1px solid #000;">${dateFormatted}</td>
         </tr>
         <tr>
-          <td style="font-weight:700; padding:2px 0;">PERIODE SURVEI</td>
-          <td style="text-align:center; padding:2px 0;">:</td>
-          <td style="padding:2px 0;">Semester Genap 2025/2026</td>
-          <td style="font-weight:700; padding:2px 0;">JUMLAH SAMPEL</td>
-          <td style="text-align:center; padding:2px 0;">:</td>
-          <td style="padding:2px 0;">${totalStudents} Responden Aktif</td>
+          <td style="font-weight:700; padding:6px 8px; border:1px solid #000; background:#F8FAFC;">PERIODE SURVEI</td>
+          <td style="padding:6px 8px; border:1px solid #000;">Semester Genap 2025/2026</td>
+          <td style="font-weight:700; padding:6px 8px; border:1px solid #000; background:#F8FAFC;">JUMLAH SAMPEL</td>
+          <td style="padding:6px 8px; border:1px solid #000;">${totalStudents} Responden Aktif</td>
         </tr>
         <tr>
-          <td style="font-weight:700; padding:2px 0;">METODE ASESMEN</td>
-          <td style="text-align:center; padding:2px 0;">:</td>
-          <td style="padding:2px 0;">LPA-GMM (k=3) &amp; Sentimen Korpus</td>
-          <td style="font-weight:700; padding:2px 0;">SIFAT DOKUMEN</td>
-          <td style="text-align:center; padding:2px 0;">:</td>
-          <td style="padding:2px 0;">Dokumen Resmi Internal</td>
+          <td style="font-weight:700; padding:6px 8px; border:1px solid #000; background:#F8FAFC;">METODE ASESMEN</td>
+          <td style="padding:6px 8px; border:1px solid #000;">LPA-GMM (k=3) &amp; Sentimen Korpus</td>
+          <td style="font-weight:700; padding:6px 8px; border:1px solid #000; background:#F8FAFC;">SIFAT DOKUMEN</td>
+          <td style="padding:6px 8px; border:1px solid #000;">Dokumen Resmi Internal</td>
         </tr>
       </table>
 
