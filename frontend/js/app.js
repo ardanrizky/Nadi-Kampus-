@@ -518,8 +518,8 @@
       if (!el) return;
       el.innerHTML = [
         ['all', `Semua (${curSource === 'all' ? voiceStats.n : '5.2k'})`],
-        ['gform', '📋 GForm (553)'],
-        ['telegram', '💬 Menfess Tele (4.6k)']
+        ['gform', 'GForm (553)'],
+        ['telegram', 'Menfess Tele (4.6k)']
       ].map(([k, l]) => `
         <button type="button" class="seg__btn" aria-pressed="${curSource === k}" data-source="${k}">
           ${l}
@@ -615,9 +615,9 @@
           <li class="quote ${q.isNew ? 'quote--new' : ''}">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
               <span class="quote__src-badge quote__src-badge--${q.source || 'gform'}">
-                ${q.source === 'telegram' ? '💬 Menfess Telegram' : '📋 Kuesioner GForm'}
+                ${q.source === 'telegram' ? 'Menfess Telegram' : 'Kuesioner GForm'}
               </span>
-              ${q.isNew ? `<span class="quote__new-tag">✨ Curhat Baru (Anonim${q.prodi ? ' · ' + q.prodi : ''}${q.sem ? ' · Sem ' + q.sem : ''})</span>` : ''}
+              ${q.isNew ? `<span class="quote__new-tag">Curhat Baru (Anonim${q.prodi ? ' · ' + q.prodi : ''}${q.sem ? ' · Sem ' + q.sem : ''})</span>` : ''}
             </div>
             <p>“${q.x}”</p>
             <div class="quote__meta">
@@ -1637,7 +1637,7 @@
             });
             if (state.view === 'voice') {
               renderVoice();
-              toast('✨ Ada aspirasi mahasiswa baru masuk secara real-time!');
+              toast('Ada aspirasi mahasiswa baru masuk secara real-time!');
             }
           }
         })
