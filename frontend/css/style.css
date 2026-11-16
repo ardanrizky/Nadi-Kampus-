@@ -2610,7 +2610,7 @@ body.drawer-locked {
     text-overflow: ellipsis !important;
   }
 
-  /* Tab 2: Profiling Mobile (3 Kolom Kompak Sejajar, Angka Persentase Menonjol & Pas) */
+  /* Tab 2: Profiling Mobile (3 Kolom Kompak Sejajar, Angka Persentase di Tengah Antara Rentan & Mahasiswa) */
   .profiles {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
@@ -2621,52 +2621,40 @@ body.drawer-locked {
   .pcard {
     width: auto !important;
     max-width: none !important;
-    padding: 12px 9px 12px !important;
+    padding: 12px 10px 11px !important;
     border-radius: 13px !important;
     border: 1.5px solid var(--line) !important;
     background: #FFFFFF !important;
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 5px !important;
+    gap: 2px !important;
     text-align: left !important;
     min-width: 0 !important;
   }
 
+  /* Ratakan urutan vertikal: Badge (1) -> Title/Rentan (2) -> Persen (3) -> Jumlah Mhs (4) -> Bar (5) */
   .pcard__header {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 4px !important;
+    display: contents !important;
   }
 
   .pcard__badge {
+    order: 1 !important;
+    align-self: flex-start !important;
     font-size: 10px !important;
     padding: 2.5px 6px !important;
     border-radius: 6px !important;
     font-weight: 700 !important;
     white-space: nowrap !important;
-  }
-
-  .pcard__pct {
-    font-family: var(--serif) !important;
-    font-size: 28px !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
-    letter-spacing: -0.6px !important;
-  }
-
-  .pcard__pct small {
-    font-size: 14.5px !important;
-    font-weight: 700 !important;
-    margin-left: 1.5px !important;
+    margin-bottom: 3px !important;
   }
 
   .pcard h4, .pcard__title {
+    order: 2 !important;
     font-size: 13.5px !important;
     font-weight: 700 !important;
     line-height: 1.25 !important;
-    margin: 3px 0 1px !important;
+    margin: 0 0 2px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
@@ -2680,19 +2668,38 @@ body.drawer-locked {
     display: inline !important;
   }
 
+  .pcard__pct {
+    order: 3 !important;
+    font-family: var(--serif) !important;
+    font-size: 28px !important;
+    font-weight: 800 !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.6px !important;
+    color: var(--c) !important;
+    margin: 1px 0 2px !important;
+  }
+
+  .pcard__pct small {
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
+    margin-left: 1.5px !important;
+  }
+
   .pcard__n {
-    font-size: 11px !important;
+    order: 4 !important;
+    font-size: 10.5px !important;
     color: var(--muted) !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     display: block !important;
-    margin-bottom: 2px !important;
+    margin-bottom: 4px !important;
   }
 
   .pcard__bar {
-    height: 5px !important;
-    margin-top: 2px !important;
+    order: 5 !important;
+    height: 4.5px !important;
+    margin-top: auto !important;
     border-radius: 999px !important;
   }
 
