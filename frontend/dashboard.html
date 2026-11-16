@@ -16,7 +16,7 @@
       document.documentElement.style.colorScheme = t;
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20261116_voice_fixes_v17" />
+  <link rel="stylesheet" href="css/style.css?v=20261116_topbar_fixes_v18" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -205,8 +205,21 @@
         height: 18px !important;
         min-width: 18px !important;
         min-height: 18px !important;
-        display: block !important;
         stroke: currentColor !important;
+      }
+      /* Hanya satu ikon aktif (tidak bertumpuk/bentrok) */
+      .mobile-theme-btn .theme-icon-sun {
+        display: none !important;
+      }
+      .mobile-theme-btn .theme-icon-moon {
+        display: block !important;
+      }
+      [data-theme="dark"] .mobile-theme-btn .theme-icon-sun {
+        display: block !important;
+        color: #F59E0B !important;
+      }
+      [data-theme="dark"] .mobile-theme-btn .theme-icon-moon {
+        display: none !important;
       }
       .desktop-theme-btn {
         display: none !important;
@@ -242,12 +255,21 @@
       .app-topbar__actions .select--app {
         flex: 1 1 auto !important;
         min-width: 0 !important;
-        padding: 2px 8px 2px 10px !important;
+        padding: 2px 6px 2px 10px !important;
+      }
+      .app-topbar__actions .select--app span {
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        flex-shrink: 0 !important;
+        margin-right: 2px !important;
       }
       .app-topbar__actions .select--app select {
         width: 100% !important;
-        font-size: 13px !important;
-        padding: 6px 28px 6px 6px !important;
+        font-size: 12.5px !important;
+        font-weight: 600 !important;
+        padding: 5px 22px 5px 4px !important;
+        background-position: right 4px center !important;
+        background-size: 14px 14px !important;
       }
       .app-topbar__btn-group {
         display: inline-flex !important;
@@ -255,8 +277,8 @@
         flex-shrink: 0 !important;
       }
       #btnPrintReport {
-        padding: 8px 14px !important;
-        font-size: 12.5px !important;
+        padding: 6.5px 12px !important;
+        font-size: 12px !important;
         white-space: nowrap !important;
         border-radius: 999px !important;
         display: inline-flex !important;
@@ -1839,7 +1861,7 @@
   <script src="js/theme.js"></script>
   <script src="js/data.js?v=20261116_pens_5vars_v10"></script>
   <script src="js/charts.js?v=20261116_pens_5vars_v10"></script>
-  <script src="js/app.js?v=20261116_voice_fixes_v17"></script>
+  <script src="js/app.js?v=20261116_topbar_fixes_v18"></script>
 
   <!-- Mobile Drawer Controller (seperti ETHOL PENS) -->
   <script>

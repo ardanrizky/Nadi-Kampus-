@@ -1539,8 +1539,8 @@
   const facSel = $('#fFaculty');
   if (facSel) {
     const prodiSource = window.PRODIS || window.FACULTIES || {};
-    facSel.innerHTML = `<option value="all">Seluruh Program Studi (Kampus)</option>` +
-      Object.keys(prodiSource).map(k => `<option value="${k}">Prodi ${prodiSource[k].name}</option>`).join('');
+    facSel.innerHTML = `<option value="all">Seluruh Prodi</option>` +
+      Object.keys(prodiSource).map(k => `<option value="${k}">${prodiSource[k].name}</option>`).join('');
     facSel.addEventListener('change', e => setFaculty(e.target.value));
   }
 
