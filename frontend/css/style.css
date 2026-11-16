@@ -1579,52 +1579,54 @@ svg { display: block; }
   color: #FB7185;
 }
 
-/* Toggle Pills Indikator Tren */
-#trendToggles.seg {
-  background: #F1F5F9 !important;
-  border: 1px solid #E2E8F0 !important;
-  padding: 3px !important;
-  border-radius: 999px !important;
-  display: inline-flex !important;
-  gap: 3px !important;
-}
+/* Toggle Pills Indikator Tren (Desktop) */
+@media (min-width: 993px) {
+  #trendToggles, #trendToggles.seg {
+    background: #F1F5F9 !important;
+    border: 1px solid #E2E8F0 !important;
+    padding: 3px !important;
+    border-radius: 999px !important;
+    display: inline-flex !important;
+    gap: 3px !important;
+  }
 
-#trendToggles .seg__btn {
-  border: 0 !important;
-  background: transparent !important;
-  color: #64748B !important;
-  padding: 6px 13px !important;
-  border-radius: 999px !important;
-  font-size: 12.5px !important;
-  font-weight: 600 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 7px !important;
-  cursor: pointer !important;
-  transition: all .2s ease !important;
-}
+  #trendToggles .seg__btn {
+    border: 0 !important;
+    background: transparent !important;
+    color: #64748B !important;
+    padding: 6px 13px !important;
+    border-radius: 999px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    cursor: pointer !important;
+    transition: all .2s ease !important;
+  }
 
-#trendToggles .seg__btn i {
-  width: 8px !important;
-  height: 8px !important;
-  border-radius: 50% !important;
-  transition: transform .2s ease !important;
-}
+  #trendToggles .seg__btn i {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    transition: transform .2s ease !important;
+  }
 
-#trendToggles .seg__btn:hover {
-  color: #0F172A !important;
-  background: rgba(255, 255, 255, 0.6) !important;
-}
+  #trendToggles .seg__btn:hover {
+    color: #0F172A !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+  }
 
-#trendToggles .seg__btn[aria-pressed="true"] {
-  background: #FFFFFF !important;
-  color: #0F172A !important;
-  font-weight: 700 !important;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
-}
+  #trendToggles .seg__btn[aria-pressed="true"] {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+  }
 
-#trendToggles .seg__btn[aria-pressed="true"] i {
-  transform: scale(1.3) !important;
+  #trendToggles .seg__btn[aria-pressed="true"] i {
+    transform: scale(1.3) !important;
+  }
 }
 
 
@@ -2549,7 +2551,7 @@ body.drawer-locked {
   }
 
   /* Segmented Toggles Indikator Tren & Komparasi: 2 Baris x 2 Kolom (Tanpa Harus Digeser) */
-  #trendToggles, #cmpMetric {
+  #trendToggles, #trendToggles.seg, #cmpMetric, #cmpMetric.seg {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     width: 100% !important;
@@ -2562,11 +2564,13 @@ body.drawer-locked {
     overflow: visible !important;
   }
 
-  #trendToggles::-webkit-scrollbar, #cmpMetric::-webkit-scrollbar {
+  #trendToggles::-webkit-scrollbar, #trendToggles.seg::-webkit-scrollbar,
+  #cmpMetric::-webkit-scrollbar, #cmpMetric.seg::-webkit-scrollbar {
     display: none !important;
   }
 
-  #trendToggles .seg__btn, #cmpMetric .seg__btn {
+  #trendToggles .seg__btn, #trendToggles.seg .seg__btn,
+  #cmpMetric .seg__btn, #cmpMetric.seg .seg__btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -2583,7 +2587,8 @@ body.drawer-locked {
     border: 0 !important;
   }
 
-  #trendToggles .seg__btn i, #cmpMetric .seg__btn i {
+  #trendToggles .seg__btn i, #trendToggles.seg .seg__btn i,
+  #cmpMetric .seg__btn i, #cmpMetric.seg .seg__btn i {
     width: 7px !important;
     height: 7px !important;
     min-width: 7px !important;
@@ -2591,24 +2596,29 @@ body.drawer-locked {
     flex-shrink: 0 !important;
   }
 
-  #trendToggles .seg__btn[aria-pressed="true"], #cmpMetric .seg__btn[aria-pressed="true"] {
+  #trendToggles .seg__btn[aria-pressed="true"], #trendToggles.seg .seg__btn[aria-pressed="true"],
+  #cmpMetric .seg__btn[aria-pressed="true"], #cmpMetric.seg .seg__btn[aria-pressed="true"] {
     background: #FFFFFF !important;
     color: #0F172A !important;
     font-weight: 700 !important;
     box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08) !important;
   }
 
-  [data-theme="dark"] #trendToggles, [data-theme="dark"] #cmpMetric {
+  [data-theme="dark"] #trendToggles, [data-theme="dark"] #trendToggles.seg,
+  [data-theme="dark"] #cmpMetric, [data-theme="dark"] #cmpMetric.seg {
     background: #151F32 !important;
     border: 1px solid #1E293B !important;
   }
 
-  [data-theme="dark"] #trendToggles .seg__btn, [data-theme="dark"] #cmpMetric .seg__btn {
+  [data-theme="dark"] #trendToggles .seg__btn, [data-theme="dark"] #trendToggles.seg .seg__btn,
+  [data-theme="dark"] #cmpMetric .seg__btn, [data-theme="dark"] #cmpMetric.seg .seg__btn {
     color: #94A3B8 !important;
   }
 
   [data-theme="dark"] #trendToggles .seg__btn[aria-pressed="true"],
-  [data-theme="dark"] #cmpMetric .seg__btn[aria-pressed="true"] {
+  [data-theme="dark"] #trendToggles.seg .seg__btn[aria-pressed="true"],
+  [data-theme="dark"] #cmpMetric .seg__btn[aria-pressed="true"],
+  [data-theme="dark"] #cmpMetric.seg .seg__btn[aria-pressed="true"] {
     background: #1E293B !important;
     color: #F8FAFC !important;
     border: 1px solid #334155 !important;

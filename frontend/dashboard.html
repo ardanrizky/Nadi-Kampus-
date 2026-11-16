@@ -16,7 +16,7 @@
       document.documentElement.style.colorScheme = t;
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20261116_no_scroll_toggles_v20" />
+  <link rel="stylesheet" href="css/style.css?v=20261116_trend_grid_match_v21" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -358,7 +358,7 @@
       }
 
       /* Segmented Toggles Indikator Tren & Komparasi: 2 Baris x 2 Kolom (Tanpa Harus Digeser) */
-      #trendToggles, #cmpMetric {
+      #trendToggles, #trendToggles.seg, #cmpMetric, #cmpMetric.seg {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
         width: 100% !important;
@@ -370,10 +370,12 @@
         box-sizing: border-box !important;
         overflow: visible !important;
       }
-      #trendToggles::-webkit-scrollbar, #cmpMetric::-webkit-scrollbar {
+      #trendToggles::-webkit-scrollbar, #trendToggles.seg::-webkit-scrollbar,
+      #cmpMetric::-webkit-scrollbar, #cmpMetric.seg::-webkit-scrollbar {
         display: none !important;
       }
-      #trendToggles .seg__btn, #cmpMetric .seg__btn {
+      #trendToggles .seg__btn, #trendToggles.seg .seg__btn,
+      #cmpMetric .seg__btn, #cmpMetric.seg .seg__btn {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -389,27 +391,32 @@
         background: transparent !important;
         border: 0 !important;
       }
-      #trendToggles .seg__btn i, #cmpMetric .seg__btn i {
+      #trendToggles .seg__btn i, #trendToggles.seg .seg__btn i,
+      #cmpMetric .seg__btn i, #cmpMetric.seg .seg__btn i {
         width: 7px !important;
         height: 7px !important;
         min-width: 7px !important;
         border-radius: 50% !important;
         flex-shrink: 0 !important;
       }
-      #trendToggles .seg__btn[aria-pressed="true"], #cmpMetric .seg__btn[aria-pressed="true"] {
+      #trendToggles .seg__btn[aria-pressed="true"], #trendToggles.seg .seg__btn[aria-pressed="true"],
+      #cmpMetric .seg__btn[aria-pressed="true"], #cmpMetric.seg .seg__btn[aria-pressed="true"] {
         background: #FFFFFF !important;
         color: #0F172A !important;
         font-weight: 700 !important;
         box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08) !important;
       }
-      [data-theme="dark"] #trendToggles, [data-theme="dark"] #cmpMetric {
+      [data-theme="dark"] #trendToggles, [data-theme="dark"] #trendToggles.seg,
+      [data-theme="dark"] #cmpMetric, [data-theme="dark"] #cmpMetric.seg {
         background: #151F32 !important;
         border: 1px solid #1E293B !important;
       }
-      [data-theme="dark"] #trendToggles .seg__btn, [data-theme="dark"] #cmpMetric .seg__btn {
+      [data-theme="dark"] #trendToggles .seg__btn, [data-theme="dark"] #trendToggles.seg .seg__btn,
+      [data-theme="dark"] #cmpMetric .seg__btn, [data-theme="dark"] #cmpMetric.seg .seg__btn {
         color: #94A3B8 !important;
       }
-      [data-theme="dark"] #trendToggles .seg__btn[aria-pressed="true"], [data-theme="dark"] #cmpMetric .seg__btn[aria-pressed="true"] {
+      [data-theme="dark"] #trendToggles .seg__btn[aria-pressed="true"], [data-theme="dark"] #trendToggles.seg .seg__btn[aria-pressed="true"],
+      [data-theme="dark"] #cmpMetric .seg__btn[aria-pressed="true"], [data-theme="dark"] #cmpMetric.seg .seg__btn[aria-pressed="true"] {
         background: #1E293B !important;
         color: #F8FAFC !important;
         border: 1px solid #334155 !important;
@@ -1898,7 +1905,7 @@
   <script src="js/theme.js"></script>
   <script src="js/data.js?v=20261116_pens_5vars_v10"></script>
   <script src="js/charts.js?v=20261116_pens_5vars_v10"></script>
-  <script src="js/app.js?v=20261116_no_scroll_toggles_v20"></script>
+  <script src="js/app.js?v=20261116_trend_grid_match_v21"></script>
 
   <!-- Mobile Drawer Controller (seperti ETHOL PENS) -->
   <script>
