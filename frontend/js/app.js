@@ -843,7 +843,7 @@
       const { r, m, t } = x;
       const on = state.plan.has(r.id);
       const targetProfiles = (r.profiles && r.profiles.length)
-        ? r.profiles.filter(i => profileList[i]).map(i => profileList[i].short).join(', ')
+        ? (r.profiles.length >= 3 ? 'Semua Profil' : r.profiles.filter(i => profileList[i]).map(i => profileList[i].short).join(', '))
         : 'Semua Profil';
 
       return `
@@ -997,7 +997,7 @@
     const recosTableHtml = filteredList.map((item, idx) => {
       const { r, m, t, pr } = item;
       const targetProfiles = (r.profiles && r.profiles.length)
-        ? r.profiles.filter(i => PROFILES[i]).map(i => PROFILES[i].short).join(', ')
+        ? (r.profiles.length >= 3 ? 'Semua Profil' : r.profiles.filter(i => PROFILES[i]).map(i => PROFILES[i].short).join(', '))
         : 'Semua Profil';
       return `
         <tr>
