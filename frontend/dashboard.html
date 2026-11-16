@@ -16,7 +16,7 @@
       document.documentElement.style.colorScheme = t;
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20261116_uniform_cards_v13" />
+  <link rel="stylesheet" href="css/style.css?v=20261116_pct_fit_v14" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -454,25 +454,24 @@
         resize: vertical !important;
       }
 
-      /* Profiling Mobile (Ketiga Kartu Seragam 100% Berukuran & Berbentuk Sama seperti Dashboard) */
+      /* Profiling Mobile (3 Kolom Kompak Sejajar, Angka Persentase Menonjol & Pas) */
       .profiles {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 10px !important;
-        margin-bottom: 16px !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 14px !important;
       }
       .pcard {
-        width: calc(50% - 5px) !important;
-        max-width: calc(50% - 5px) !important;
-        padding: 13px 12px 12px !important;
-        border-radius: 14px !important;
+        width: auto !important;
+        max-width: none !important;
+        padding: 10px 8px 10px !important;
+        border-radius: 12px !important;
         border: 1.5px solid #E2E8F0 !important;
         background: #FFFFFF !important;
         box-sizing: border-box !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 6px !important;
+        gap: 4px !important;
         text-align: left !important;
         min-width: 0 !important;
       }
@@ -480,27 +479,35 @@
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
-        gap: 6px !important;
+        gap: 4px !important;
       }
       .pcard__badge {
-        font-size: 11px !important;
-        padding: 2.5px 7px !important;
+        font-size: 10px !important;
+        padding: 2px 5px !important;
         border-radius: 6px !important;
         font-weight: 700 !important;
+        white-space: nowrap !important;
       }
       .pcard__pct {
+        font-family: var(--serif) !important;
         font-size: 24px !important;
         font-weight: 800 !important;
         line-height: 1 !important;
+        letter-spacing: -0.5px !important;
       }
       .pcard__pct small {
         font-size: 13px !important;
+        font-weight: 700 !important;
+        margin-left: 1px !important;
       }
       .pcard h4, .pcard__title {
-        font-size: 13.5px !important;
+        font-size: 13px !important;
         font-weight: 700 !important;
         line-height: 1.25 !important;
         margin: 2px 0 1px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
       }
       .pcard__name-full, .pcard__n-full {
         display: none !important;
@@ -509,14 +516,16 @@
         display: inline !important;
       }
       .pcard__n {
-        font-size: 11.5px !important;
+        font-size: 10.5px !important;
         color: var(--muted) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
         display: block !important;
-        margin-bottom: 2px !important;
       }
       .pcard__bar {
-        height: 5px !important;
-        margin-top: auto !important;
+        height: 4px !important;
+        margin-top: 2px !important;
         border-radius: 999px !important;
       }
 
@@ -1740,7 +1749,7 @@
   <script src="js/theme.js"></script>
   <script src="js/data.js?v=20261116_pens_5vars_v10"></script>
   <script src="js/charts.js?v=20261116_pens_5vars_v10"></script>
-  <script src="js/app.js?v=20261116_uniform_cards_v13"></script>
+  <script src="js/app.js?v=20261116_pct_fit_v14"></script>
 
   <!-- Mobile Drawer Controller (seperti ETHOL PENS) -->
   <script>
