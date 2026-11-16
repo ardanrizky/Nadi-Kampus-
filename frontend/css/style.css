@@ -419,6 +419,8 @@ svg { display: block; }
 .pcard__pct { font-family: var(--serif); font-size: 44px; line-height: 1; font-weight: 600; color: var(--c); }
 .pcard__pct small { font-size: 20px; margin-left: 2px; }
 .pcard h4 { font-size: 15px; font-weight: 700; line-height: 1.3; }
+.pcard__name-short, .pcard__n-short { display: none; }
+.pcard__name-full, .pcard__n-full { display: inline; }
 .pcard__n { font-size: 13px; color: var(--muted); }
 .pcard__bar { height: 6px; border-radius: 6px; background: #EAF1EE; margin-top: 4px; }
 .pcard__bar i { display: block; height: 100%; border-radius: 6px; background: var(--c); transform-origin: left; animation: grow .9s var(--ease) both; }
@@ -2610,16 +2612,71 @@ body.drawer-locked {
 
   /* Tab 2: Profiling */
   .profiles {
-    grid-template-columns: 1fr !important;
-    gap: 10px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
   }
 
   .pcard {
-    padding: 14px !important;
+    padding: 10px 8px 10px !important;
+    border-radius: 12px !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+  }
+
+  .pcard__header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 4px !important;
+  }
+
+  .pcard__badge {
+    font-size: 10px !important;
+    padding: 2px 5px !important;
+    border-radius: 6px !important;
+    font-weight: 700 !important;
   }
 
   .pcard__pct {
-    font-size: 30px !important;
+    font-size: 19px !important;
+    font-weight: 800 !important;
+  }
+
+  .pcard__pct small {
+    font-size: 11px !important;
+  }
+
+  .pcard h4, .pcard__title {
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    margin: 2px 0 1px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .pcard__name-full, .pcard__n-full {
+    display: none !important;
+  }
+
+  .pcard__name-short, .pcard__n-short {
+    display: inline !important;
+  }
+
+  .pcard__n {
+    font-size: 10px !important;
+    color: var(--muted) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+
+  .pcard__bar {
+    height: 4px !important;
+    margin-top: 2px !important;
   }
 
   /* Tab 3: Student Voice */

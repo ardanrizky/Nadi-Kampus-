@@ -16,7 +16,7 @@
       document.documentElement.style.colorScheme = t;
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20261113_lucinda_v6" />
+  <link rel="stylesheet" href="css/style.css?v=20261116_profiling_mobile_v11" />
   <style>
     /* CRITICAL MOBILE DASHBOARD STYLING (PORSI HP MURNI SEPERTI ETHOL PENS) */
     @media (max-width: 992px) {
@@ -454,8 +454,63 @@
         resize: vertical !important;
       }
 
+      /* Profiling 3 Kolom Rapi di Mobile (Sejajar & Kompak seperti Dashboard) */
       .profiles {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 14px !important;
+      }
+      .pcard {
+        padding: 10px 8px 10px !important;
+        border-radius: 12px !important;
+        gap: 4px !important;
+        min-width: 0 !important;
+      }
+      .pcard__header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 4px !important;
+      }
+      .pcard__badge {
+        font-size: 10px !important;
+        padding: 2px 5px !important;
+        border-radius: 6px !important;
+        font-weight: 700 !important;
+      }
+      .pcard__pct {
+        font-size: 19px !important;
+        font-weight: 800 !important;
+      }
+      .pcard__pct small {
+        font-size: 11px !important;
+      }
+      .pcard h4, .pcard__title {
+        font-size: 12.5px !important;
+        font-weight: 700 !important;
+        line-height: 1.25 !important;
+        margin: 2px 0 1px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+      .pcard__name-full, .pcard__n-full {
+        display: none !important;
+      }
+      .pcard__name-short, .pcard__n-short {
+        display: inline !important;
+      }
+      .pcard__n {
+        font-size: 10px !important;
+        color: var(--muted) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        display: block !important;
+      }
+      .pcard__bar {
+        height: 4px !important;
+        margin-top: 2px !important;
       }
 
       /* REKOMENDASI MOBILE POLISHED */
@@ -1678,7 +1733,7 @@
   <script src="js/theme.js"></script>
   <script src="js/data.js?v=20261116_pens_5vars_v10"></script>
   <script src="js/charts.js?v=20261116_pens_5vars_v10"></script>
-  <script src="js/app.js?v=20261116_pens_5vars_v10"></script>
+  <script src="js/app.js?v=20261116_profiling_mobile_v11"></script>
 
   <!-- Mobile Drawer Controller (seperti ETHOL PENS) -->
   <script>
