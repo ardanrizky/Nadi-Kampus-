@@ -16,7 +16,7 @@
       document.documentElement.style.colorScheme = t;
     })();
   </script>
-  <link rel="stylesheet" href="css/style.css?v=20261116_topbar_fixes_v18" />
+  <link rel="stylesheet" href="css/style.css?v=20261116_hero_title_v19" />
   <style>
     /* CRITICAL MOBILE STYLING (PORSI HP MURNI) */
     @media (max-width: 860px) {
@@ -86,17 +86,17 @@
         line-height: 1.3 !important;
       }
       .hero__title {
-        font-size: 26px !important;
-        line-height: 1.2 !important;
-        margin-bottom: 8px !important;
-        letter-spacing: -0.02em !important;
+        font-size: clamp(23px, 6.8vw, 29px) !important;
+        line-height: 1.22 !important;
+        margin-bottom: 10px !important;
+        letter-spacing: -0.025em !important;
       }
       .hero__title .line {
-        display: inline !important;
+        display: block !important;
         overflow: visible !important;
       }
       .hero__title .line > span {
-        display: inline !important;
+        display: inline-block !important;
         transform: none !important;
         animation: none !important;
       }
@@ -213,8 +213,7 @@
         <div class="hero__copy">
           <p class="hero__pill">Survei wellbeing semester genap 2025/2026 sudah dianalisis</p>
           <h1 class="hero__title">
-            <span class="line"><span>Memahami</span></span>
-            <span class="line"><span>Mahasiswa</span></span>
+            <span class="line"><span>Memahami Mahasiswa</span></span>
             <span class="line"><span>Melalui Data</span></span>
           </h1>
           <p class="hero__sub">Analitik wellbeing dan permasalahan mahasiswa untuk mendukung keputusan kampus berbasis data.</p>
