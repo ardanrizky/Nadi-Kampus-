@@ -374,11 +374,11 @@
           </div>
           <h4 class="pcard__title">
             <span class="pcard__name-full">${p.name}</span>
-            <span class="pcard__name-short">${p.short || p.name}</span>
+            <span class="pcard__name-short">Profil ${p.cluster}: ${p.short}</span>
           </h4>
           <span class="pcard__n">
             <span class="pcard__n-full">± ${nf.format(n)} mahasiswa (${p.count || Math.round(149 * pct / 100)} sampel riil)</span>
-            <span class="pcard__n-short">± ${nf.format(n)} mhs</span>
+            <span class="pcard__n-short">± ${nf.format(n)} mahasiswa</span>
           </span>
           <span class="pcard__bar"><i style="width:${pct}%"></i></span>
         </button>`;
