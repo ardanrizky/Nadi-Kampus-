@@ -1070,7 +1070,7 @@
         </tr>
         <tr>
           <td style="font-weight:700; padding:6px 8px; border:1px solid #000; background:#F8FAFC;">PERIODE SURVEI</td>
-          <td style="padding:6px 8px; border:1px solid #000;">Semester Genap 2025/2026</td>
+          <td style="padding:6px 8px; border:1px solid #000;">Semester Ganjil 2025/2026</td>
           <td style="font-weight:700; padding:6px 8px; border:1px solid #000; background:#F8FAFC;">JUMLAH SAMPEL</td>
           <td style="padding:6px 8px; border:1px solid #000;">${totalStudents} Responden Aktif</td>
         </tr>
