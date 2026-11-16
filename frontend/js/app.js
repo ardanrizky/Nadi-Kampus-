@@ -10,6 +10,7 @@
   const dim = key => DIMS.find(m => m.key === key);
   const CLUSTERS = window.CLUSTERS || window.PROFILES || [];
   const CLUSTER_POINTS = window.CLUSTER_POINTS || [];
+  const RECOS = window.RECOS || [];
 
   /* ---------------------------------------------------------
      Supabase Client & Konfigurasi Cloud Database
@@ -854,12 +855,10 @@
           </div>
           <h4>${r.title}</h4>
           <p>${r.desc}</p>
-          <p class="reco__why"><b>Dasar data:</b> ${m ? m.short : 'Indikator'} ${D.scores[m ? m.key : 'wellbeing']} · ${Math.round(t.w)}% komentar membahas ${t.name ? t.name.toLowerCase() : 'topik'} (${t.sent ? t.sent[2] : 0}% negatif)</p>
           <dl class="reco__meta">
-            <div><dt>Penanggung jawab</dt><dd>${r.owner}</dd></div>
-            <div><dt>Durasi</dt><dd>${r.duration}</dd></div>
-            <div><dt>Tingkat usaha</dt><dd>${r.effort}</dd></div>
-            <div><dt>Indikator keberhasilan</dt><dd>${r.kpi}</dd></div>
+            <div><dt>Fokus Masalah</dt><dd>${r.focus || 'Beban Tugas Akademik'}</dd></div>
+            <div><dt>Sasaran Profil</dt><dd>${targetProfiles}</dd></div>
+            <div style="grid-column: 1 / -1;"><dt>Penanggung Jawab (PIC)</dt><dd>${r.owner}</dd></div>
           </dl>
           <button type="button" class="btn ${on ? 'btn--em' : 'btn--outline'} btn--sm" data-plan="${r.id}" aria-pressed="${on}">
             ${on ? '✓ Masuk rencana' : '+ Masukkan ke rencana'}
@@ -879,8 +878,8 @@
 
   function planText() {
     const lines = RECOS.filter(r => state.plan.has(r.id)).map((r, i) =>
-      `${i + 1}. ${r.title} (${r.owner}, ${r.duration}). Indikator keberhasilan: ${r.kpi}.`);
-    return `Rencana Program Dukungan Mahasiswa — ${D.name}\n` + lines.join('\n');
+      `${i + 1}. ${r.title} — Fokus: ${r.focus || 'Beban Akademik'} (PIC: ${r.owner})`);
+    return `Rencana Program Intervensi Mahasiswa — ${D.name}\n` + lines.join('\n');
   }
 
   let toastTimer;
@@ -1008,15 +1007,8 @@
             <div style="color:#333; line-height:1.4;">${r.desc}</div>
           </td>
           <td style="padding:7px 8px; border:1px solid #000; font-size:11px; text-align:center;">${targetProfiles}</td>
-          <td style="padding:7px 8px; border:1px solid #000; font-size:10.5px; color:#222;">
-            ${m ? m.short : 'Indikator'}: <b>${currData.scores[m ? m.key : 'wellbeing']}</b><br/>
-            Topik: <em>${t.name}</em> (${t.sent ? t.sent[2] : 0}% keluhan)
-          </td>
-          <td style="padding:7px 8px; border:1px solid #000; font-size:10.5px;">
-            <b>${r.owner}</b><br/>
-            <span>Durasi: ${r.duration}</span>
-          </td>
-          <td style="padding:7px 8px; border:1px solid #000; font-size:10.5px;">${r.kpi}</td>
+          <td style="padding:7px 8px; border:1px solid #000; font-size:11px; font-weight:600;">${r.focus || 'Beban Tugas Akademik'}</td>
+          <td style="padding:7px 8px; border:1px solid #000; font-size:11px;">${r.owner}</td>
         </tr>
       `;
     }).join('');
@@ -1195,11 +1187,10 @@
             <tr style="background:#E2E8F0; text-align:center;">
               <th style="padding:7px; border:1px solid #000; width:4%; font-weight:800;">NO</th>
               <th style="padding:7px; border:1px solid #000; width:11%; font-weight:800;">PRIORITAS</th>
-              <th style="padding:7px; border:1px solid #000; width:25%; font-weight:800;">PROGRAM INTERVENSI</th>
-              <th style="padding:7px; border:1px solid #000; width:13%; font-weight:800;">SASARAN</th>
-              <th style="padding:7px; border:1px solid #000; width:16%; font-weight:800;">DASAR MASALAH (DATA)</th>
-              <th style="padding:7px; border:1px solid #000; width:16%; font-weight:800;">UNIT PIC &amp; DURASI</th>
-              <th style="padding:7px; border:1px solid #000; width:15%; font-weight:800;">TARGET INDIKATOR (KPI)</th>
+              <th style="padding:7px; border:1px solid #000; width:34%; font-weight:800;">PROGRAM INTERVENSI</th>
+              <th style="padding:7px; border:1px solid #000; width:15%; font-weight:800;">SASARAN PROFIL</th>
+              <th style="padding:7px; border:1px solid #000; width:16%; font-weight:800;">FOKUS MASALAH</th>
+              <th style="padding:7px; border:1px solid #000; width:20%; font-weight:800;">PENANGGUNG JAWAB (PIC)</th>
             </tr>
           </thead>
           <tbody>
