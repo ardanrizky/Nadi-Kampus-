@@ -2548,29 +2548,88 @@ body.drawer-locked {
     display: block !important;
   }
 
-  /* Segmented Toggles Pills */
-  #trendToggles.seg, .seg {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    scrollbar-width: none !important;
+  /* Segmented Toggles Indikator Tren & Komparasi: 2 Baris x 2 Kolom (Tanpa Harus Digeser) */
+  #trendToggles, #cmpMetric {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
     gap: 6px !important;
-    padding: 2px 0 4px !important;
+    background: #F1F5F9 !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 12px !important;
+    padding: 4px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
   }
 
-  #trendToggles.seg::-webkit-scrollbar, .seg::-webkit-scrollbar {
+  #trendToggles::-webkit-scrollbar, #cmpMetric::-webkit-scrollbar {
     display: none !important;
   }
 
-  #trendToggles .seg__btn, .seg__btn {
-    flex: 0 0 auto !important;
+  #trendToggles .seg__btn, #cmpMetric .seg__btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 6.5px 4px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    gap: 5px !important;
+    color: #64748B !important;
+    background: transparent !important;
+    border: 0 !important;
+  }
+
+  #trendToggles .seg__btn i, #cmpMetric .seg__btn i {
+    width: 7px !important;
+    height: 7px !important;
+    min-width: 7px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+  }
+
+  #trendToggles .seg__btn[aria-pressed="true"], #cmpMetric .seg__btn[aria-pressed="true"] {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    font-weight: 700 !important;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08) !important;
+  }
+
+  [data-theme="dark"] #trendToggles, [data-theme="dark"] #cmpMetric {
+    background: #151F32 !important;
+    border: 1px solid #1E293B !important;
+  }
+
+  [data-theme="dark"] #trendToggles .seg__btn, [data-theme="dark"] #cmpMetric .seg__btn {
+    color: #94A3B8 !important;
+  }
+
+  [data-theme="dark"] #trendToggles .seg__btn[aria-pressed="true"],
+  [data-theme="dark"] #cmpMetric .seg__btn[aria-pressed="true"] {
+    background: #1E293B !important;
+    color: #F8FAFC !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  /* Seg lainnya jika ada yang berjejer */
+  .seg:not(#trendToggles):not(#cmpMetric) {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    padding: 2px 0 4px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .seg:not(#trendToggles):not(#cmpMetric) .seg__btn {
+    flex: 1 1 auto !important;
     white-space: nowrap !important;
     font-size: 11px !important;
     padding: 5px 9px !important;
+    justify-content: center !important;
   }
 
   .trend-stats-strip {
