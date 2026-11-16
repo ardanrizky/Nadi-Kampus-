@@ -2621,14 +2621,14 @@ body.drawer-locked {
   .pcard {
     width: auto !important;
     max-width: none !important;
-    padding: 10px 8px 10px !important;
-    border-radius: 12px !important;
+    padding: 12px 9px 12px !important;
+    border-radius: 13px !important;
     border: 1.5px solid var(--line) !important;
     background: #FFFFFF !important;
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 4px !important;
+    gap: 5px !important;
     text-align: left !important;
     min-width: 0 !important;
   }
@@ -2642,7 +2642,7 @@ body.drawer-locked {
 
   .pcard__badge {
     font-size: 10px !important;
-    padding: 2px 5px !important;
+    padding: 2.5px 6px !important;
     border-radius: 6px !important;
     font-weight: 700 !important;
     white-space: nowrap !important;
@@ -2650,23 +2650,23 @@ body.drawer-locked {
 
   .pcard__pct {
     font-family: var(--serif) !important;
-    font-size: 24px !important;
+    font-size: 28px !important;
     font-weight: 800 !important;
     line-height: 1 !important;
-    letter-spacing: -0.5px !important;
+    letter-spacing: -0.6px !important;
   }
 
   .pcard__pct small {
-    font-size: 13px !important;
+    font-size: 14.5px !important;
     font-weight: 700 !important;
-    margin-left: 1px !important;
+    margin-left: 1.5px !important;
   }
 
   .pcard h4, .pcard__title {
-    font-size: 13px !important;
+    font-size: 13.5px !important;
     font-weight: 700 !important;
     line-height: 1.25 !important;
-    margin: 2px 0 1px !important;
+    margin: 3px 0 1px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
@@ -2681,16 +2681,17 @@ body.drawer-locked {
   }
 
   .pcard__n {
-    font-size: 10.5px !important;
+    font-size: 11px !important;
     color: var(--muted) !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     display: block !important;
+    margin-bottom: 2px !important;
   }
 
   .pcard__bar {
-    height: 4px !important;
+    height: 5px !important;
     margin-top: 2px !important;
     border-radius: 999px !important;
   }
